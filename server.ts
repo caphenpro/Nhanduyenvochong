@@ -5,21 +5,33 @@ import { GoogleGenAI } from '@google/genai';
 import { SYSTEM_INSTRUCTION_PROMPT } from './src/data/knowledgeBasePrompt';
 import { getCanChiByYear, checkNguHanhRelation, getTruongSanhChu, TRUONG_SANH_DATA, CO_THAN_QUA_TU } from './src/data/tamtheData';
 import { getCaoLyGiaiDoan } from './src/data/caolyData';
+import { generateAncientWisdomResponse } from './src/data/ancientReasoner';
 
-// Initialize GoogleGenAI SDK server-side
-function getGeminiClient(): GoogleGenAI {
+// Initialize GoogleGenAI SDK server-side lazily
+let geminiClient: GoogleGenAI | null = null;
+
+function getGeminiClient(): GoogleGenAI | null {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.warn('Warning: GEMINI_API_KEY is not set. Chat AI features may return fallback responses.');
+    return null;
   }
-  return new GoogleGenAI({
-    apiKey: apiKey || 'dummy-key',
-    httpOptions: {
-      headers: {
-        'User-Agent': 'aistudio-build',
-      },
-    },
-  });
+  if (!geminiClient) {
+    geminiClient = new GoogleGenAI({ apiKey });
+  }
+  return geminiClient;
+}
+
+// Helper to stream text smoothly if using fallback engine
+async function streamFallbackText(res: express.Response, text: string) {
+  const words = text.split(' ');
+  const chunkSize = 4;
+  for (let i = 0; i < words.length; i += chunkSize) {
+    const chunk = words.slice(i, i + chunkSize).join(' ') + (i + chunkSize < words.length ? ' ' : '');
+    res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+  res.write('data: [DONE]\n\n');
+  res.end();
 }
 
 async function startServer() {
@@ -124,21 +136,27 @@ async function startServer() {
 
   // AI Chat Endpoint with Streaming
   app.post('/api/chat', async (req, res) => {
+    // Stream response using SSE
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
     try {
       const { messages, coupleContext } = req.body;
 
       if (!messages || !Array.isArray(messages) || messages.length === 0) {
-        return res.status(400).json({ error: 'Messages array is required.' });
+        return streamFallbackText(res, 'Dạ thưa quý bạn, xin vui lòng gửi nội dung câu hỏi về tuổi hoặc nhân duyên để ta giải đáp.');
       }
 
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return res.status(500).json({
-          error: 'GEMINI_API_KEY chưa được cấu hình. Vui lòng thêm khóa API trong phần Settings > Secrets.',
-        });
-      }
+      const lastUserMessage = [...messages].reverse().find((m: any) => m.role === 'user')?.content || '';
 
       const ai = getGeminiClient();
+
+      if (!ai) {
+        // If no GEMINI_API_KEY is configured, use the ancient knowledge reasoning engine
+        const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
+        return await streamFallbackText(res, fallbackText);
+      }
 
       // Format conversation history for Gemini
       const conversationContents = messages.map((m: any) => ({
@@ -152,35 +170,47 @@ async function startServer() {
         systemInstruction += `\n\n--- DỮ LIỆU ĐANG TRA CỨU HIỆN TẠI CỦA NGƯỜI DÙNG ---\n${JSON.stringify(coupleContext, null, 2)}\nHãy tham chiếu chặt chẽ dữ liệu này khi trả lời nếu người dùng hỏi về cặp tuổi này.`;
       }
 
-      // Stream response using SSE
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
+      try {
+        const responseStream = await ai.models.generateContentStream({
+          model: 'gemini-3.7-flash',
+          contents: conversationContents,
+          config: {
+            systemInstruction,
+            temperature: 0.7,
+          },
+        });
 
-      const responseStream = await ai.models.generateContentStream({
-        model: 'gemini-3.7-flash',
-        contents: conversationContents,
-        config: {
-          systemInstruction,
-          temperature: 0.7,
-        },
-      });
-
-      for await (const chunk of responseStream) {
-        const text = chunk.text;
-        if (text) {
-          res.write(`data: ${JSON.stringify({ text })}\n\n`);
+        let hasSentData = false;
+        for await (const chunk of responseStream) {
+          const text = chunk.text;
+          if (text) {
+            hasSentData = true;
+            res.write(`data: ${JSON.stringify({ text })}\n\n`);
+          }
         }
+
+        if (hasSentData) {
+          res.write('data: [DONE]\n\n');
+          res.end();
+          return;
+        }
+      } catch (geminiError: any) {
+        console.warn('Gemini API stream error, using ancient knowledge fallback:', geminiError.message);
+        const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
+        return await streamFallbackText(res, fallbackText);
       }
 
-      res.write('data: [DONE]\n\n');
-      res.end();
+      // If stream ended with no data
+      const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
+      return await streamFallbackText(res, fallbackText);
     } catch (err: any) {
       console.error('Error in /api/chat:', err);
-      if (!res.headersSent) {
-        res.status(500).json({ error: err.message || 'Lỗi xử lý phản hồi từ AI.' });
-      } else {
-        res.write(`data: ${JSON.stringify({ error: err.message || 'Lỗi trong lúc truyền tin' })}\n\n`);
+      try {
+        const fallbackText = generateAncientWisdomResponse('Vấn đáp duyên nợ');
+        await streamFallbackText(res, fallbackText);
+      } catch (finalErr) {
+        res.write(`data: ${JSON.stringify({ text: 'Kính chào quý bạn! Vui lòng thử lại câu hỏi về năm sinh hoặc tuổi vợ chồng.' })}\n\n`);
+        res.write('data: [DONE]\n\n');
         res.end();
       }
     }
