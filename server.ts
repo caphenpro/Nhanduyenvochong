@@ -6,6 +6,11 @@ import { SYSTEM_INSTRUCTION_PROMPT } from './src/data/knowledgeBasePrompt';
 import { getCanChiByYear, checkNguHanhRelation, getTruongSanhChu, TRUONG_SANH_DATA, CO_THAN_QUA_TU } from './src/data/tamtheData';
 import { getCaoLyGiaiDoan } from './src/data/caolyData';
 import { generateAncientWisdomResponse } from './src/data/ancientReasoner';
+import { generateMetaphysicsState, buildComprehensiveMetaphysicsContext } from './src/data/metaphysicsData';
+
+// OpenRouter Config
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const SERVER_OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 
 // Initialize GoogleGenAI SDK server-side lazily
 let geminiClient: GoogleGenAI | null = null;
@@ -28,7 +33,7 @@ async function streamFallbackText(res: express.Response, text: string) {
   for (let i = 0; i < words.length; i += chunkSize) {
     const chunk = words.slice(i, i + chunkSize).join(' ') + (i + chunkSize < words.length ? ' ' : '');
     res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
-    await new Promise((resolve) => setTimeout(resolve, 25));
+    await new Promise((resolve) => setTimeout(resolve, 20));
   }
   res.write('data: [DONE]\n\n');
   res.end();
@@ -134,48 +139,215 @@ async function startServer() {
     }
   });
 
-  // AI Chat Endpoint with Streaming
-  app.post('/api/chat', async (req, res) => {
+  // Get real-time Metaphysics Board State (24 Tiết Khí, Bát Tự, Kỳ Môn Độn Giáp, Lục Nhâm)
+  app.get('/api/metaphysics/state', (req, res) => {
+    try {
+      const state = generateMetaphysicsState(new Date());
+      res.json(state);
+    } catch (err: any) {
+      res.status(500).json({ error: 'Không thể lấy dữ liệu tiết khí & cổ thuật.' });
+    }
+  });
+
+  // Get list of supported OpenRouter models
+  app.get('/api/openrouter/models', (req, res) => {
+    res.json({
+      defaultModel: 'google/gemini-2.5-flash',
+      models: [
+        {
+          id: 'google/gemini-2.5-flash',
+          name: 'Gemini 2.5 Flash',
+          desc: 'Tốc độ nhanh, giải đoán sắc bén, hỗ trợ toàn diện (Khuyên dùng)',
+          badge: 'Mặc định',
+        },
+        {
+          id: 'google/gemini-2.5-pro',
+          name: 'Gemini 2.5 Pro',
+          desc: 'Tối ưu cho luận giải Bát tự, Tiết khí, Kỳ Môn Độn Giáp, Lục Nhâm',
+          badge: 'Chuyên sâu',
+        },
+        {
+          id: 'anthropic/claude-3.5-sonnet',
+          name: 'Claude 3.5 Sonnet',
+          desc: 'Văn phong cổ thi trau chuốt, thấu cảm sâu sắc',
+          badge: 'Văn phong',
+        },
+        {
+          id: 'deepseek/deepseek-chat',
+          name: 'DeepSeek Chat V3',
+          desc: 'Lý giải thuật số, nạp âm, tuần không chi tiết',
+          badge: 'Thuật số',
+        },
+      ],
+    });
+  });
+
+  // Get OpenRouter & Gemini configuration status
+  app.get('/api/openrouter/config-status', (req, res) => {
+    res.json({
+      hasServerOpenRouterKey: Boolean(SERVER_OPENROUTER_API_KEY),
+      hasServerGeminiKey: Boolean(process.env.GEMINI_API_KEY),
+    });
+  });
+
+  // Test custom user OpenRouter API Key
+  app.post('/api/openrouter/test-key', async (req, res) => {
+    const { apiKey } = req.body;
+    const testKey = (apiKey || SERVER_OPENROUTER_API_KEY || '').toString().trim();
+
+    if (!testKey) {
+      return res.status(400).json({ success: false, error: 'Vui lòng cung cấp OpenRouter API Key để kiểm tra.' });
+    }
+
+    try {
+      const response = await fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${testKey}`,
+          'HTTP-Referer': 'https://ai.studio',
+          'X-Title': 'Can Duyen Tien Dinh Key Test',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [{ role: 'user', content: 'Xin chào, trả lời ngắn 1 từ: OK' }],
+          max_tokens: 10,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content || 'OK';
+        return res.json({ success: true, message: 'Khóa OpenRouter hợp lệ và kết nối thành công!', sampleReply: reply });
+      } else {
+        const errText = await response.text();
+        let errMsg = `Lỗi từ OpenRouter (Mã ${response.status})`;
+        try {
+          const errJson = JSON.parse(errText);
+          if (errJson.error?.message) errMsg = errJson.error.message;
+        } catch {
+          // Ignore
+        }
+        return res.status(response.status).json({ success: false, error: errMsg });
+      }
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: `Không thể kết nối đến OpenRouter: ${err.message}` });
+    }
+  });
+
+  // Handler function for OpenRouter Chat with Streaming
+  async function handleOpenRouterChat(req: express.Request, res: express.Response) {
     // Stream response using SSE
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
+    const { messages, coupleContext, model = 'google/gemini-2.5-flash', apiKey } = req.body;
+    const clientKey = (apiKey || req.headers['x-openrouter-key'] || '').toString().trim();
+    const effectiveOpenRouterKey = clientKey || SERVER_OPENROUTER_API_KEY;
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return streamFallbackText(res, 'Dạ thưa quý bạn, xin vui lòng gửi nội dung câu hỏi về tuổi, tiết khí hoặc nhân duyên để ta giải đáp.');
+    }
+
+    const lastUserMessage = [...messages].reverse().find((m: any) => m.role === 'user')?.content || '';
+
+    // Build rich system instruction with current metaphysics state & couple context
+    const metaphysicsContext = buildComprehensiveMetaphysicsContext(coupleContext, new Date());
+    const fullSystemPrompt = `${SYSTEM_INSTRUCTION_PROMPT}\n\n${metaphysicsContext}`;
+
+    // Format messages for OpenRouter / OpenAI compatible API
+    const openRouterMessages = [
+      { role: 'system', content: fullSystemPrompt },
+      ...messages.map((m: any) => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: m.content,
+      })),
+    ];
+
     try {
-      const { messages, coupleContext } = req.body;
+      if (effectiveOpenRouterKey) {
+        const response = await fetch(OPENROUTER_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${effectiveOpenRouterKey}`,
+            'HTTP-Referer': 'https://ai.studio',
+            'X-Title': 'Can Duyen Tien Dinh & Co Thuat Metaphysics',
+          },
+          body: JSON.stringify({
+            model: model || 'google/gemini-2.5-flash',
+            messages: openRouterMessages,
+            stream: true,
+            temperature: 0.7,
+            max_tokens: 2500,
+          }),
+        });
 
-      if (!messages || !Array.isArray(messages) || messages.length === 0) {
-        return streamFallbackText(res, 'Dạ thưa quý bạn, xin vui lòng gửi nội dung câu hỏi về tuổi hoặc nhân duyên để ta giải đáp.');
+        if (response.ok && response.body) {
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder('utf-8');
+          let buffer = '';
+          let hasStreamedData = false;
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (!trimmed || trimmed.startsWith(':')) continue;
+              if (trimmed === 'data: [DONE]') {
+                res.write('data: [DONE]\n\n');
+                res.end();
+                return;
+              }
+              if (trimmed.startsWith('data: ')) {
+                try {
+                  const json = JSON.parse(trimmed.slice(6));
+                  const textChunk = json.choices?.[0]?.delta?.content || '';
+                  if (textChunk) {
+                    hasStreamedData = true;
+                    res.write(`data: ${JSON.stringify({ text: textChunk })}\n\n`);
+                  }
+                } catch {
+                  // Ignore JSON parse chunk errors
+                }
+              }
+            }
+          }
+
+          if (hasStreamedData) {
+            res.write('data: [DONE]\n\n');
+            res.end();
+            return;
+          }
+        } else {
+          console.warn('OpenRouter API returned error status:', response.status, await response.text().catch(() => ''));
+        }
       }
+    } catch (openRouterErr: any) {
+      console.warn('OpenRouter request failed, attempting Gemini SDK / Ancient Reasoner fallback:', openRouterErr.message);
+    }
 
-      const lastUserMessage = [...messages].reverse().find((m: any) => m.role === 'user')?.content || '';
-
+    // Secondary Fallback: Try Gemini SDK if key exists
+    try {
       const ai = getGeminiClient();
+      if (ai) {
+        const conversationContents = messages.map((m: any) => ({
+          role: m.role === 'user' ? 'user' : 'model',
+          parts: [{ text: m.content }],
+        }));
 
-      if (!ai) {
-        // If no GEMINI_API_KEY is configured, use the ancient knowledge reasoning engine
-        const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
-        return await streamFallbackText(res, fallbackText);
-      }
-
-      // Format conversation history for Gemini
-      const conversationContents = messages.map((m: any) => ({
-        role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: m.content }],
-      }));
-
-      // Add couple context if provided
-      let systemInstruction = SYSTEM_INSTRUCTION_PROMPT;
-      if (coupleContext) {
-        systemInstruction += `\n\n--- DỮ LIỆU ĐANG TRA CỨU HIỆN TẠI CỦA NGƯỜI DÙNG ---\n${JSON.stringify(coupleContext, null, 2)}\nHãy tham chiếu chặt chẽ dữ liệu này khi trả lời nếu người dùng hỏi về cặp tuổi này.`;
-      }
-
-      try {
         const responseStream = await ai.models.generateContentStream({
-          model: 'gemini-3.7-flash',
+          model: 'gemini-2.5-flash',
           contents: conversationContents,
           config: {
-            systemInstruction,
+            systemInstruction: fullSystemPrompt,
             temperature: 0.7,
           },
         });
@@ -194,27 +366,19 @@ async function startServer() {
           res.end();
           return;
         }
-      } catch (geminiError: any) {
-        console.warn('Gemini API stream error, using ancient knowledge fallback:', geminiError.message);
-        const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
-        return await streamFallbackText(res, fallbackText);
       }
-
-      // If stream ended with no data
-      const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
-      return await streamFallbackText(res, fallbackText);
-    } catch (err: any) {
-      console.error('Error in /api/chat:', err);
-      try {
-        const fallbackText = generateAncientWisdomResponse('Vấn đáp duyên nợ');
-        await streamFallbackText(res, fallbackText);
-      } catch (finalErr) {
-        res.write(`data: ${JSON.stringify({ text: 'Kính chào quý bạn! Vui lòng thử lại câu hỏi về năm sinh hoặc tuổi vợ chồng.' })}\n\n`);
-        res.write('data: [DONE]\n\n');
-        res.end();
-      }
+    } catch (geminiErr: any) {
+      console.warn('Gemini SDK fallback also failed:', geminiErr.message);
     }
-  });
+
+    // Final Fallback: Ancient Wisdom Reasoner Engine
+    const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
+    return await streamFallbackText(res, fallbackText);
+  }
+
+  // AI Chat Endpoints
+  app.post('/api/chat', handleOpenRouterChat);
+  app.post('/api/openrouter/chat', handleOpenRouterChat);
 
   // Vite middleware in development
   if (process.env.NODE_ENV !== 'production') {
