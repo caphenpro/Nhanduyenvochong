@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Cpu, Layers, ChevronDown, Key } from 'lucide-react';
+import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Cpu, Layers, ChevronDown, Key, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
 import { generateMetaphysicsState, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
-import { streamAIChat } from '../services/aiChatClient';
+import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
 
 interface ChatbotViewProps {
   currentCoupleResult: CoupleAnalysisResult | null;
@@ -23,13 +23,6 @@ const SAMPLE_PROMPTS = [
   'Ý nghĩa triết lý "Một người không phải chỉ là một cái tuổi" và "Đức Năng Thắng Số"?',
 ];
 
-const AVAILABLE_MODELS = [
-  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', badge: 'Mặc định' },
-  { id: 'google/gemini-2.5-pro', name: 'Gemini 2.5 Pro', badge: 'Chuyên sâu' },
-  { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', badge: 'Văn phong' },
-  { id: 'deepseek/deepseek-chat', name: 'DeepSeek Chat V3', badge: 'Thuật số' },
-];
-
 export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, onNavigateToLookup, onOpenApiKeySettings }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -44,7 +37,8 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('google/gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState<string>(AUTO_MODEL_ID);
+  const [resolvedModelName, setResolvedModelName] = useState<string | null>(null);
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showMetaphysicsBoard, setShowMetaphysicsBoard] = useState(false);
   const [metaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
@@ -120,6 +114,9 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
         coupleContext: currentCoupleResult,
         model: selectedModel,
         userApiKey: userKey || getStoredOpenRouterKey(),
+        onModelResolved: (modelName) => {
+          setResolvedModelName(modelName);
+        },
         onChunk: (accumulatedText) => {
           setMessages((prev) =>
             prev.map((msg) =>
@@ -164,41 +161,58 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           timestamp: Date.now(),
         },
       ]);
+      setResolvedModelName(null);
     }
   };
 
-  const currentModelName = AVAILABLE_MODELS.find((m) => m.id === selectedModel)?.name || 'Gemini 2.5 Flash';
+  const currentSelectedObj = AI_MODELS_LIST.find((m) => m.id === selectedModel);
+  const displayModelLabel = selectedModel === AUTO_MODEL_ID
+    ? (resolvedModelName ? `⚡ Tự động: ${resolvedModelName}` : '⚡ Tự Động (Auto-Fallback)')
+    : (currentSelectedObj?.name || selectedModel);
 
   return (
     <div className="flex flex-col h-[calc(100vh-4.5rem)] max-w-5xl mx-auto w-full px-2 sm:px-4 py-3">
       {/* Top Bar: Model Switcher & Metaphysics Live Indicator */}
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl shadow-2xs text-xs">
         <div className="flex items-center space-x-2">
+          {/* Model Switcher with Auto-Fallback */}
           <div className="relative">
             <button
               onClick={() => setShowModelMenu(!showModelMenu)}
-              className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-amber-200/70 hover:bg-amber-200 text-amber-950 font-medium transition-colors border border-amber-300"
+              className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-amber-200/80 hover:bg-amber-200 text-amber-950 font-medium transition-colors border border-amber-300 shadow-2xs"
+              title="Chọn mô hình AI hoặc để Tự Động luân chuyển khi hết gói miễn phí"
             >
-              <Cpu className="w-3.5 h-3.5 text-amber-800" />
-              <span>{currentModelName}</span>
+              <Zap className="w-3.5 h-3.5 text-amber-700 fill-amber-500" />
+              <span className="font-semibold">{displayModelLabel}</span>
               <ChevronDown className="w-3 h-3 text-amber-800" />
             </button>
 
             {showModelMenu && (
-              <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-amber-300 rounded-xl shadow-xl z-50 p-1 space-y-1">
-                {AVAILABLE_MODELS.map((model) => (
+              <div className="absolute left-0 top-full mt-1 w-72 bg-white border border-amber-300 rounded-xl shadow-2xl z-50 p-1.5 space-y-1">
+                <div className="px-2 py-1 text-[11px] font-semibold text-amber-900 border-b border-amber-100 flex items-center justify-between">
+                  <span>Chế độ & Mô hình AI</span>
+                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-normal">Tự luân chuyển khi hết quota</span>
+                </div>
+                {AI_MODELS_LIST.map((model) => (
                   <button
                     key={model.id}
                     onClick={() => {
                       setSelectedModel(model.id);
                       setShowModelMenu(false);
                     }}
-                    className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between ${
-                      selectedModel === model.id ? 'bg-amber-100 text-amber-900 font-bold' : 'hover:bg-amber-50 text-stone-700'
+                    className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex flex-col space-y-0.5 ${
+                      selectedModel === model.id ? 'bg-amber-100/90 text-amber-950 font-bold border border-amber-300/80' : 'hover:bg-amber-50/80 text-stone-700'
                     }`}
                   >
-                    <span>{model.name}</span>
-                    <span className="text-[10px] text-amber-700 font-normal">{model.badge}</span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{model.name}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                        model.id === AUTO_MODEL_ID ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-600'
+                      }`}>
+                        {model.badge}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-stone-500 font-normal leading-tight">{model.desc}</p>
                   </button>
                 ))}
               </div>

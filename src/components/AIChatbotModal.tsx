@@ -26,8 +26,8 @@ import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
 import { getCurrentSolarTerm, generateMetaphysicsState, SolarTermInfo, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
-import { streamAIChat } from '../services/aiChatClient';
-import { Key } from 'lucide-react';
+import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
+import { Key, Zap } from 'lucide-react';
 
 interface AIChatbotModalProps {
   currentCoupleResult?: CoupleAnalysisResult | null;
@@ -42,33 +42,6 @@ const METAPHYSICS_QUICK_PROMPTS = [
   'Nguyên tắc: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
   'Quan hệ Bát Trạch (Sinh Khí, Diên Niên, Tuyệt Mệnh, Ngũ Quỷ) trong gia đạo?',
   'Cơ chế Sinh – Khắc – Chế – Hóa và triết lý "Một người không phải chỉ là một cái tuổi"?',
-];
-
-const AVAILABLE_MODELS = [
-  {
-    id: 'google/gemini-2.5-flash',
-    name: 'Gemini 2.5 Flash',
-    tag: 'Mặc định (Nhanh & Chuẩn)',
-    desc: 'Tốc độ phản hồi tức thì, bao quát toàn diện',
-  },
-  {
-    id: 'google/gemini-2.5-pro',
-    name: 'Gemini 2.5 Pro',
-    tag: 'Chuyên sâu Bát Tự & Cổ Thuật',
-    desc: 'Tối ưu cho Kỳ Môn Độn Giáp, Lục Nhâm, 24 Tiết Khí',
-  },
-  {
-    id: 'anthropic/claude-3.5-sonnet',
-    name: 'Claude 3.5 Sonnet',
-    tag: 'Văn phong Cổ thi',
-    desc: 'Lời văn sâu sắc, phong vị hiền triết phương Đông',
-  },
-  {
-    id: 'deepseek/deepseek-chat',
-    name: 'DeepSeek Chat V3',
-    tag: 'Thuật số & Nạp âm',
-    desc: 'Phân tích chi tiết nạp âm 60 hoa giáp và tuần không',
-  },
 ];
 
 const STORAGE_KEY = 'canduyen_chat_history_v2';
@@ -91,7 +64,8 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showDataDrawer, setShowDataDrawer] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<string>('google/gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState<string>(AUTO_MODEL_ID);
+  const [resolvedModelName, setResolvedModelName] = useState<string | null>(null);
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -118,7 +92,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
       {
         id: 'welcome-modal-msg',
         role: 'assistant',
-        content: `Kính chào quý bạn! Ta là **Cụ Căn Duyên** — Đại Sư Luận Đoán Cổ Thuật & Nhân Duyên Tiền Định.\n\nTa đã kết nối bàn quẻ toàn diện với **Kỳ Môn Độn Giáp**, **Đại Lục Nhâm**, **24 Tiết Khí**, và cổ thư **Diễn Cầm Tam Thế (1952) / Cao Ly Đầu Hình** qua động cơ AI OpenRouter (*${AVAILABLE_MODELS[0].name}*).\n\nQuý bạn muốn tầm khảo về căn duyên vợ chồng, hóa giải xung khắc, hay phân tích thiên thời địa lợi theo tiết khí? Hãy nhập câu hỏi hoặc chọn gợi ý bên dưới!`,
+        content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Đại Sư Luận Đoán Cổ Thuật & Nhân Duyên Tiền Định.\n\nTa đã kết nối bàn quẻ toàn diện với **Kỳ Môn Độn Giáp**, **Đại Lục Nhâm**, **24 Tiết Khí**, và cổ thư **Diễn Cầm Tam Thế (1952) / Cao Ly Đầu Hình** qua động cơ AI Tự Động Luân Chuyển (*Auto-Fallback chống hết hạn mức*).\n\nQuý bạn muốn tầm khảo về căn duyên vợ chồng, hóa giải xung khắc, hay phân tích thiên thời địa lợi theo tiết khí? Hãy nhập câu hỏi hoặc chọn gợi ý bên dưới!`,
         timestamp: Date.now(),
       },
     ];
@@ -237,6 +211,9 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
         coupleContext: currentCoupleResult,
         model: selectedModel,
         userApiKey: userKey || getStoredOpenRouterKey(),
+        onModelResolved: (modelName) => {
+          setResolvedModelName(modelName);
+        },
         onChunk: (accumulated) => {
           setMessages((prev) =>
             prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: accumulated } : msg))
@@ -268,7 +245,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
     }
   };
 
-  const currentModelObj = AVAILABLE_MODELS.find((m) => m.id === selectedModel) || AVAILABLE_MODELS[0];
+  const currentModelObj = AI_MODELS_LIST.find((m) => m.id === selectedModel) || AI_MODELS_LIST[0];
 
   return (
     <>
@@ -391,40 +368,52 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
           {/* Model Selector Bar */}
           <div className="px-3.5 py-2 bg-stone-950/80 border-b border-amber-900/30 flex items-center justify-between text-xs">
             <div className="flex items-center space-x-2">
-              <Cpu className="w-3.5 h-3.5 text-amber-400" />
+              <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-500/30" />
               <span className="text-stone-400 text-[11px]">Động cơ:</span>
               <div className="relative">
                 <button
                   id="model-selector-btn"
                   onClick={() => setShowModelMenu(!showModelMenu)}
                   className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-stone-800/90 text-amber-200 border border-amber-700/40 hover:bg-stone-800 transition-colors font-medium text-[11px]"
+                  title="Chọn mô hình hoặc để Tự Động luân chuyển khi hết gói miễn phí"
                 >
-                  <span>{currentModelObj.name}</span>
+                  <span>
+                    {selectedModel === AUTO_MODEL_ID
+                      ? (resolvedModelName ? `⚡ ${resolvedModelName}` : '⚡ Tự Động (Auto-Fallback)')
+                      : (AI_MODELS_LIST.find((m) => m.id === selectedModel)?.name || selectedModel)}
+                  </span>
                   <ChevronDown className="w-3 h-3 text-amber-400" />
                 </button>
 
                 {/* Model Dropdown Menu */}
                 {showModelMenu && (
-                  <div className="absolute left-0 top-full mt-1.5 w-64 bg-stone-900 border border-amber-700/50 rounded-xl shadow-2xl z-50 p-1.5 space-y-1">
-                    {AVAILABLE_MODELS.map((model) => (
+                  <div className="absolute left-0 top-full mt-1.5 w-72 bg-stone-900 border border-amber-700/50 rounded-xl shadow-2xl z-50 p-1.5 space-y-1">
+                    <div className="px-2 py-1 text-[11px] font-semibold text-amber-200 border-b border-stone-800 flex items-center justify-between">
+                      <span>Chế độ & Mô hình AI</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">Tự luân chuyển khi hết quota</span>
+                    </div>
+                    {AI_MODELS_LIST.map((model) => (
                       <button
                         key={model.id}
                         onClick={() => {
                           setSelectedModel(model.id);
                           setShowModelMenu(false);
                         }}
-                        className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-colors flex flex-col space-y-0.5 ${
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-colors flex flex-col space-y-0.5 ${
                           selectedModel === model.id
                             ? 'bg-amber-950 text-amber-200 border border-amber-600/50'
                             : 'text-stone-300 hover:bg-stone-800 hover:text-amber-100'
                         }`}
                       >
                         <div className="flex items-center justify-between font-semibold">
-                          <span>{model.name}</span>
-                          {selectedModel === model.id && <Check className="w-3.5 h-3.5 text-amber-400" />}
+                          <span className="text-amber-100">{model.name}</span>
+                          <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                            model.id === AUTO_MODEL_ID ? 'bg-amber-500 text-stone-950' : 'bg-stone-800 text-stone-300'
+                          }`}>
+                            {model.badge}
+                          </span>
                         </div>
-                        <span className="text-[10px] text-amber-400/80">{model.tag}</span>
-                        <span className="text-[10px] text-stone-400">{model.desc}</span>
+                        <span className="text-[10px] text-stone-400 font-normal">{model.desc}</span>
                       </button>
                     ))}
                   </div>

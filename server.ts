@@ -152,13 +152,43 @@ async function startServer() {
   // Get list of supported OpenRouter models
   app.get('/api/openrouter/models', (req, res) => {
     res.json({
-      defaultModel: 'google/gemini-2.5-flash',
+      defaultModel: 'auto',
       models: [
+        {
+          id: 'auto',
+          name: '⚡ Tự Động Chọn Tối Ưu',
+          desc: 'Tự động chọn & luân chuyển mô hình dự phòng khi hết gói miễn phí (Khuyên dùng)',
+          badge: 'Khuyên dùng',
+        },
         {
           id: 'google/gemini-2.5-flash',
           name: 'Gemini 2.5 Flash',
-          desc: 'Tốc độ nhanh, giải đoán sắc bén, hỗ trợ toàn diện (Khuyên dùng)',
-          badge: 'Mặc định',
+          desc: 'Tốc độ nhanh, giải đoán sắc bén, hỗ trợ toàn diện',
+          badge: 'Nhanh & Chuẩn',
+        },
+        {
+          id: 'deepseek/deepseek-chat',
+          name: 'DeepSeek Chat V3',
+          desc: 'Lý giải thuật số, nạp âm, tuần không chi tiết',
+          badge: 'Thuật số',
+        },
+        {
+          id: 'meta-llama/llama-3.3-70b-instruct:free',
+          name: 'Llama 3.3 70B (Free)',
+          desc: 'Mô hình mã nguồn mở mạnh mẽ, dự phòng tin cậy',
+          badge: 'Miễn phí',
+        },
+        {
+          id: 'qwen/qwen-2.5-72b-instruct:free',
+          name: 'Qwen 2.5 72B (Free)',
+          desc: 'Khả năng tiếng Việt vượt trội, hỗ trợ thuật thư',
+          badge: 'Miễn phí',
+        },
+        {
+          id: 'google/gemini-2.0-flash-exp:free',
+          name: 'Gemini 2.0 Flash (Free)',
+          desc: 'Bản thử nghiệm miễn phí từ Google',
+          badge: 'Miễn phí',
         },
         {
           id: 'google/gemini-2.5-pro',
@@ -171,12 +201,6 @@ async function startServer() {
           name: 'Claude 3.5 Sonnet',
           desc: 'Văn phong cổ thi trau chuốt, thấu cảm sâu sắc',
           badge: 'Văn phong',
-        },
-        {
-          id: 'deepseek/deepseek-chat',
-          name: 'DeepSeek Chat V3',
-          desc: 'Lý giải thuật số, nạp âm, tuần không chi tiết',
-          badge: 'Thuật số',
         },
       ],
     });
@@ -265,69 +289,90 @@ async function startServer() {
       })),
     ];
 
+    const AUTO_SERVER_FALLBACK_MODELS = [
+      'google/gemini-2.5-flash',
+      'deepseek/deepseek-chat',
+      'meta-llama/llama-3.3-70b-instruct:free',
+      'qwen/qwen-2.5-72b-instruct:free',
+      'google/gemini-2.0-flash-exp:free',
+      'mistralai/mistral-small-24b-instruct-2501:free',
+    ];
+
+    const requestedModel = (model || 'auto').toString();
+    const candidateModels =
+      requestedModel === 'auto'
+        ? AUTO_SERVER_FALLBACK_MODELS
+        : [requestedModel, ...AUTO_SERVER_FALLBACK_MODELS.filter((m) => m !== requestedModel)];
+
     try {
       if (effectiveOpenRouterKey) {
-        const response = await fetch(OPENROUTER_API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${effectiveOpenRouterKey}`,
-            'HTTP-Referer': 'https://ai.studio',
-            'X-Title': 'Can Duyen Tien Dinh & Co Thuat Metaphysics',
-          },
-          body: JSON.stringify({
-            model: model || 'google/gemini-2.5-flash',
-            messages: openRouterMessages,
-            stream: true,
-            temperature: 0.7,
-            max_tokens: 2500,
-          }),
-        });
+        for (const currentModel of candidateModels) {
+          try {
+            const response = await fetch(OPENROUTER_API_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${effectiveOpenRouterKey}`,
+                'HTTP-Referer': 'https://ai.studio',
+                'X-Title': 'Can Duyen Tien Dinh & Co Thuat Metaphysics',
+              },
+              body: JSON.stringify({
+                model: currentModel,
+                messages: openRouterMessages,
+                stream: true,
+                temperature: 0.7,
+                max_tokens: 2500,
+              }),
+            });
 
-        if (response.ok && response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder('utf-8');
-          let buffer = '';
-          let hasStreamedData = false;
+            if (response.ok && response.body) {
+              const reader = response.body.getReader();
+              const decoder = new TextDecoder('utf-8');
+              let buffer = '';
+              let hasStreamedData = false;
 
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
 
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
 
-            for (const line of lines) {
-              const trimmed = line.trim();
-              if (!trimmed || trimmed.startsWith(':')) continue;
-              if (trimmed === 'data: [DONE]') {
+                for (const line of lines) {
+                  const trimmed = line.trim();
+                  if (!trimmed || trimmed.startsWith(':')) continue;
+                  if (trimmed === 'data: [DONE]') {
+                    res.write('data: [DONE]\n\n');
+                    res.end();
+                    return;
+                  }
+                  if (trimmed.startsWith('data: ')) {
+                    try {
+                      const json = JSON.parse(trimmed.slice(6));
+                      const textChunk = json.choices?.[0]?.delta?.content || '';
+                      if (textChunk) {
+                        hasStreamedData = true;
+                        res.write(`data: ${JSON.stringify({ text: textChunk })}\n\n`);
+                      }
+                    } catch {
+                      // Ignore JSON parse chunk errors
+                    }
+                  }
+                }
+              }
+
+              if (hasStreamedData) {
                 res.write('data: [DONE]\n\n');
                 res.end();
                 return;
               }
-              if (trimmed.startsWith('data: ')) {
-                try {
-                  const json = JSON.parse(trimmed.slice(6));
-                  const textChunk = json.choices?.[0]?.delta?.content || '';
-                  if (textChunk) {
-                    hasStreamedData = true;
-                    res.write(`data: ${JSON.stringify({ text: textChunk })}\n\n`);
-                  }
-                } catch {
-                  // Ignore JSON parse chunk errors
-                }
-              }
+            } else {
+              console.warn(`[Server Auto-Fallback] Model ${currentModel} returned ${response.status}. Attempting next fallback model...`);
             }
+          } catch (modelErr: any) {
+            console.warn(`[Server Auto-Fallback] Error querying ${currentModel}:`, modelErr.message);
           }
-
-          if (hasStreamedData) {
-            res.write('data: [DONE]\n\n');
-            res.end();
-            return;
-          }
-        } else {
-          console.warn('OpenRouter API returned error status:', response.status, await response.text().catch(() => ''));
         }
       }
     } catch (openRouterErr: any) {

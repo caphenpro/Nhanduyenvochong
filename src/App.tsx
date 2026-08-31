@@ -7,6 +7,7 @@ import { AboutView } from './components/AboutView';
 import { Footer } from './components/Footer';
 import { AIChatbotModal } from './components/AIChatbotModal';
 import { ApiKeySettingsModal } from './components/ApiKeySettingsModal';
+import { VersionHistoryModal } from './components/VersionHistoryModal';
 import { CoupleAnalysisResult } from './types';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   const [currentCoupleResult, setCurrentCoupleResult] = useState<CoupleAnalysisResult | null>(null);
   const [isModalChatOpen, setIsModalChatOpen] = useState<boolean>(false);
   const [isApiKeySettingsOpen, setIsApiKeySettingsOpen] = useState<boolean>(false);
+  const [isVersionModalOpen, setIsVersionModalOpen] = useState<boolean>(false);
 
   const handleSelectCoupleForChat = (result: CoupleAnalysisResult) => {
     setCurrentCoupleResult(result);
@@ -28,6 +30,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         onOpenAIChat={() => setIsModalChatOpen(true)}
         onOpenApiKeySettings={() => setIsApiKeySettingsOpen(true)}
+        onOpenVersionModal={() => setIsVersionModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -49,7 +52,9 @@ export default function App() {
 
         {activeTab === 'library' && <AncientLibraryView />}
 
-        {activeTab === 'about' && <AboutView />}
+        {activeTab === 'about' && (
+          <AboutView onOpenVersionModal={() => setIsVersionModalOpen(true)} />
+        )}
       </main>
 
       {/* Floating AI Chatbot Modal (Accessible across all views) */}
@@ -66,9 +71,16 @@ export default function App() {
         onClose={() => setIsApiKeySettingsOpen(false)}
       />
 
+      {/* Global Version History & Changelog Modal */}
+      <VersionHistoryModal
+        isOpen={isVersionModalOpen}
+        onClose={() => setIsVersionModalOpen(false)}
+      />
+
       {/* Footer (displayed on non-chat pages or at bottom) */}
-      {activeTab !== 'chat' && <Footer />}
+      {activeTab !== 'chat' && (
+        <Footer onOpenVersionModal={() => setIsVersionModalOpen(true)} />
+      )}
     </div>
   );
 }
-

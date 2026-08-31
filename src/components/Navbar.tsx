@@ -1,6 +1,7 @@
 import React from 'react';
-import { MessageSquare, Sparkles, BookOpen, Info, HeartHandshake, Compass, Key } from 'lucide-react';
+import { MessageSquare, Sparkles, BookOpen, Info, HeartHandshake, Compass, Key, History } from 'lucide-react';
 import { getStoredOpenRouterKey } from './ApiKeySettingsModal';
+import { APP_INFO } from '../data/versionHistory';
 
 export type TabType = 'chat' | 'lookup' | 'library' | 'about';
 
@@ -9,6 +10,7 @@ interface NavbarProps {
   setActiveTab: (tab: TabType) => void;
   onOpenAIChat?: () => void;
   onOpenApiKeySettings?: () => void;
+  onOpenVersionModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -16,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab,
   onOpenAIChat,
   onOpenApiKeySettings,
+  onOpenVersionModal,
 }) => {
   const hasCustomKey = Boolean(getStoredOpenRouterKey());
 
@@ -39,6 +42,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-rose-100 text-rose-800 border border-rose-200">
                   AI Chatbox
                 </span>
+                {onOpenVersionModal && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenVersionModal();
+                    }}
+                    className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-200/80 hover:bg-amber-300 text-amber-900 border border-amber-400/60 transition-colors flex items-center space-x-1 cursor-pointer"
+                    title="Nhấn để xem Lịch Sử Phiên Bản & Changelog"
+                  >
+                    <span>{APP_INFO.currentVersion}</span>
+                  </button>
+                )}
               </div>
               <p className="text-xs text-amber-800/80 hidden sm:block">
                 Kết Nối Tâm Duyên &bull; Thấu Hiểu Yêu Thương &bull; Luận Giải Đa Tầng

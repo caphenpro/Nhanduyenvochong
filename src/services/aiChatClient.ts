@@ -4,21 +4,81 @@ import { SYSTEM_INSTRUCTION_PROMPT } from '../data/knowledgeBasePrompt';
 import { generateAncientWisdomResponse } from '../data/ancientReasoner';
 import { getStoredOpenRouterKey } from '../components/ApiKeySettingsModal';
 
+export const AUTO_MODEL_ID = 'auto';
+
+export const AI_MODELS_LIST = [
+  {
+    id: AUTO_MODEL_ID,
+    name: '⚡ Tự Động Chọn Tối Ưu',
+    badge: 'Khuyên dùng',
+    desc: 'Tự động luân chuyển mô hình khi hết gói miễn phí hoặc quá tải',
+    isAuto: true,
+  },
+  {
+    id: 'google/gemini-2.5-flash',
+    name: 'Gemini 2.5 Flash',
+    badge: 'Nhanh & Chuẩn',
+    desc: 'Tốc độ cao, phân tích đa tầng toàn diện',
+  },
+  {
+    id: 'deepseek/deepseek-chat',
+    name: 'DeepSeek Chat V3',
+    badge: 'Thuật số',
+    desc: 'Lý giải thuật số, nạp âm và phân tích lý tính',
+  },
+  {
+    id: 'meta-llama/llama-3.3-70b-instruct:free',
+    name: 'Llama 3.3 70B (Free)',
+    badge: 'Miễn phí',
+    desc: 'Mô hình mã nguồn mở mạnh mẽ, dự phòng tin cậy',
+  },
+  {
+    id: 'qwen/qwen-2.5-72b-instruct:free',
+    name: 'Qwen 2.5 72B (Free)',
+    badge: 'Miễn phí',
+    desc: 'Khả năng tiếng Việt vượt trội, hỗ trợ thuật thư',
+  },
+  {
+    id: 'google/gemini-2.0-flash-exp:free',
+    name: 'Gemini 2.0 Flash (Free)',
+    badge: 'Miễn phí',
+    desc: 'Bản thử nghiệm miễn phí từ Google',
+  },
+  {
+    id: 'anthropic/claude-3.5-sonnet',
+    name: 'Claude 3.5 Sonnet',
+    badge: 'Văn phong',
+    desc: 'Văn phong cổ thi trau chuốt, sâu sắc',
+  },
+];
+
+// Danh sách các mô hình trong chuỗi tự động fallback khi hết quota hoặc lỗi
+export const AUTO_FALLBACK_CHAIN = [
+  'google/gemini-2.5-flash',
+  'deepseek/deepseek-chat',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'qwen/qwen-2.5-72b-instruct:free',
+  'google/gemini-2.0-flash-exp:free',
+  'mistralai/mistral-small-24b-instruct-2501:free',
+];
+
 export interface StreamChatOptions {
   messages: Array<{ role: string; content: string }>;
   coupleContext?: CoupleAnalysisResult | null;
   model?: string;
   userApiKey?: string;
   onChunk: (accumulatedText: string) => void;
+  onModelResolved?: (modelName: string) => void;
   onError?: (error: any) => void;
 }
 
 export async function streamAIChat({
   messages,
   coupleContext,
-  model = 'google/gemini-2.5-flash',
+  model = AUTO_MODEL_ID,
   userApiKey,
   onChunk,
+  onModelResolved,
   onError,
 }: StreamChatOptions): Promise<void> {
   const effectiveKey = (userApiKey || getStoredOpenRouterKey() || '').trim();
@@ -56,83 +116,93 @@ export async function streamAIChat({
 ${coupleSummary}
 `;
 
-  // Strategy 1: Direct OpenRouter call from client if user has an API Key (Works 100% on Vercel & GitHub)
+  // Determine the sequence of models to try
+  const candidateModels: string[] =
+    model === AUTO_MODEL_ID || !model
+      ? AUTO_FALLBACK_CHAIN
+      : [model, ...AUTO_FALLBACK_CHAIN.filter((m) => m !== model)];
+
+  // Strategy 1: Direct OpenRouter call with Auto-Fallback across candidate models
   if (effectiveKey) {
-    try {
-      const openRouterMessages = [
-        { role: 'system', content: systemPrompt },
-        ...messages.map((m) => ({ role: m.role, content: m.content })),
-      ];
+    for (const currentCandidate of candidateModels) {
+      try {
+        const openRouterMessages = [
+          { role: 'system', content: systemPrompt },
+          ...messages.map((m) => ({ role: m.role, content: m.content })),
+        ];
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${effectiveKey}`,
-          'HTTP-Referer': window.location.origin || 'https://ai.studio',
-          'X-Title': 'Nhan Duyen Tien Dinh Co Thuat',
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: openRouterMessages,
-          stream: true,
-          temperature: 0.7,
-          max_tokens: 2500,
-        }),
-      });
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${effectiveKey}`,
+            'HTTP-Referer': window.location.origin || 'https://ai.studio',
+            'X-Title': 'Nhan Duyen Tien Dinh Co Thuat',
+          },
+          body: JSON.stringify({
+            model: currentCandidate,
+            messages: openRouterMessages,
+            stream: true,
+            temperature: 0.7,
+            max_tokens: 2500,
+          }),
+        });
 
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => '');
-        console.warn(`OpenRouter direct call failed (${response.status}):`, errorText);
-        // If 401 or invalid key, notify and fallback
-        if (response.status === 401 || response.status === 402) {
-          throw new Error(`Khóa OpenRouter không hợp lệ hoặc đã hết hạn mức (Mã ${response.status}). Đang chuyển sang Động cơ Cổ Thư nội bộ.`);
+        // If rate limited (429), quota exceeded (402), or model unavailable (404/503), try next model
+        if (!response.ok) {
+          const errText = await response.text().catch(() => '');
+          console.warn(`[Auto-Fallback] Model ${currentCandidate} returned ${response.status}: ${errText}. Đang tự động chuyển sang mô hình tiếp theo...`);
+          continue; // Try next model in fallback chain
         }
-        throw new Error(`OpenRouter returned status ${response.status}`);
-      }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let accumulated = '';
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let accumulated = '';
 
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        if (reader) {
+          if (onModelResolved) {
+            const foundObj = AI_MODELS_LIST.find((m) => m.id === currentCandidate);
+            onModelResolved(foundObj ? foundObj.name : currentCandidate);
+          }
 
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-          for (const line of lines) {
-            const trimmed = line.trim();
-            if (trimmed.startsWith('data: ')) {
-              const dataStr = trimmed.slice(6);
-              if (dataStr === '[DONE]') break;
-              try {
-                const parsed = JSON.parse(dataStr);
-                const delta = parsed.choices?.[0]?.delta?.content || '';
-                if (delta) {
-                  accumulated += delta;
-                  onChunk(accumulated);
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (trimmed.startsWith('data: ')) {
+                const dataStr = trimmed.slice(6);
+                if (dataStr === '[DONE]') break;
+                try {
+                  const parsed = JSON.parse(dataStr);
+                  const delta = parsed.choices?.[0]?.delta?.content || '';
+                  if (delta) {
+                    accumulated += delta;
+                    onChunk(accumulated);
+                  }
+                } catch {
+                  // Ignore parse errors for partial chunks
                 }
-              } catch {
-                // Ignore parse errors for partial chunks
               }
             }
           }
         }
-      }
 
-      if (accumulated.trim().length > 0) {
-        return; // Success!
+        if (accumulated.trim().length > 0) {
+          return; // Successfully completed streaming!
+        }
+      } catch (err: any) {
+        console.warn(`[Auto-Fallback] Error with model ${currentCandidate}:`, err?.message || err);
+        // Continue to next candidate model
       }
-    } catch (err: any) {
-      console.warn('Direct OpenRouter call error, falling back:', err?.message || err);
-      // If error occurred, proceed to fallback below
     }
   }
 
-  // Strategy 2: Attempt Express Server-side Route (if running on a full-stack container)
+  // Strategy 2: Attempt Express Server-side Route (Supports internal Auto-Fallback across keys & models)
   try {
     const serverResponse = await fetch('/api/openrouter/chat', {
       method: 'POST',
@@ -140,7 +210,7 @@ ${coupleSummary}
       body: JSON.stringify({
         messages,
         coupleContext,
-        model,
+        model: model,
         apiKey: effectiveKey,
       }),
     });
@@ -151,6 +221,10 @@ ${coupleSummary}
       let accumulated = '';
 
       if (reader) {
+        if (onModelResolved) {
+          onModelResolved('Động cơ AI Tự Động (Máy chủ)');
+        }
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -184,7 +258,10 @@ ${coupleSummary}
     // Backend not reachable or returned 404 (e.g. static Vercel deployment)
   }
 
-  // Strategy 3: Pure Client-Side Metaphysics Wisdom Engine (100% Offline, Zero-404 Guarantee)
+  // Strategy 3: Pure Client-Side Metaphysics Wisdom Engine (100% Offline, Zero-Error Guarantee)
+  if (onModelResolved) {
+    onModelResolved('Cổ Thư Reasoner (Offline Độc Lập)');
+  }
   const staticWisdom = generateAncientWisdomResponse(lastUserMsg, coupleContext);
   
   // Simulate smooth streaming typewriter effect

@@ -336,7 +336,7 @@ export const ApiKeySettingsModal: React.FC<ApiKeySettingsModalProps> = ({
             <div className="text-[11px] text-amber-400/90 bg-amber-950/30 p-2.5 rounded-lg border border-amber-800/40 flex items-start space-x-2">
               <Sparkles className="w-4 h-4 shrink-0 text-amber-300 mt-0.5" />
               <span>
-                <strong>Gợi ý:</strong> OpenRouter hỗ trợ nhiều mô hình miễn phí hoặc cực kỳ tiết kiệm (như Gemini 2.5 Flash, DeepSeek Chat). Nếu chưa có Key, bạn vẫn có thể sử dụng <strong>Động cơ Cổ Thư Tích Hợp</strong> để giải đoán hôn nhân chính xác theo sách cổ.
+                <strong>Tính năng Thông Minh:</strong> Hệ thống tích hợp chế độ <strong>⚡ Tự Động Chọn & Luân Chuyển Mô Hình (Auto-Fallback)</strong>. Khi một mô hình hết gói miễn phí hoặc quá tải, ứng dụng sẽ tự động chuyển sang mô hình tiếp theo (Gemini &rarr; DeepSeek &rarr; Llama 3.3 Free &rarr; Qwen Free &rarr; Cổ Thư Reasoner) để đảm bảo không bao giờ bị gián đoạn.
               </span>
             </div>
           </div>
