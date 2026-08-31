@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.4.1',
+  currentVersion: 'v2.4.2',
   releaseDate: '31/08/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,35 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.4.2',
+    releaseDate: '31/08/2026',
+    codename: 'Hoàn Thiện Tàng Kinh Các (Ancient Library Scroll Fix)',
+    tagline: 'Khắc phục hoàn toàn lỗi ẩn/mất tab và nội dung trong Cẩm Nang Cổ Thư trên điện thoại di động',
+    isLatest: true,
+    highlights: [
+      'Khắc phục lỗi căn giữa (justify-center) trong thanh tab khiến các chuyên mục "100 Đồ Hình Cao Ly" và "Cung Mệnh Bát Trạch" bị tràn sang tọa độ âm trên smartphone.',
+      'Chuẩn hóa thanh chuyển tab Cổ Thư với chế độ cuộn tự nhiên từ trái sang phải, đảm bảo hiển thị đầy đủ và dễ dàng chạm chuyển qua lại giữa 5 pho thư tịch cổ.',
+      'Tối ưu hóa các thẻ Du Niên 8 hướng và bảng tra số dư chia 9, loại bỏ hiện tượng ngắt dòng khó nhìn và chống che khuất bởi nút trợ lý AI nổi.',
+    ],
+    changes: [
+      {
+        type: 'fix',
+        title: 'Sửa lỗi mất tab Cổ Thư trên di động',
+        description: 'Chuyển thanh tab switcher từ flex justify-center sang justify-start kèm thanh cuộn mượt, cho phép người dùng lướt và xem trọn vẹn cả 5 tab sách cổ.',
+      },
+      {
+        type: 'ui',
+        title: 'Tối ưu độ phản hồi Cổ Thư trên Mobile',
+        description: 'Tăng khoảng đệm chân trang (pb-28) chống bị nút tròn AI che khuất, bỏ line-clamp cắt chữ Du Niên và hoàn thiện bố cục Can Chồng selector.',
+      },
+    ],
+  },
+  {
     version: 'v2.4.1',
     releaseDate: '31/08/2026',
     codename: 'Tương Thích Toàn Diện Di Động (Mobile Perfect Flow)',
     tagline: 'Khắc phục triệt để hiện tượng mất cân đối hiển thị trên thiết bị di động, tối ưu hóa thanh điều hướng và khung đàm đạo',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Khắc phục hoàn toàn lỗi tràn ngang (horizontal overflow) làm giao diện bị co sang một bên trên màn hình điện thoại thông minh.',
       'Tối ưu hóa thanh điều hướng Navbar với kích thước touch-target chuẩn mực, tiêu đề không bị ngắt dòng và các icon chức năng thu gọn tinh tế.',

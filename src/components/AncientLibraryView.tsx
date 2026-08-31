@@ -12,7 +12,7 @@ import {
 import { CanName, CungPhi } from '../types';
 
 export const AncientLibraryView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'caoly' | 'truongsanh' | 'napam' | 'battrach' | 'phuocduc'>('caoly');
+  const [activeTab, setActiveTab] = useState<'caoly' | 'battrach' | 'truongsanh' | 'napam' | 'phuocduc'>('caoly');
   const [selectedCan, setSelectedCan] = useState<CanName>('Giáp');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -35,81 +35,81 @@ export const AncientLibraryView: React.FC = () => {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-2.5 sm:px-4 py-4 sm:py-8 space-y-5 sm:space-y-6 pb-28 w-full min-w-0">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto space-y-2">
+      <div className="text-center max-w-2xl mx-auto space-y-2 px-2">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-semibold">
           <BookOpen className="w-3.5 h-3.5 text-amber-700" />
           <span>Tàng Kinh Các Cổ Thư</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold font-serif text-amber-950">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-amber-950 leading-tight">
           Cẩm Nang Tra Cứu Toàn Thư Cổ Bản
         </h1>
-        <p className="text-xs sm:text-sm text-stone-600">
+        <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
           Trích lục nguyên văn từ Cung Mệnh Bát Trạch, Diễn Cầm Tam Thế (1952) và Cao Ly Đầu Hình (NXB Hồng Dân).
         </p>
       </div>
 
-      {/* Main Tab Switcher */}
-      <div className="flex justify-center border-b border-amber-200">
-        <div className="flex space-x-2 sm:space-x-3 overflow-x-auto pb-1">
+      {/* Main Tab Switcher - Fixed mobile scroll: starts from left (justify-start) so no items get truncated */}
+      <div className="w-full border-b border-amber-200">
+        <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto pb-2 px-1 scroll-smooth justify-start md:justify-center">
           <button
             onClick={() => setActiveTab('caoly')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold transition-all border-b-2 shrink-0 ${
+            className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
               activeTab === 'caoly'
-                ? 'border-amber-800 text-amber-900 bg-amber-100/60'
-                : 'border-transparent text-stone-600 hover:text-amber-900'
+                ? 'bg-amber-900 text-amber-50 shadow-xs'
+                : 'bg-amber-50 text-stone-700 hover:bg-amber-100 hover:text-amber-950 border border-amber-200/80'
             }`}
           >
-            <ScrollText className="w-4 h-4 text-amber-700" />
+            <ScrollText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>100 Đồ Hình Cao Ly</span>
           </button>
 
           <button
             onClick={() => setActiveTab('battrach')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold transition-all border-b-2 shrink-0 ${
+            className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
               activeTab === 'battrach'
-                ? 'border-amber-800 text-amber-900 bg-amber-100/60'
-                : 'border-transparent text-stone-600 hover:text-amber-900'
+                ? 'bg-amber-900 text-amber-50 shadow-xs'
+                : 'bg-amber-50 text-stone-700 hover:bg-amber-100 hover:text-amber-950 border border-amber-200/80'
             }`}
           >
-            <Compass className="w-4 h-4 text-amber-700" />
+            <Compass className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>Cung Mệnh Bát Trạch</span>
           </button>
 
           <button
             onClick={() => setActiveTab('truongsanh')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold transition-all border-b-2 shrink-0 ${
+            className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
               activeTab === 'truongsanh'
-                ? 'border-amber-800 text-amber-900 bg-amber-100/60'
-                : 'border-transparent text-stone-600 hover:text-amber-900'
+                ? 'bg-amber-900 text-amber-50 shadow-xs'
+                : 'bg-amber-50 text-stone-700 hover:bg-amber-100 hover:text-amber-950 border border-amber-200/80'
             }`}
           >
-            <Layers className="w-4 h-4 text-amber-700" />
+            <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>12 Cung Trường Sanh</span>
           </button>
 
           <button
             onClick={() => setActiveTab('napam')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold transition-all border-b-2 shrink-0 ${
+            className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
               activeTab === 'napam'
-                ? 'border-amber-800 text-amber-900 bg-amber-100/60'
-                : 'border-transparent text-stone-600 hover:text-amber-900'
+                ? 'bg-amber-900 text-amber-50 shadow-xs'
+                : 'bg-amber-50 text-stone-700 hover:bg-amber-100 hover:text-amber-950 border border-amber-200/80'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-700" />
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>60 Hoa Giáp & Nạp Âm</span>
           </button>
 
           <button
             onClick={() => setActiveTab('phuocduc')}
-            className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold transition-all border-b-2 shrink-0 ${
+            className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer ${
               activeTab === 'phuocduc'
-                ? 'border-amber-800 text-amber-900 bg-amber-100/60'
-                : 'border-transparent text-stone-600 hover:text-amber-900'
+                ? 'bg-amber-900 text-amber-50 shadow-xs'
+                : 'bg-amber-50 text-stone-700 hover:bg-amber-100 hover:text-amber-950 border border-amber-200/80'
             }`}
           >
-            <Heart className="w-4 h-4 text-amber-700" />
+            <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>Đức Năng Thắng Số</span>
           </button>
         </div>
@@ -303,12 +303,12 @@ export const AncientLibraryView: React.FC = () => {
               </div>
 
               {/* 8 Directions Grid of calculated person */}
-              <div className="lg:col-span-2 bg-white rounded-2xl p-5 border border-amber-200 shadow-xs space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="lg:col-span-2 bg-white rounded-2xl p-4 sm:p-5 border border-amber-200 shadow-xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                   <span className="text-xs font-bold text-amber-950 uppercase tracking-wider">
                     8 Hướng Du Niên Cho {batTrachGender} ({batTrachYear} — Cung {batTrachCalculation.cung})
                   </span>
-                  <div className="flex items-center space-x-2 text-[11px]">
+                  <div className="flex items-center space-x-3 text-[11px]">
                     <span className="inline-flex items-center text-emerald-700 font-bold">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 mr-1" /> 4 Hướng Cát
                     </span>
@@ -318,7 +318,7 @@ export const AncientLibraryView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {Object.entries(BAT_TRACH_8_CUNG_CHI_TIET[batTrachCalculation.cung].huongDetail).map(
                     ([huong, detail]) => {
                       const isCat = detail.loai === 'Cát';
@@ -327,13 +327,13 @@ export const AncientLibraryView: React.FC = () => {
                           key={huong}
                           className={`p-3 rounded-xl border transition-all text-xs flex flex-col justify-between ${
                             isCat
-                              ? 'bg-emerald-50/70 border-emerald-200 hover:border-emerald-400'
-                              : 'bg-rose-50/60 border-rose-200 hover:border-rose-400'
+                              ? 'bg-emerald-50/80 border-emerald-200 hover:border-emerald-400'
+                              : 'bg-rose-50/70 border-rose-200 hover:border-rose-400'
                           }`}
                         >
                           <div>
                             <div className="flex items-center justify-between">
-                              <span className="font-bold text-stone-900">{huong}</span>
+                              <span className="font-bold text-stone-900 text-xs sm:text-sm">Hướng {huong}</span>
                               <span
                                 className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
                                   isCat ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'
@@ -346,7 +346,7 @@ export const AncientLibraryView: React.FC = () => {
                               {detail.nguHanhDuNien} khí &bull; {isCat ? 'Cát Khí' : 'Hung Khí'}
                             </div>
                           </div>
-                          <p className="text-[11px] text-stone-600 mt-2 line-clamp-2" title={detail.yNghia}>
+                          <p className="text-[11px] text-stone-700 mt-2 leading-relaxed" title={detail.yNghia}>
                             {detail.yNghia}
                           </p>
                         </div>
