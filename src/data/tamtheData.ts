@@ -90,6 +90,13 @@ export const NGU_HANH_NAP_AM_60: Record<number, { can: CanName; chi: ChiName; me
 };
 
 export function getCanChiByYear(year: number): CanChiInfo {
+  const canMap: Record<CanName, MenhNguHanh> = {
+    Giáp: 'Mộc', Ất: 'Mộc', Bính: 'Hỏa', Đinh: 'Hỏa', Mậu: 'Thổ', Kỷ: 'Thổ', Canh: 'Kim', Tân: 'Kim', Nhâm: 'Thủy', Quý: 'Thủy'
+  };
+  const chiMap: Record<ChiName, MenhNguHanh> = {
+    Tý: 'Thủy', Sửu: 'Thổ', Dần: 'Mộc', Mão: 'Mộc', Mẹo: 'Mộc', Thìn: 'Thổ', Tỵ: 'Hỏa', Ngọ: 'Hỏa', Mùi: 'Thổ', Thân: 'Kim', Dậu: 'Kim', Tuất: 'Thổ', Hợi: 'Thủy'
+  };
+
   if (NGU_HANH_NAP_AM_60[year]) {
     const info = NGU_HANH_NAP_AM_60[year];
     return {
@@ -99,6 +106,8 @@ export function getCanChiByYear(year: number): CanChiInfo {
       lunarYear: year,
       menh: info.menh,
       nguHanh: info.nguHanh,
+      canNguHanh: canMap[info.can],
+      chiNguHanh: chiMap[info.chi],
       tuoiCon: info.tuoiCon,
     };
   }
@@ -118,6 +127,8 @@ export function getCanChiByYear(year: number): CanChiInfo {
     lunarYear: year,
     menh: info.menh,
     nguHanh: info.nguHanh,
+    canNguHanh: canMap[can],
+    chiNguHanh: chiMap[chi],
     tuoiCon: info.tuoiCon,
   };
 }
@@ -283,6 +294,7 @@ export const CO_THAN_QUA_TU: Record<ChiName, { traiPham: number[]; gaiPham: numb
   'Tý': { traiPham: [1, 7], gaiPham: [2, 8] },
   'Sửu': { traiPham: [1, 7], gaiPham: [3, 9] },
   'Dần': { traiPham: [4, 10], gaiPham: [4, 10] },
+  'Mão': { traiPham: [4, 10], gaiPham: [5, 11] },
   'Mẹo': { traiPham: [4, 10], gaiPham: [5, 11] },
   'Thìn': { traiPham: [4, 10], gaiPham: [6, 12] },
   'Tỵ': { traiPham: [1, 7], gaiPham: [1, 7] },

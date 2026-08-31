@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Heart, HelpCircle, ShieldCheck, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
+import { Sparkles, Heart, ShieldCheck, ArrowRight, BookOpen, Layers, CheckCircle2, AlertTriangle, Info, Compass, CompassIcon } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CoupleAnalysisResult } from '../types';
-import { analyzeCoupleLocal } from '../services/coupleAnalysis';
+import { analyzeCoupleMultiLayer } from '../services/coupleAnalysis';
 
 interface CoupleLookupViewProps {
   onSelectCoupleForChat: (result: CoupleAnalysisResult) => void;
@@ -21,18 +21,17 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<CoupleAnalysisResult | null>(savedResult);
 
-  const performAnalysis = async (cYear: number, cMonth: number, vYear: number, vMonth: number) => {
+  const performAnalysis = (cYear: number, cMonth: number, vYear: number, vMonth: number) => {
     setLoading(true);
     try {
-      // Calculate directly with pure ancient wisdom engine (100% offline & zero network lag)
-      const localData = analyzeCoupleLocal(cYear, cMonth, vYear, vMonth);
-      setResult(localData);
-      if (localData.tongKetDuyenNo.diemSo >= 75) {
+      const data = analyzeCoupleMultiLayer(cYear, cMonth, vYear, vMonth);
+      setResult(data);
+      if (data.cauTrucTongHop.diemThuan.length >= 2) {
         confetti({
-          particleCount: 50,
+          particleCount: 40,
           spread: 60,
           origin: { y: 0.7 },
-          colors: ['#d97706', '#b45309', '#f59e0b'],
+          colors: ['#e11d48', '#f59e0b', '#fb7185'],
         });
       }
     } catch (err) {
@@ -53,77 +52,71 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
     performAnalysis(chongYear, chongMonth, voYear, voMonth);
   };
 
-  const getScoreBadge = (score: number) => {
-    if (score >= 80) return 'bg-emerald-100 text-emerald-900 border-emerald-300';
-    if (score >= 65) return 'bg-amber-100 text-amber-900 border-amber-300';
-    if (score >= 50) return 'bg-yellow-100 text-yellow-900 border-yellow-300';
-    return 'bg-rose-100 text-rose-900 border-rose-300';
-  };
-
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8 space-y-8">
       {/* Title & Introduction */}
-      <div className="text-center max-w-2xl mx-auto space-y-2">
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-          <span>Thuật Số Căn Duyên Tiền Định &bull; Cao Ly Đầu Hình</span>
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+          <img src="/logo.png" alt="Logo" className="w-4 h-4 rounded-full object-cover" />
+          <span>AI Nhân Duyên &bull; Hệ Thống Luận Giải Đa Tầng Khoa Học</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold font-serif text-amber-950">
-          Lập Quẻ Luận Đoán Nhân Duyên Vợ Chồng
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-amber-950">
+          Khảo Sát Hòa Hợp Nhân Duyên & Hôn Nhân
         </h1>
-        <p className="text-sm sm:text-base text-stone-600">
-          Tra cứu Can Chi, Ngũ Hành nạp âm, 100 Đồ Hình Cao Ly, 12 Cung Trường Sanh và hạn Cô Thần - Quả Tú.
+        <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
+          Đánh giá đa chiều dựa trên <strong>Thiên Can (Khí)</strong>, <strong>Địa Chi (Động)</strong>, <strong>Ngũ Hành</strong>, <strong>Nạp Âm Lục Thập Hoa Giáp</strong> và <strong>Cung Mệnh Bát Trạch</strong>.
         </p>
       </div>
 
       {/* Input Form Card */}
       <form
         onSubmit={handleCalculate}
-        className="bg-white border-2 border-amber-300/80 rounded-2xl p-5 sm:p-7 shadow-md"
+        className="bg-white border-2 border-rose-200/80 rounded-2xl p-5 sm:p-7 shadow-md"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
           {/* Heart icon in center on large screens */}
-          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-amber-100 border border-amber-300 items-center justify-center text-amber-700 z-10 shadow-xs">
-            <Heart className="w-5 h-5 fill-amber-300" />
+          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-rose-100 border border-rose-300 items-center justify-center text-rose-600 z-10 shadow-xs">
+            <Heart className="w-5 h-5 fill-rose-300" />
           </div>
 
           {/* Husband Column */}
-          <div className="space-y-4 bg-amber-50/50 p-4 sm:p-5 rounded-xl border border-amber-200">
+          <div className="space-y-4 bg-amber-50/60 p-4 sm:p-5 rounded-xl border border-amber-200">
             <div className="flex items-center space-x-2 border-b border-amber-200 pb-2">
               <div className="w-7 h-7 rounded-lg bg-amber-800 text-amber-100 flex items-center justify-center font-bold text-xs">
                 ♂
               </div>
-              <h2 className="font-serif font-bold text-amber-950 text-base">Thông Tin Người Chồng</h2>
+              <h2 className="font-serif font-bold text-amber-950 text-base">Thông Tin Người Chồng (Nam)</h2>
             </div>
 
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Năm sinh Dương lịch / Âm lịch (1940 - 2030):
+                  Năm Sinh Dương Lịch (1940 - 2035):
                 </label>
                 <input
+                  id="chong-year-input"
                   type="number"
                   min="1940"
-                  max="2030"
+                  max="2035"
                   value={chongYear}
-                  onChange={(e) => setChongYear(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl text-stone-900 font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                  required
+                  onChange={(e) => setChongYear(parseInt(e.target.value) || 1990)}
+                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-lg text-sm font-semibold text-amber-950 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Tháng sinh (Tháng Âm Lịch):
+                  Tháng Sinh Âm Lịch (1 - 12):
                 </label>
                 <select
+                  id="chong-month-select"
                   value={chongMonth}
-                  onChange={(e) => setChongMonth(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl text-stone-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  onChange={(e) => setChongMonth(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-lg text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 >
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <option key={m} value={m}>
-                      Tháng {m === 1 ? 'Giêng (1)' : m}
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      Tháng {i + 1} Âm Lịch
                     </option>
                   ))}
                 </select>
@@ -132,42 +125,43 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
           </div>
 
           {/* Wife Column */}
-          <div className="space-y-4 bg-amber-50/50 p-4 sm:p-5 rounded-xl border border-amber-200">
-            <div className="flex items-center space-x-2 border-b border-amber-200 pb-2">
+          <div className="space-y-4 bg-rose-50/60 p-4 sm:p-5 rounded-xl border border-rose-200">
+            <div className="flex items-center space-x-2 border-b border-rose-200 pb-2">
               <div className="w-7 h-7 rounded-lg bg-rose-800 text-rose-100 flex items-center justify-center font-bold text-xs">
                 ♀
               </div>
-              <h2 className="font-serif font-bold text-rose-950 text-base">Thông Tin Người Vợ</h2>
+              <h2 className="font-serif font-bold text-rose-950 text-base">Thông Tin Người Vợ (Nữ)</h2>
             </div>
 
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Năm sinh Dương lịch / Âm lịch (1940 - 2030):
+                  Năm Sinh Dương Lịch (1940 - 2035):
                 </label>
                 <input
+                  id="vo-year-input"
                   type="number"
                   min="1940"
-                  max="2030"
+                  max="2035"
                   value={voYear}
-                  onChange={(e) => setVoYear(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl text-stone-900 font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                  required
+                  onChange={(e) => setVoYear(parseInt(e.target.value) || 1990)}
+                  className="w-full px-3 py-2 bg-white border border-rose-300 rounded-lg text-sm font-semibold text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Tháng sinh (Tháng Âm Lịch):
+                  Tháng Sinh Âm Lịch (1 - 12):
                 </label>
                 <select
+                  id="vo-month-select"
                   value={voMonth}
-                  onChange={(e) => setVoMonth(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl text-stone-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  onChange={(e) => setVoMonth(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 bg-white border border-rose-300 rounded-lg text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
                 >
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <option key={m} value={m}>
-                      Tháng {m === 1 ? 'Giêng (1)' : m}
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      Tháng {i + 1} Âm Lịch
                     </option>
                   ))}
                 </select>
@@ -176,15 +170,16 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
           </div>
         </div>
 
+        {/* Submit button */}
         <div className="mt-6 flex justify-center">
           <button
             id="btn-calculate-couple"
             type="submit"
             disabled={loading}
-            className="flex items-center space-x-2 px-8 py-3 rounded-xl bg-linear-to-r from-amber-700 to-amber-900 hover:from-amber-800 hover:to-amber-950 text-amber-50 font-bold text-base shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+            className="flex items-center space-x-2 px-8 py-3 rounded-xl bg-linear-to-r from-rose-700 to-amber-900 hover:from-rose-800 hover:to-amber-950 text-white font-bold text-base shadow-md hover:scale-[1.02] transition-all cursor-pointer"
           >
-            <Sparkles className="w-5 h-5 text-amber-300" />
-            <span>{loading ? 'Đang Lập Quẻ...' : 'Lập Quẻ Xem Duyên Nợ'}</span>
+            <Sparkles className="w-5 h-5 text-rose-200" />
+            <span>{loading ? 'Đang Phân Tích Đa Tầng...' : 'Phân Tích Hòa Hợp Nhân Duyên'}</span>
           </button>
         </div>
       </form>
@@ -192,159 +187,221 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
       {/* Analysis Results Display */}
       {result && (
         <div className="space-y-6">
-          {/* Header Score & Classification */}
-          <div className="bg-linear-to-br from-amber-900 to-amber-950 text-amber-50 rounded-2xl p-6 sm:p-8 shadow-lg border border-amber-700 relative overflow-hidden">
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="space-y-2">
+          {/* Header Summary Banner */}
+          <div className="bg-linear-to-br from-stone-900 via-rose-950 to-amber-950 text-amber-50 rounded-2xl p-6 sm:p-8 shadow-xl border border-rose-800/60 relative overflow-hidden">
+            <div className="relative z-10 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 font-medium">
-                    Tổng Luận Căn Duyên
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/40 font-medium">
+                    Cấu Trúc Hòa Hợp Đa Tầng
                   </span>
                   <span className="text-xs text-amber-200">
-                    Chồng {result.chong.fullName} &hearts; Vợ {result.vo.fullName}
+                    Chồng {result.chong.fullName} ({result.chong.lunarYear}) &hearts; Vợ {result.vo.fullName} ({result.vo.lunarYear})
                   </span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-amber-100">
-                  Xếp Loại: {result.tongKetDuyenNo.xepLoai}
+                <div className="text-xs text-stone-300">
+                  Cung Bát Trạch: <strong className="text-amber-200">{result.tang5CungMenh.ketQuaBatTrach}</strong>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-rose-100">
+                  Thông Điệp Cốt Lõi: &ldquo;{result.cauTrucTongHop.thongDiepCotLoi}&rdquo;
                 </h3>
-                <p className="text-sm text-amber-200/90 max-w-2xl leading-relaxed">
-                  {result.tongKetDuyenNo.loiKhuyenHoaGiai}
+                <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-3xl">
+                  {result.cauTrucTongHop.amDuongCheHoa}
                 </p>
               </div>
 
-              {/* Score circle */}
-              <div className="flex flex-col items-center justify-center p-4 bg-amber-800/60 backdrop-blur-xs border border-amber-600/40 rounded-2xl shrink-0 w-32 h-32 text-center">
-                <span className="text-3xl font-black font-serif text-amber-200">
-                  {result.tongKetDuyenNo.diemSo}
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-amber-300 font-medium">
-                  Điểm Hòa Hợp / 100
-                </span>
+              {/* Quick Action to Ask AI */}
+              <div className="pt-4 border-t border-rose-900/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <p className="text-xs text-rose-200/80 italic">
+                  &ldquo;Một người không phải chỉ là một cái tuổi &bull; Đạo đức và sự thấu hiểu quyết định hôn nhân&rdquo;
+                </p>
+                <button
+                  id="btn-ask-ai-detail"
+                  onClick={() => onSelectCoupleForChat(result)}
+                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 bg-rose-200 hover:bg-rose-100 text-rose-950 font-bold text-sm rounded-xl transition-all shadow-md cursor-pointer"
+                >
+                  <img src="/logo.png" alt="AI" className="w-4 h-4 rounded-full object-cover" />
+                  <span>Đàm Đạo Với AI Nhân Duyên Về Cặp Đôi Này</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
-            </div>
-
-            {/* Quick Action to Ask AI */}
-            <div className="mt-6 pt-5 border-t border-amber-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-amber-300/80 italic">
-                Cổ nhân có câu: &ldquo;Phước Đức Năng Thắng Số&rdquo; &bull; Tâm lành phước trổ
-              </p>
-              <button
-                id="btn-ask-ai-detail"
-                onClick={() => onSelectCoupleForChat(result)}
-                className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 bg-amber-300 text-amber-950 hover:bg-amber-200 font-bold text-sm rounded-xl transition-all shadow-md cursor-pointer"
-              >
-                <span>Hỏi Cụ Căn Duyên AI Luận Giải Chi Tiết</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
             </div>
           </div>
 
-          {/* Detailed Breakdown Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* 1. Cao Ly Đầu Hình Card */}
-            <div className="bg-white border border-amber-200 rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-amber-100 pb-3">
+          {/* 6 Layers Breakdown Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Tầng 1: Thiên Can */}
+            <div className="bg-white border border-amber-200/80 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-amber-100 pb-2.5">
                 <div className="flex items-center space-x-2">
-                  <BookOpen className="w-5 h-5 text-amber-700" />
-                  <h4 className="font-serif font-bold text-amber-950 text-lg">
-                    Phép Cao Ly Đầu Hình
+                  <div className="w-6 h-6 rounded-md bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-xs">
+                    1
+                  </div>
+                  <h4 className="font-serif font-bold text-amber-950 text-base">
+                    Tầng 1: Thiên Can (Tầng Khí)
                   </h4>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-bold border ${getScoreBadge(result.caoly.danhGia === 'Đại Cát' ? 90 : result.caoly.danhGia === 'Cát' ? 75 : 50)}`}>
-                  {result.caoly.danhGia}
+                <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                  {result.tang1ThienCan.quanHe}
                 </span>
               </div>
-
-              <div className="space-y-3">
-                <div>
-                  <span className="text-xs font-semibold text-amber-800 uppercase tracking-wider">
-                    Đồ hình:
-                  </span>
-                  <p className="text-base font-serif font-bold text-amber-950">
-                    {result.caoly.tenDoHinh}
-                  </p>
-                </div>
-
-                <div className="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 text-xs sm:text-sm font-serif italic text-amber-950 leading-relaxed">
-                  &ldquo;{result.caoly.thoHanNom}&rdquo;
-                </div>
-
-                <div>
-                  <span className="text-xs font-semibold text-stone-600 block mb-1">
-                    Chú thích cổ thư dịch nghĩa:
-                  </span>
-                  <p className="text-xs sm:text-sm text-stone-800 leading-relaxed">
-                    {result.caoly.chuThich}
-                  </p>
-                </div>
-
-                <div className="p-3 bg-amber-100/60 rounded-xl text-xs text-amber-900 border border-amber-200/80">
-                  <strong>Khuyên dạy:</strong> {result.caoly.khuyenNghi}
-                </div>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                <strong>Khảo sát:</strong> Chồng Can <strong>{result.tang1ThienCan.canChong}</strong> ({result.chong.canNguHanh}) &times; Vợ Can <strong>{result.tang1ThienCan.canVo}</strong> ({result.vo.canNguHanh}).
+              </p>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                {result.tang1ThienCan.chiTiet}
+              </p>
+              <div className="p-2.5 bg-amber-50/70 rounded-xl text-xs text-amber-900 border border-amber-200">
+                <strong>Ý nghĩa Khí:</strong> {result.tang1ThienCan.yNghiaKhi}
               </div>
             </div>
 
-            {/* 2. Mạng Ngũ Hành & 12 Cung Trường Sanh */}
-            <div className="bg-white border border-amber-200 rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-amber-100 pb-3">
+            {/* Tầng 2: Địa Chi */}
+            <div className="bg-white border border-rose-200/80 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-rose-100 pb-2.5">
                 <div className="flex items-center space-x-2">
-                  <ShieldCheck className="w-5 h-5 text-amber-700" />
-                  <h4 className="font-serif font-bold text-amber-950 text-lg">
-                    Mạng & Cung Trường Sanh
+                  <div className="w-6 h-6 rounded-md bg-rose-100 text-rose-900 flex items-center justify-center font-bold text-xs">
+                    2
+                  </div>
+                  <h4 className="font-serif font-bold text-rose-950 text-base">
+                    Tầng 2: Địa Chi (Tầng Động)
                   </h4>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-bold border ${result.tuongSinhMenh.hop ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-rose-100 text-rose-900 border-rose-300'}`}>
-                  {result.tuongSinhMenh.quanHe}
+                <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-rose-100 text-rose-900 border border-rose-300">
+                  {result.tang2DiaChi.tamHop ? 'Tam Hợp' : result.tang2DiaChi.lucHop ? 'Lục Hợp' : result.tang2DiaChi.lucXung ? 'Lục Xung' : result.tang2DiaChi.lucHai ? 'Lục Hại' : 'Bình Hòa'}
                 </span>
               </div>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                <strong>Khảo sát:</strong> Chi Chồng <strong>{result.chong.chi}</strong> ({result.chong.tuoiCon}) &times; Chi Vợ <strong>{result.vo.chi}</strong> ({result.vo.tuoiCon}).
+              </p>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                {result.tang2DiaChi.chiTietDong}
+              </p>
+              <div className="p-2.5 bg-rose-50/70 rounded-xl text-xs text-rose-900 border border-rose-200">
+                <strong>Phạm vi:</strong> Địa Chi đại diện cho hoàn cảnh cụ thể, nếp sinh hoạt và sự chuyển động hàng ngày.
+              </div>
+            </div>
 
-              <div className="space-y-3.5 text-xs sm:text-sm">
-                {/* Menh details */}
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 bg-amber-50 rounded-lg border border-amber-200">
-                    <span className="text-stone-500 block">Chồng ({result.chong.fullName}):</span>
-                    <span className="font-bold text-amber-900">{result.chong.menh}</span>
+            {/* Tầng 3 & 4: Ngũ Hành & Nạp Âm Lục Thập Hoa Giáp */}
+            <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 rounded-md bg-stone-100 text-stone-900 flex items-center justify-center font-bold text-xs">
+                    3-4
                   </div>
-                  <div className="p-2.5 bg-rose-50 rounded-lg border border-rose-200">
-                    <span className="text-stone-500 block">Vợ ({result.vo.fullName}):</span>
-                    <span className="font-bold text-rose-900">{result.vo.menh}</span>
-                  </div>
+                  <h4 className="font-serif font-bold text-stone-950 text-base">
+                    Tầng 3 & 4: Ngũ Hành & Nạp Âm
+                  </h4>
                 </div>
+                <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-stone-100 text-stone-800 border border-stone-300">
+                  {result.tang4NapAm.quanHe}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2 bg-stone-50 rounded-lg border border-stone-200">
+                  <span className="text-stone-500 block">Nạp Âm Chồng:</span>
+                  <strong className="text-stone-900">{result.tang4NapAm.napAmChong}</strong> ({result.tang4NapAm.nguHanhChong})
+                </div>
+                <div className="p-2 bg-stone-50 rounded-lg border border-stone-200">
+                  <span className="text-stone-500 block">Nạp Âm Vợ:</span>
+                  <strong className="text-stone-900">{result.tang4NapAm.napAmVo}</strong> ({result.tang4NapAm.nguHanhVo})
+                </div>
+              </div>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                {result.tang3NguHanh.chiTiet}
+              </p>
+              <div className="p-2.5 bg-stone-50 rounded-xl text-xs text-stone-700 border border-stone-200">
+                <strong>Quy chiếu:</strong> {result.tang4NapAm.phanBietRoRang}
+              </div>
+            </div>
 
-                <p className="text-xs text-stone-700 leading-relaxed">
-                  {result.tuongSinhMenh.chiTiet}
-                </p>
-
-                {/* Truong Sanh detail */}
-                {result.tamtheTruongSanh && (
-                  <div className="pt-2 border-t border-amber-100 space-y-2">
-                    <span className="font-bold text-amber-950 block text-xs uppercase tracking-wider">
-                      Cung Trường Sanh (Diễn Cầm Tam Thế):
-                    </span>
-                    <div className="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span>Chồng sanh tháng {chongMonth}: <strong className="text-amber-900">{result.tamtheTruongSanh.chuChong}</strong></span>
-                        <span className="font-semibold text-stone-600">({result.tamtheTruongSanh.giaiDoanChong?.danhGia})</span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <span>Vợ sanh tháng {voMonth}: <strong className="text-rose-900">{result.tamtheTruongSanh.chuVo}</strong></span>
-                        <span className="font-semibold text-stone-600">({result.tamtheTruongSanh.giaiDoanVo?.danhGia})</span>
-                      </div>
-                    </div>
+            {/* Tầng 5: Cung Mệnh Bát Trạch */}
+            <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 rounded-md bg-stone-100 text-stone-900 flex items-center justify-center font-bold text-xs">
+                    5
                   </div>
-                )}
+                  <h4 className="font-serif font-bold text-stone-950 text-base">
+                    Tầng 5: Cung Mệnh Bát Trạch
+                  </h4>
+                </div>
+                <span className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
+                  result.tang5CungMenh.nhomBatTrach === 'Cát' ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-amber-100 text-amber-900 border-amber-300'
+                }`}>
+                  {result.tang5CungMenh.ketQuaBatTrach}
+                </span>
+              </div>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                <strong>Phối Cung:</strong> Chồng cung <strong>{result.tang5CungMenh.cungChong}</strong> ({result.tang5CungMenh.dongTayChong}) &times; Vợ cung <strong>{result.tang5CungMenh.cungVo}</strong> ({result.tang5CungMenh.dongTayVo}) &rarr; Cung <strong>{result.tang5CungMenh.ketQuaBatTrach}</strong> (Nhóm {result.tang5CungMenh.nhomBatTrach}).
+              </p>
+              <p className="text-xs text-stone-700 leading-relaxed">
+                {result.tang5CungMenh.yNghia}
+              </p>
+              <div className="p-2.5 bg-stone-50 rounded-xl text-xs text-stone-700 border border-stone-200">
+                <strong>Bát Trạch trong hôn nhân:</strong> Dùng tham khảo hướng nhà, trạch vị gia đạo và phong cách tương tác không gian.
+              </div>
+            </div>
+          </div>
 
-                {/* Co Than Qua Tu */}
-                {result.coThanQuaTu && (
-                  <div className={`p-3 rounded-xl border text-xs flex items-start space-x-2 ${
-                    result.coThanQuaTu.chongPham || result.coThanQuaTu.voPham
-                      ? 'bg-amber-50/90 border-amber-300 text-amber-900'
-                      : 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                  }`}>
-                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                    <span>{result.coThanQuaTu.chiTiet}</span>
-                  </div>
-                )}
+          {/* Tầng 6: Cấu Trúc Tổng Hợp Thuận / Nghịch / Lưu Ý */}
+          <div className="bg-white border border-rose-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-stone-200 pb-3">
+              <Layers className="w-5 h-5 text-rose-700" />
+              <h4 className="font-serif font-bold text-stone-950 text-lg">
+                Tầng 6: Tổng Hợp Cấu Trúc & Khuyến Nghị Thực Tế
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              {/* Điểm Thuận */}
+              <div className="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2">
+                <div className="flex items-center space-x-1.5 font-bold text-emerald-900">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Điểm Thuận</span>
+                </div>
+                <ul className="space-y-1 text-emerald-950">
+                  {result.cauTrucTongHop.diemThuan.length > 0 ? (
+                    result.cauTrucTongHop.diemThuan.map((dt, idx) => (
+                      <li key={idx} className="list-disc ml-4">{dt}</li>
+                    ))
+                  ) : (
+                    <li className="italic text-stone-500">Giữ thế tự nhiên, không có tương sinh lớn.</li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Điểm Nghịch */}
+              <div className="p-3.5 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+                <div className="flex items-center space-x-1.5 font-bold text-amber-900">
+                  <AlertTriangle className="w-4 h-4 text-amber-600" />
+                  <span>Điểm Nghịch / Khác Biệt</span>
+                </div>
+                <ul className="space-y-1 text-amber-950">
+                  {result.cauTrucTongHop.diemNghich.length > 0 ? (
+                    result.cauTrucTongHop.diemNghich.map((dn, idx) => (
+                      <li key={idx} className="list-disc ml-4">{dn}</li>
+                    ))
+                  ) : (
+                    <li className="italic text-stone-500">Không có quan hệ xung phá lớn.</li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Điểm Cần Lưu Ý */}
+              <div className="p-3.5 bg-rose-50/70 border border-rose-200 rounded-xl space-y-2">
+                <div className="flex items-center space-x-1.5 font-bold text-rose-900">
+                  <Info className="w-4 h-4 text-rose-600" />
+                  <span>Điểm Cần Lưu Ý</span>
+                </div>
+                <ul className="space-y-1 text-rose-950">
+                  {result.cauTrucTongHop.diemLuuY.map((dl, idx) => (
+                    <li key={idx} className="list-disc ml-4">{dl}</li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>

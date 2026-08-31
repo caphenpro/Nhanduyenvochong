@@ -1,6 +1,6 @@
 {
-  "name": "Nhân Duyên Tiền Định - AI Chatbot Hôn Nhân Cổ Thư",
-  "description": "Chatbot AI tra cứu và luận giải hôn nhân, nhân duyên vợ chồng dựa trên Diễn Cầm Tam Thế và Cao Ly Đầu Hình",
+  "name": "AI Nhân Duyên - Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương",
+  "description": "Nền tảng luận giải hòa hợp vợ chồng khoa học và đa tầng theo Âm Dương, Ngũ Hành, Thiên Can, Địa Chi, Lục Thập Hoa Giáp và Bát Trạch.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

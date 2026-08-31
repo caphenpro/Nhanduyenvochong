@@ -37,11 +37,11 @@ interface AIChatbotModalProps {
 }
 
 const METAPHYSICS_QUICK_PROMPTS = [
-  'Luận giải Kỳ Môn Độn Giáp & Cửu Cung Bát Môn cho cặp tuổi này?',
-  'Phân tích 24 Tiết Khí và Ngũ Hành thời lệnh hiện tại ảnh hưởng ra sao?',
-  'Xem Đại Lục Nhâm: Tứ Khóa & Tam Truyền về căn duyên gia đạo?',
-  'Tra cứu Bát Tự, Mạng Ngũ Hành & 12 Cung Trường Sanh theo Diễn Cầm Tam Thế?',
-  'Phương pháp phong thủy và "Đức Năng Thắng Số" để hóa giải xung khắc?',
+  'Luận giải 6 tầng Âm Dương Ngũ Hành cho cặp tuổi này?',
+  'Phân biệt Ngũ Hành Nạp Âm với Thiên Can, Địa Chi như thế nào?',
+  'Nguyên tắc: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
+  'Quan hệ Bát Trạch (Sinh Khí, Diên Niên, Tuyệt Mệnh, Ngũ Quỷ) trong gia đạo?',
+  'Cơ chế Sinh – Khắc – Chế – Hóa và triết lý "Một người không phải chỉ là một cái tuổi"?',
 ];
 
 const AVAILABLE_MODELS = [
@@ -319,8 +319,8 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
           <div className="bg-linear-to-r from-amber-950 via-stone-900 to-amber-950 px-4 py-3.5 border-b border-amber-800/40 flex items-center justify-between select-none">
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-600 to-amber-900 flex items-center justify-center text-amber-100 ring-2 ring-amber-400/40 shadow-md">
-                  <Compass className="w-5 h-5 text-amber-200" />
+                <div className="w-10 h-10 rounded-xl overflow-hidden bg-white ring-2 ring-rose-400/60 shadow-md">
+                  <img src="/logo.png" alt="AI Nhân Duyên" className="w-full h-full object-cover" />
                 </div>
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-stone-900 rounded-full" title="Sẵn sàng luận giải" />
               </div>
@@ -328,16 +328,16 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
               <div>
                 <div className="flex items-center space-x-2">
                   <h3 className="font-bold text-amber-100 text-sm sm:text-base font-serif">
-                    Cụ Căn Duyên AI
+                    AI Nhân Duyên
                   </h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                    Cổ Thuật
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                    AI Chatbox
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 text-[11px] text-amber-300/80">
-                  <span>Tiết: {metaState.solarTerm.name}</span>
+                  <span>Kết Nối Tâm Duyên</span>
                   <span>&bull;</span>
-                  <span>{metaState.solarTerm.kyMonDon}</span>
+                  <span>Thấu Hiểu Yêu Thương</span>
                 </div>
               </div>
             </div>
@@ -517,13 +517,17 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
               >
                 {/* Avatar */}
                 <div
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden flex items-center justify-center shrink-0 text-xs font-bold ${
                     msg.role === 'user'
                       ? 'bg-amber-700 text-amber-100 ring-1 ring-amber-400/40'
-                      : 'bg-amber-950 text-amber-300 border border-amber-700/60 shadow-xs'
+                      : 'bg-white ring-1 ring-rose-400/60 shadow-xs'
                   }`}
                 >
-                  {msg.role === 'user' ? 'Bạn' : 'Cụ'}
+                  {msg.role === 'user' ? (
+                    'Bạn'
+                  ) : (
+                    <img src="/logo.png" alt="AI" className="w-full h-full object-cover" />
+                  )}
                 </div>
 
                 {/* Message Bubble */}

@@ -29,14 +29,18 @@ export async function streamAIChat({
   let coupleSummary = 'Chưa có thông tin cặp đôi trong phiên làm việc hiện tại.';
   if (coupleContext) {
     coupleSummary = `
-- Chồng: ${coupleContext.chong.fullName} (${coupleContext.chong.lunarYear}), Mạng: ${coupleContext.chong.menh} (${coupleContext.chong.nguHanh}).
-- Vợ: ${coupleContext.vo.fullName} (${coupleContext.vo.lunarYear}), Mạng: ${coupleContext.vo.menh} (${coupleContext.vo.nguHanh}).
-- Tương quan Ngũ Hành: ${coupleContext.tuongSinhMenh.quanHe} (${coupleContext.tuongSinhMenh.hop ? 'Hợp' : 'Khắc'}).
-- Cao Ly Đầu Hình: ${coupleContext.caoly.tenDoHinh} (${coupleContext.caoly.danhGia}). Thơ: "${coupleContext.caoly.thoHanNom}". Chú giải: ${coupleContext.caoly.chuThich}.
-- 12 Cung Trường Sanh: Chồng (${coupleContext.tamtheTruongSanh?.chuChong || 'Trường Sanh'}), Vợ (${coupleContext.tamtheTruongSanh?.chuVo || 'Trường Sanh'}).
-- Hạn Cô Thần - Quả Tú: ${coupleContext.coThanQuaTu?.chiTiet || 'Không phạm'}.
-- Điểm hòa hợp tổng quan: ${coupleContext.tongKetDuyenNo.diemSo}/100 (${coupleContext.tongKetDuyenNo.xepLoai}).
-- Lời khuyên cổ nhân: ${coupleContext.tongKetDuyenNo.loiKhuyenHoaGiai}
+- Chồng: ${coupleContext.chong.fullName} (${coupleContext.chong.lunarYear}), Can: ${coupleContext.chong.can} (${coupleContext.chong.canNguHanh}), Chi: ${coupleContext.chong.chi} (${coupleContext.chong.chiNguHanh}), Mạng Nạp Âm: ${coupleContext.chong.menh} (${coupleContext.chong.nguHanh}), Cung Phi: ${coupleContext.chong.cungPhi} (${coupleContext.chong.dongTayMenh}).
+- Vợ: ${coupleContext.vo.fullName} (${coupleContext.vo.lunarYear}), Can: ${coupleContext.vo.can} (${coupleContext.vo.canNguHanh}), Chi: ${coupleContext.vo.chi} (${coupleContext.vo.chiNguHanh}), Mạng Nạp Âm: ${coupleContext.vo.menh} (${coupleContext.vo.nguHanh}), Cung Phi: ${coupleContext.vo.cungPhi} (${coupleContext.vo.dongTayMenh}).
+- Tầng 1 Thiên Can: ${coupleContext.tang1ThienCan.quanHe} (${coupleContext.tang1ThienCan.chiTiet}).
+- Tầng 2 Địa Chi: ${coupleContext.tang2DiaChi.chiTietDong}.
+- Tầng 3 Ngũ Hành: ${coupleContext.tang3NguHanh.chiTiet}.
+- Tầng 4 Nạp Âm: ${coupleContext.tang4NapAm.quanHe} (${coupleContext.tang4NapAm.phanBietRoRang}).
+- Tầng 5 Bát Trạch: ${coupleContext.tang5CungMenh.ketQuaBatTrach} (${coupleContext.tang5CungMenh.nhomBatTrach}) - ${coupleContext.tang5CungMenh.yNghia}.
+- Cấu Trúc Tổng Hợp:
+  + Điểm thuận: ${coupleContext.cauTrucTongHop.diemThuan.join('; ')}.
+  + Điểm nghịch: ${coupleContext.cauTrucTongHop.diemNghich.join('; ')}.
+  + Điểm lưu ý: ${coupleContext.cauTrucTongHop.diemLuuY.join('; ')}.
+  + Thông điệp cốt lõi: "${coupleContext.cauTrucTongHop.thongDiepCotLoi}".
 `;
   }
 

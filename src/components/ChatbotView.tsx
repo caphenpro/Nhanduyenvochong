@@ -14,13 +14,13 @@ interface ChatbotViewProps {
 }
 
 const SAMPLE_PROMPTS = [
-  'Chồng tuổi Bính Tý (1996) lấy vợ tuổi Đinh Sửu (1997) theo sách cổ hạp khắc ra sao?',
-  'Phép xem duyên nợ theo Cao Ly Đầu Hình (Can chồng phối Chi vợ) tính thế nào?',
-  'Phân tích Kỳ Môn Độn Giáp & 24 Tiết Khí hiện tại ảnh hưởng gì đến căn duyên?',
-  'Đại Lục Nhâm: Tứ Khóa & Tam Truyền luận về tình cảm vợ chồng thế nào?',
-  'Nếu tuổi vợ chồng phạm Cô Thần, Quả Tú hoặc Tuyệt Mạng thì hóa giải bằng cách nào?',
-  'Ý nghĩa của 12 chữ Trường Sanh trong việc xem số vợ chồng ở Diễn Cầm Tam Thế?',
-  'Cổ nhân dạy thế nào về triết lý "Đức Năng Thắng Số" trong hôn nhân?',
+  'Chồng tuổi Bính Tý (1996) lấy vợ tuổi Đinh Sửu (1997) luận giải theo 6 tầng Âm Dương ra sao?',
+  'Nguyên tắc phân biệt giữa Nạp Âm năm sinh và Ngũ Hành Thiên Can, Địa Chi?',
+  'Tại sao trong mệnh lý: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
+  'Quan hệ Bát Trạch (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh, Ngũ Quỷ) hiểu thế nào cho đúng?',
+  'Nếu chỉ có năm sinh thì đánh giá hòa hợp có những giới hạn gì, khi nào cần Tứ Trụ?',
+  'Cơ chế Sinh – Khắc – Chế – Hóa trong Âm Dương Ngũ Hành tác động đến hôn nhân thế nào?',
+  'Ý nghĩa triết lý "Một người không phải chỉ là một cái tuổi" và "Đức Năng Thắng Số"?',
 ];
 
 const AVAILABLE_MODELS = [
@@ -35,7 +35,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
     {
       id: 'welcome-msg',
       role: 'assistant',
-      content: `Kính chào quý bạn! Ta là **Cụ Căn Duyên**, được đúc kết từ hai bộ cổ thư trứ danh:\n\n* 📜 **Diễn Cầm Tam Thế Diễn Nghĩa** *(soạn giả Dương Công Hầu - hiệu Khương Đức, 1952)*\n* 📖 **Cao Ly Đầu Hình** *(soạn giả Đoàn Văn Đâu, bản dịch NXB Hồng Dân Sài Gòn)*\n* ⚡ **Kỳ Môn Độn Giáp, Đại Lục Nhâm & 24 Tiết Khí** thời lệnh cổ truyền\n\nQuý bạn muốn tầm khảo về **nhân duyên vợ chồng, căn số tiền định, hòa hợp Can Chi - Mạng Ngũ Hành, 12 cung Trường Sanh, hào con cái hay phương pháp tu tâm hóa giải xung khắc**? Hãy cho ta biết năm sinh (hoặc Can Chi) của hai bạn nhé!`,
+      content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Trợ lý AI chuyên sâu về luận giải hòa hợp nhân duyên vợ chồng, tình yêu và gia đạo theo hệ thống Âm Dương – Ngũ Hành khoa học và đa tầng.\n\n🌸 **6 Tầng Luận Giải Chuẩn Mực:**\n1. **Tầng 1 - Thiên Can:** Khảo sát tầng quan hệ Khí (Hợp – Sinh – Khắc – Bình hòa).\n2. **Tầng 2 - Địa Chi:** Khảo sát tầng quan hệ Động (Tam hợp, Lục hợp, Lục xung, Lục hại, Lục phá, Hình).\n3. **Tầng 3 - Ngũ Hành:** Phân tích Ngũ Hành nội tại của Thiên Can và Địa Chi.\n4. **Tầng 4 - Nạp Âm Lục Thập Hoa Giáp:** Phân biệt rõ Nạp Âm với Can và Chi.\n5. **Tầng 5 - Cung Mệnh Bát Trạch:** Phối Cung phi (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh, v.v.).\n6. **Tầng 6 - Cấu Trúc Quan Hệ:** Tổng hợp Điểm Thuận, Điểm Nghịch, Điểm Cần Lưu Ý theo cơ chế Sinh – Khắc – Chế – Hóa.\n\n> *"Một người không phải chỉ là một cái tuổi. Huyền học là hệ thống tham khảo nhận diện khuynh hướng; còn chất lượng hôn nhân thực tế phụ thuộc vào tính cách, giao tiếp, trách nhiệm, đạo đức và cách hai người cùng nhau xử lý khác biệt."*\n\nQuý bạn hãy gửi năm sinh của hai bạn (hoặc ngày tháng năm sinh Tứ Trụ) để ta cùng đàm đạo nhé!`,
       timestamp: Date.now(),
     },
   ]);
@@ -308,13 +308,17 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           >
             {/* Avatar */}
             <div
-              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 shadow-xs font-serif ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 shadow-xs font-serif ${
                 msg.role === 'user'
                   ? 'bg-amber-900 text-amber-100'
-                  : 'bg-linear-to-br from-amber-700 to-amber-900 text-amber-100 ring-2 ring-amber-400/40'
+                  : 'bg-white ring-2 ring-rose-300/80'
               }`}
             >
-              {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5 text-amber-200" />}
+              {msg.role === 'user' ? (
+                <User className="w-5 h-5" />
+              ) : (
+                <img src="/logo.png" alt="AI Nhân Duyên" className="w-full h-full object-cover" />
+              )}
             </div>
 
             {/* Content Bubble */}
@@ -327,9 +331,9 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
             >
               {msg.role === 'assistant' && (
                 <div className="flex items-center justify-between border-b border-amber-100 pb-2 mb-2.5 text-xs text-amber-900/70">
-                  <div className="flex items-center space-x-1.5 font-serif font-bold text-amber-900">
-                    <Compass className="w-3.5 h-3.5 text-amber-700" />
-                    <span>Cụ Căn Duyên &bull; Diễn Cầm Tam Thế &bull; Cổ Thuật</span>
+                  <div className="flex items-center space-x-1.5 font-serif font-bold text-amber-950">
+                    <Sparkles className="w-3.5 h-3.5 text-rose-600" />
+                    <span>AI Nhân Duyên &bull; Luận Giải Hòa Hợp Đa Tầng</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <button
