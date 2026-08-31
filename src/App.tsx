@@ -17,7 +17,7 @@ export default function App() {
   const [isVersionModalOpen, setIsVersionModalOpen] = useState<boolean>(false);
 
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-900 flex flex-col font-sans selection:bg-amber-200 selection:text-amber-950">
+    <div className="min-h-screen bg-stone-100 text-stone-900 flex flex-col font-sans selection:bg-amber-200 selection:text-amber-950 w-full max-w-full overflow-x-hidden">
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}

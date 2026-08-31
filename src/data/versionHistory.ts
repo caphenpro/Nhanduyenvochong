@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.4.0',
+  currentVersion: 'v2.4.1',
   releaseDate: '31/08/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,40 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.4.1',
+    releaseDate: '31/08/2026',
+    codename: 'Tương Thích Toàn Diện Di Động (Mobile Perfect Flow)',
+    tagline: 'Khắc phục triệt để hiện tượng mất cân đối hiển thị trên thiết bị di động, tối ưu hóa thanh điều hướng và khung đàm đạo',
+    isLatest: true,
+    highlights: [
+      'Khắc phục hoàn toàn lỗi tràn ngang (horizontal overflow) làm giao diện bị co sang một bên trên màn hình điện thoại thông minh.',
+      'Tối ưu hóa thanh điều hướng Navbar với kích thước touch-target chuẩn mực, tiêu đề không bị ngắt dòng và các icon chức năng thu gọn tinh tế.',
+      'Căn chỉnh tỷ lệ khung đàm đạo Chatbox và thanh công cụ trạng thái tiết khí, mô hình AI hiển thị trọn vẹn 100% chiều rộng màn hình di động.',
+    ],
+    changes: [
+      {
+        type: 'fix',
+        title: 'Khắc phục tràn ngang trên màn hình di động',
+        description: 'Bổ sung cơ chế overflow-x-hidden và max-w-full tại index.css, App.tsx, Navbar và ChatbotView để bảo đảm bố cục luôn cân đối 100% viewport.',
+      },
+      {
+        type: 'ui',
+        title: 'Tối ưu hóa Navbar trên Smartphone',
+        description: 'Thu gọn padding các nút điều hướng, chống ngắt dòng tiêu đề "AI Nhân Duyên", hiển thị icon thông minh cho Key và Cửa sổ AI.',
+      },
+      {
+        type: 'enhance',
+        title: 'Tinh chỉnh thanh công cụ Chatbot',
+        description: 'Tối ưu độ rộng nhãn mô hình AI, nút Tiết Khí và bubble chat để đọc văn bản mượt mà, thoải mái trên mọi kích thước màn hình.',
+      },
+    ],
+  },
+  {
     version: 'v2.4.0',
     releaseDate: '31/08/2026',
     codename: 'Tinh Gọn Tâm Duyên & Tối Ưu Trải Nghiệm',
     tagline: 'Lược bỏ chuyên mục Lập quẻ, tập trung toàn diện vào đàm đạo AI Chatbox tương tác và tra cứu Cẩm Nang Cổ Thư Bát Trạch',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Lược bỏ chuyên mục "Lập Quẻ Duyên Nợ" để tinh giản giao diện điều hướng, giúp người dùng tập trung tương tác tự nhiên với AI Chatbox và tra cứu kiến thức trong Cẩm Nang Cổ Thư.',
       'Toàn bộ năng lực luận giải tuổi vợ chồng theo 6 tầng Âm Dương Ngũ Hành được chuyển giao trọn vẹn vào Trợ Lý AI Chatbox (người dùng chỉ cần nhập năm sinh hoặc ngày giờ sinh của hai người).',

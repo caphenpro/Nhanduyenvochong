@@ -166,31 +166,31 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
 
   const currentSelectedObj = AI_MODELS_LIST.find((m) => m.id === selectedModel);
   const displayModelLabel = selectedModel === AUTO_MODEL_ID
-    ? (resolvedModelName ? `⚡ Tự động: ${resolvedModelName}` : '⚡ Tự Động (Auto-Fallback)')
+    ? (resolvedModelName ? `⚡ ${resolvedModelName}` : '⚡ Tự Động AI')
     : (currentSelectedObj?.name || selectedModel);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4.5rem)] max-w-5xl mx-auto w-full px-2 sm:px-4 py-3">
+    <div className="flex flex-col h-[calc(100vh-3.8rem)] sm:h-[calc(100vh-4.5rem)] max-w-5xl mx-auto w-full px-2 sm:px-4 py-2 sm:py-3 min-w-0">
       {/* Top Bar: Model Switcher & Metaphysics Live Indicator */}
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl shadow-2xs text-xs">
-        <div className="flex items-center space-x-2">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50/90 border border-amber-200 rounded-xl shadow-2xs text-xs">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 w-full sm:w-auto justify-between sm:justify-start">
           {/* Model Switcher with Auto-Fallback */}
           <div className="relative">
             <button
               onClick={() => setShowModelMenu(!showModelMenu)}
-              className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-amber-200/80 hover:bg-amber-200 text-amber-950 font-medium transition-colors border border-amber-300 shadow-2xs"
+              className="flex items-center space-x-1 sm:space-x-1.5 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg bg-amber-200/90 hover:bg-amber-200 text-amber-950 font-medium transition-colors border border-amber-300 shadow-2xs text-[11px] sm:text-xs cursor-pointer"
               title="Chọn mô hình AI hoặc để Tự Động luân chuyển khi hết gói miễn phí"
             >
-              <Zap className="w-3.5 h-3.5 text-amber-700 fill-amber-500" />
-              <span className="font-semibold">{displayModelLabel}</span>
-              <ChevronDown className="w-3 h-3 text-amber-800" />
+              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 fill-amber-500 shrink-0" />
+              <span className="font-semibold truncate max-w-[120px] sm:max-w-none">{displayModelLabel}</span>
+              <ChevronDown className="w-3 h-3 text-amber-800 shrink-0" />
             </button>
 
             {showModelMenu && (
-              <div className="absolute left-0 top-full mt-1 w-72 bg-white border border-amber-300 rounded-xl shadow-2xl z-50 p-1.5 space-y-1">
+              <div className="absolute left-0 top-full mt-1 w-64 sm:w-72 bg-white border border-amber-300 rounded-xl shadow-2xl z-50 p-1.5 space-y-1">
                 <div className="px-2 py-1 text-[11px] font-semibold text-amber-900 border-b border-amber-100 flex items-center justify-between">
                   <span>Chế độ & Mô hình AI</span>
-                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-normal">Tự luân chuyển khi hết quota</span>
+                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-normal">Tự luân chuyển</span>
                 </div>
                 {AI_MODELS_LIST.map((model) => (
                   <button
@@ -199,7 +199,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
                       setSelectedModel(model.id);
                       setShowModelMenu(false);
                     }}
-                    className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex flex-col space-y-0.5 ${
+                    className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex flex-col space-y-0.5 cursor-pointer ${
                       selectedModel === model.id ? 'bg-amber-100/90 text-amber-950 font-bold border border-amber-300/80' : 'hover:bg-amber-50/80 text-stone-700'
                     }`}
                   >
@@ -220,35 +220,38 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
 
           <button
             onClick={() => setShowMetaphysicsBoard(!showMetaphysicsBoard)}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg border transition-colors ${
+            className={`flex items-center space-x-1 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border transition-colors text-[11px] sm:text-xs cursor-pointer ${
               showMetaphysicsBoard
                 ? 'bg-amber-900 text-amber-100 border-amber-900'
                 : 'bg-white hover:bg-amber-100/60 text-amber-900 border-amber-200'
             }`}
           >
-            <Compass className="w-3.5 h-3.5" />
-            <span>Tiết: {metaState.solarTerm.name} &bull; Kỳ Môn {metaState.kyMonDonGiap.don}</span>
+            <Compass className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+            <span className="truncate max-w-[130px] sm:max-w-none">
+              Tiết: {metaState.solarTerm.name}
+            </span>
           </button>
 
           <button
             id="chat-open-api-settings-btn"
             onClick={() => (onOpenApiKeySettings ? onOpenApiKeySettings() : setIsApiKeyModalOpen(true))}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg border transition-colors ${
+            className={`flex items-center space-x-1 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border transition-colors text-[11px] sm:text-xs cursor-pointer ${
               userKey
                 ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-300'
                 : 'bg-amber-100/60 hover:bg-amber-200/60 text-amber-950 border-amber-300'
             }`}
             title="Cài đặt API Key OpenRouter"
           >
-            <Key className="w-3.5 h-3.5 text-amber-700" />
-            <span>{userKey ? 'Khóa API: Đã Lưu' : 'Nhập API Key'}</span>
+            <Key className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
+            <span>{userKey ? 'Khóa: Đã Lưu' : 'Nhập Key'}</span>
           </button>
         </div>
 
-        <div className="text-[11px] text-amber-800 hidden sm:block">
+        <div className="text-[11px] text-amber-800 hidden md:block">
           Ngũ hành lệnh: <strong className="text-amber-950">{metaState.solarTerm.nguHanhVuong}</strong> vượng, <strong>{metaState.solarTerm.nguHanhTuong}</strong> tướng
         </div>
       </div>
+
 
       {/* Metaphysics Board Context View (Collapsible) */}
       {showMetaphysicsBoard && (
