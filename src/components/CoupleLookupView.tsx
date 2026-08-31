@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, Heart, HelpCircle, ShieldCheck, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CoupleAnalysisResult } from '../types';
+import { analyzeCoupleLocal } from '../services/coupleAnalysis';
 
 interface CoupleLookupViewProps {
   onSelectCoupleForChat: (result: CoupleAnalysisResult) => void;
@@ -23,28 +24,16 @@ export const CoupleLookupView: React.FC<CoupleLookupViewProps> = ({
   const performAnalysis = async (cYear: number, cMonth: number, vYear: number, vMonth: number) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/analyze-couple', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chongNamSinh: cYear,
-          chongThangSanh: cMonth,
-          voNamSinh: vYear,
-          voThangSanh: vMonth,
-        }),
-      });
-
-      if (res.ok) {
-        const data: CoupleAnalysisResult = await res.json();
-        setResult(data);
-        if (data.tongKetDuyenNo.diemSo >= 75) {
-          confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.7 },
-            colors: ['#d97706', '#b45309', '#f59e0b'],
-          });
-        }
+      // Calculate directly with pure ancient wisdom engine (100% offline & zero network lag)
+      const localData = analyzeCoupleLocal(cYear, cMonth, vYear, vMonth);
+      setResult(localData);
+      if (localData.tongKetDuyenNo.diemSo >= 75) {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.7 },
+          colors: ['#d97706', '#b45309', '#f59e0b'],
+        });
       }
     } catch (err) {
       console.error('Error analyzing:', err);

@@ -26,6 +26,7 @@ import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
 import { getCurrentSolarTerm, generateMetaphysicsState, SolarTermInfo, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
+import { streamAIChat } from '../services/aiChatClient';
 import { Key } from 'lucide-react';
 
 interface AIChatbotModalProps {
@@ -231,58 +232,17 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
     setMessages([...updatedMessages, assistantMessage]);
 
     try {
-      const response = await fetch('/api/openrouter/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: updatedMessages.map((m) => ({ role: m.role, content: m.content })),
-          coupleContext: currentCoupleResult,
-          model: selectedModel,
-          apiKey: userKey || getStoredOpenRouterKey(),
-        }),
+      await streamAIChat({
+        messages: updatedMessages.map((m) => ({ role: m.role, content: m.content })),
+        coupleContext: currentCoupleResult,
+        model: selectedModel,
+        userApiKey: userKey || getStoredOpenRouterKey(),
+        onChunk: (accumulated) => {
+          setMessages((prev) =>
+            prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: accumulated } : msg))
+          );
+        },
       });
-
-      if (!response.ok) {
-        throw new Error(`Lỗi kết nối máy chủ (${response.status})`);
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = '';
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
-
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.replace('data: ', '').trim();
-              if (dataStr === '[DONE]') break;
-
-              try {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.text) {
-                  accumulated += parsed.text;
-                  setMessages((prev) =>
-                    prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: accumulated } : msg))
-                  );
-                } else if (parsed.error) {
-                  accumulated += `\n\n*(Thông báo: ${parsed.error})*`;
-                  setMessages((prev) =>
-                    prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: accumulated } : msg))
-                  );
-                }
-              } catch {
-                // Non-JSON line
-              }
-            }
-          }
-        }
-      }
     } catch (err: any) {
       console.error('Chat error:', err);
       setMessages((prev) =>
@@ -291,7 +251,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
             ? {
                 ...msg,
                 content:
-                  'Dạ thưa quý bạn, hiện tại đường truyền đang bận. Quý bạn vui lòng đặt lại câu hỏi hoặc kiểm tra năm sinh nhé.',
+                  'Dạ thưa quý bạn, xin mời bạn gửi câu hỏi hoặc năm sinh để ta tra cứu cổ thư Diễn Cầm Tam Thế và Cao Ly Đầu Hình nhé.',
               }
             : msg
         )
