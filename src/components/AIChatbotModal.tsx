@@ -92,7 +92,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
       {
         id: 'welcome-modal-msg',
         role: 'assistant',
-        content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Đại Sư Luận Đoán Cổ Thuật & Nhân Duyên Tiền Định.\n\nTa đã kết nối bàn quẻ toàn diện với **Kỳ Môn Độn Giáp**, **Đại Lục Nhâm**, **24 Tiết Khí**, và cổ thư **Diễn Cầm Tam Thế (1952) / Cao Ly Đầu Hình** qua động cơ AI Tự Động Luân Chuyển (*Auto-Fallback chống hết hạn mức*).\n\nQuý bạn muốn tầm khảo về căn duyên vợ chồng, hóa giải xung khắc, hay phân tích thiên thời địa lợi theo tiết khí? Hãy nhập câu hỏi hoặc chọn gợi ý bên dưới!`,
+        content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Cố Vấn Luận Giải Hòa Hợp & Nhân Duyên.\n\nTa đã kết nối hệ thống phân tích toàn diện với **Kỳ Môn Độn Giáp**, **Đại Lục Nhâm**, **24 Tiết Khí**, **Bát Trạch Phong Thủy** và kho tàng **Cổ Thư Diễn Cầm Tam Thế / Cao Ly Đầu Hình** qua động cơ AI Tự Động Luân Chuyển (*Auto-Fallback chống gián đoạn*).\n\nQuý bạn muốn tầm khảo về căn duyên vợ chồng, 6 tầng hòa hợp Âm Dương Ngũ Hành, hay phương hướng phong thủy Bát Trạch? Hãy nhập câu hỏi hoặc chọn gợi ý bên dưới!`,
         timestamp: Date.now(),
       },
     ];
@@ -456,7 +456,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
               <div className="flex items-center justify-between text-amber-300 font-semibold pb-1 border-b border-amber-900/30">
                 <span className="flex items-center space-x-1.5">
                   <Compass className="w-3.5 h-3.5" />
-                  <span>Trạng Thái Bàn Quẻ & 24 Tiết Khí Hiện Tại</span>
+                  <span>Trạng Thái Cổ Thuật & 24 Tiết Khí Hiện Tại</span>
                 </span>
                 <span className="text-[10px] text-stone-400">{metaState.currentDateStr}</span>
               </div>

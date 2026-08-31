@@ -9,7 +9,6 @@ import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatC
 
 interface ChatbotViewProps {
   currentCoupleResult: CoupleAnalysisResult | null;
-  onNavigateToLookup: () => void;
   onOpenApiKeySettings?: () => void;
 }
 
@@ -23,7 +22,7 @@ const SAMPLE_PROMPTS = [
   'Ý nghĩa triết lý "Một người không phải chỉ là một cái tuổi" và "Đức Năng Thắng Số"?',
 ];
 
-export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, onNavigateToLookup, onOpenApiKeySettings }) => {
+export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, onOpenApiKeySettings }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome-msg',
@@ -257,7 +256,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           <div className="flex items-center justify-between font-bold border-b border-amber-700/60 pb-1">
             <span className="flex items-center space-x-1.5">
               <Layers className="w-3.5 h-3.5 text-amber-300" />
-              <span>Bàn Quẻ Cổ Thuật Thời Lệnh (Kỳ Môn & Đại Lục Nhâm)</span>
+              <span>Bảng Thông Tin Thời Lệnh (Kỳ Môn & Đại Lục Nhâm)</span>
             </span>
             <span className="text-[10px] text-amber-300">{metaState.currentDateStr}</span>
           </div>
@@ -290,7 +289,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           <div className="flex items-center space-x-2 text-xs sm:text-sm text-amber-950 font-medium truncate">
             <Sparkles className="w-4 h-4 text-amber-700 shrink-0" />
             <span className="truncate">
-              Đang gắn ngữ cảnh quẻ:{' '}
+              Đang gắn ngữ cảnh cặp đôi:{' '}
               <strong className="text-amber-900">
                 Chồng {currentCoupleResult.chong.fullName} ({currentCoupleResult.chong.lunarYear}) &bull; Vợ {currentCoupleResult.vo.fullName} ({currentCoupleResult.vo.lunarYear})
               </strong>{' '}
@@ -300,7 +299,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           <button
             onClick={() =>
               handleSend(
-                `Xin Cụ Căn Duyên luận giải chi tiết và thấu đáo quẻ hôn nhân của Chồng tuổi ${currentCoupleResult.chong.fullName} (${currentCoupleResult.chong.menh}) và Vợ tuổi ${currentCoupleResult.vo.fullName} (${currentCoupleResult.vo.menh}) theo cả Cao Ly Đầu Hình và Diễn Cầm Tam Thế!`
+                `Xin AI Nhân Duyên luận giải chi tiết và thấu đáo tương quan hôn nhân của Chồng tuổi ${currentCoupleResult.chong.fullName} (${currentCoupleResult.chong.menh}) và Vợ tuổi ${currentCoupleResult.vo.fullName} (${currentCoupleResult.vo.menh}) theo 6 tầng Âm Dương Ngũ Hành và Bát Trạch!`
               )
             }
             className="ml-2 px-2.5 py-1 text-xs font-semibold bg-amber-800 text-amber-50 rounded-lg hover:bg-amber-900 transition-colors shrink-0 shadow-xs"
@@ -421,14 +420,8 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
               title="Làm mới cuộc trò chuyện"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Làm mới</span>
-            </button>
-            <button
-              onClick={onNavigateToLookup}
-              className="flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-amber-100 transition-colors font-medium text-amber-900"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Tra cứu tuổi nhanh &rarr;</span>
+              <span className="hidden sm:inline">Làm mới cuộc trò chuyện</span>
+              <span className="sm:hidden">Làm mới</span>
             </button>
           </div>
 

@@ -3,7 +3,7 @@ import { MessageSquare, Sparkles, BookOpen, Info, HeartHandshake, Compass, Key, 
 import { getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { APP_INFO } from '../data/versionHistory';
 
-export type TabType = 'chat' | 'lookup' | 'library' | 'about';
+export type TabType = 'chat' | 'library' | 'about';
 
 interface NavbarProps {
   activeTab: TabType;
@@ -76,20 +76,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <MessageSquare className="w-4 h-4" />
                 <span className="hidden sm:inline">Trò Chuyện AI</span>
                 <span className="sm:hidden">Hỏi AI</span>
-              </button>
-
-              <button
-                id="nav-tab-lookup"
-                onClick={() => setActiveTab('lookup')}
-                className={`flex items-center space-x-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  activeTab === 'lookup'
-                    ? 'bg-amber-900 text-amber-50 shadow-sm'
-                    : 'text-amber-900 hover:bg-amber-100/80 hover:text-amber-950'
-                }`}
-              >
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="hidden sm:inline">Lập Quẻ Duyên Nợ</span>
-                <span className="sm:hidden">Lập Quẻ</span>
               </button>
 
               <button

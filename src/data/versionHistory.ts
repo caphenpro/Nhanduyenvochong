@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.3.0',
+  currentVersion: 'v2.4.0',
   releaseDate: '31/08/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,40 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.4.0',
+    releaseDate: '31/08/2026',
+    codename: 'Tinh Gọn Tâm Duyên & Tối Ưu Trải Nghiệm',
+    tagline: 'Lược bỏ chuyên mục Lập quẻ, tập trung toàn diện vào đàm đạo AI Chatbox tương tác và tra cứu Cẩm Nang Cổ Thư Bát Trạch',
+    isLatest: true,
+    highlights: [
+      'Lược bỏ chuyên mục "Lập Quẻ Duyên Nợ" để tinh giản giao diện điều hướng, giúp người dùng tập trung tương tác tự nhiên với AI Chatbox và tra cứu kiến thức trong Cẩm Nang Cổ Thư.',
+      'Toàn bộ năng lực luận giải tuổi vợ chồng theo 6 tầng Âm Dương Ngũ Hành được chuyển giao trọn vẹn vào Trợ Lý AI Chatbox (người dùng chỉ cần nhập năm sinh hoặc ngày giờ sinh của hai người).',
+      'Chuẩn hóa thuật ngữ khoa học, loại bỏ các khái niệm "bàn quẻ" mang tính bói toán cơ học, kiên định với triết lý nhân văn: "Một người không phải chỉ là một cái tuổi".',
+    ],
+    changes: [
+      {
+        type: 'ui',
+        title: 'Tinh giản thanh điều hướng (Navbar)',
+        description: 'Loại bỏ tab "Lập Quẻ Duyên Nợ", tập trung điều hướng vào 3 chuyên mục chính: Trò Chuyện AI, Cẩm Nang Cổ Thư và Nguồn Gốc.',
+      },
+      {
+        type: 'enhance',
+        title: 'Tối ưu hóa trải nghiệm tương tác với AI Chatbox',
+        description: 'Tự động phân tích và luận giải đa tầng trực tiếp khi người dùng cung cấp thông tin năm sinh qua khung trò chuyện.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Chuẩn hóa thuật ngữ luận giải nhân duyên',
+        description: 'Chuyển hóa toàn bộ ngôn ngữ giao diện theo hướng nhân văn, hướng dẫn đối thoại và hóa giải thay vì phán đoán quẻ cơ học.',
+      },
+    ],
+  },
+  {
     version: 'v2.3.0',
     releaseDate: '31/08/2026',
     codename: 'Bát Trạch Khai Hoa & Tri Thức Ưu Tiên',
     tagline: 'Bổ sung Bát Trạch Phong Thủy vào Cổ Thư và kích hoạt Chỉ Thị Tối Cao ưu tiên nguồn tri thức ứng dụng cho AI Chatbox',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Mở rộng Tàng Kinh Các Cổ Thư với phân mục "Cung Mệnh Bát Trạch": tra cứu trực tuyến cung phi theo năm sinh và giới tính, bảng 8 Cung Mệnh & 2 Nhóm Trạch, bảng số dư chia 9, và chi tiết 8 Hướng Du Niên (Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh).',
       'Công cụ Tra cứu tương tác Bát Trạch với hiển thị trực quan lưới 8 hướng Cát / Hung cùng lời khuyên bố trí nhà cửa, phòng ngủ, phòng thờ và hướng bếp.',
