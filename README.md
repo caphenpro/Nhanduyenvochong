@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.2.0-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.3.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -195,6 +195,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.3.0** | 31/08/2026 | **Bát Trạch Khai Hoa & Tri Thức Ưu Tiên** | Bổ sung Cung Mệnh Bát Trạch và 8 Hướng Du Niên vào Cổ Thư; Công cụ tra cứu trực tuyến số dư chia 9; Kích hoạt Chỉ Thị Tối Cao ưu tiên nguồn tri thức nội bộ ứng dụng cho AI Chatbox. |
 | **v2.2.0** | 31/08/2026 | **Tự Động Luân Chuyển (Smart Auto-Fallback)** | Tự động chọn mô hình và tự động chuyển đổi mô hình dự phòng khi hết gói miễn phí (Gemini, DeepSeek, Llama 3.3 Free, Qwen 2.5 Free, Gemini Flash Free). |
 | **v2.1.0** | 31/08/2026 | **Tâm Duyên Toàn Bích** | Chuẩn hóa nhận diện Logo chính thức, tạo hệ thống Changelog & tài liệu GitHub README hoàn chỉnh, thiết lập cơ chế tự động ghi nhớ cập nhật (`AGENTS.md`). |
 | **v2.0.0** | 30/08/2026 | **Đa Tầng Âm Dương** | Chuyển đổi toàn diện sang phương pháp luận 6 tầng phân tích; xóa bỏ chấm điểm cơ học; thiết lập triết lý *"Một người không phải chỉ là một cái tuổi"*. |

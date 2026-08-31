@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.2.0',
+  currentVersion: 'v2.3.0',
   releaseDate: '31/08/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,46 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.3.0',
+    releaseDate: '31/08/2026',
+    codename: 'Bát Trạch Khai Hoa & Tri Thức Ưu Tiên',
+    tagline: 'Bổ sung Bát Trạch Phong Thủy vào Cổ Thư và kích hoạt Chỉ Thị Tối Cao ưu tiên nguồn tri thức ứng dụng cho AI Chatbox',
+    isLatest: true,
+    highlights: [
+      'Mở rộng Tàng Kinh Các Cổ Thư với phân mục "Cung Mệnh Bát Trạch": tra cứu trực tuyến cung phi theo năm sinh và giới tính, bảng 8 Cung Mệnh & 2 Nhóm Trạch, bảng số dư chia 9, và chi tiết 8 Hướng Du Niên (Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh).',
+      'Công cụ Tra cứu tương tác Bát Trạch với hiển thị trực quan lưới 8 hướng Cát / Hung cùng lời khuyên bố trí nhà cửa, phòng ngủ, phòng thờ và hướng bếp.',
+      'Thiết lập "CHỈ THỊ TỐI CAO" trong System Prompt cho toàn bộ các mô hình AI: Bắt buộc ưu tiên sử dụng 100% hệ thống dữ liệu có sẵn trên ứng dụng (6 tầng luận giải, Bát Trạch, 60 Hoa Giáp, Tam Thế, Cao Ly) trước khi suy diễn tri thức bên ngoài.',
+      'Nâng cấp Động cơ Cổ Thư Reasoner (Offline) và Chat Client hỗ trợ phân tích tra cứu Bát Trạch và cung mệnh trực tiếp, đảm bảo phản hồi tức thì và chính xác.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Bổ sung Chuyên mục Bát Trạch Toàn Thư vào Tàng Kinh Các',
+        description: 'Tích hợp toàn bộ dữ liệu 8 Cung Mệnh Bát Trạch (Khảm, Chấn, Tốn, Ly, Càn, Khôn, Đoài, Cấn), 2 nhóm Đông/Tây Tứ Mệnh và ma trận 8 hướng Du Niên vào Cổ Thư.',
+      },
+      {
+        type: 'ui',
+        title: 'Công cụ Tra Cứu Cung Mệnh & 8 Hướng Phong Thủy Trực Tuyến',
+        description: 'Giao diện tương tác tính toán số dư chia 9, hiển thị quái mệnh, phân loại trạch hướng hợp và lưới 8 hướng Du Niên phân màu Cát (xanh) / Hung (đỏ) rõ ràng.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Chỉ Thị Tối Cao: Ưu Tiên Tri Thức Ứng Dụng Cho AI Chatbox',
+        description: 'Cấu trúc lại System Prompt ép toàn bộ mô hình AI tuân thủ phương pháp luận 6 tầng và tri thức phong thủy Bát Trạch có sẵn trong ứng dụng.',
+      },
+      {
+        type: 'enhance',
+        title: 'Nâng cấp Offline Reasoner với tri thức Bát Trạch',
+        description: 'Cho phép tra cứu cung mệnh, hướng nhà và hướng dẫn hóa giải ngay cả khi không có kết nối mạng hay hết quota API.',
+      },
+    ],
+  },
+  {
     version: 'v2.2.0',
     releaseDate: '31/08/2026',
     codename: 'Tự Động Luân Chuyển (Smart Auto-Fallback)',
     tagline: 'Chế độ tự động chọn mô hình AI tối ưu và tự động chuyển đổi khi hết hạn mức / gói miễn phí',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Chuyển chế độ mặc định sang "⚡ Tự Động Chọn Mô Hình (Auto-Fallback)" thay vì bắt buộc người dùng chọn thủ công.',
       'Tích hợp chuỗi xoay vòng dự phòng đa mô hình: Gemini 2.5 Flash ➔ DeepSeek Chat ➔ Llama 3.3 70B (Free) ➔ Qwen 2.5 72B (Free) ➔ Gemini Flash Free ➔ Server SDK ➔ Offline Reasoner.',
