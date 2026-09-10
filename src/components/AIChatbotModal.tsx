@@ -20,6 +20,7 @@ import {
   Sun,
   Moon,
   Info,
+  FileText,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -28,6 +29,7 @@ import { getCurrentSolarTerm, generateMetaphysicsState, SolarTermInfo, Metaphysi
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
 import { Key, Zap } from 'lucide-react';
+import { RoleTaskStandardModal } from './RoleTaskStandardModal';
 
 interface AIChatbotModalProps {
   currentCoupleResult?: CoupleAnalysisResult | null;
@@ -37,6 +39,9 @@ interface AIChatbotModalProps {
 }
 
 const METAPHYSICS_QUICK_PROMPTS = [
+  'Vai trò, nhiệm vụ và cấu trúc bài luận giải 5 phần của AI Nhân Duyên?',
+  'Chồng Bính Tý 1996, Vợ Đinh Sửu 1997 — Luận giải hòa hợp theo cấu trúc 5 phần chuẩn mực!',
+  'Mẫu thu thập thông tin chuẩn khi tư vấn nhân duyên (Bắt buộc vs Ưu tiên)?',
   'Luận giải 6 tầng Âm Dương Ngũ Hành cho cặp tuổi này?',
   'Phân biệt Ngũ Hành Nạp Âm với Thiên Can, Địa Chi như thế nào?',
   'Nguyên tắc: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
@@ -72,6 +77,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
   const [metaState, setMetaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
+  const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
   const [userKey, setUserKey] = useState<string>(() => getStoredOpenRouterKey());
 
   const [input, setInput] = useState('');
@@ -321,6 +327,16 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
 
             {/* Header Action Buttons */}
             <div className="flex items-center space-x-1 sm:space-x-1.5 text-stone-400">
+              {/* Toggle Role Task Standard Modal */}
+              <button
+                id="chat-toggle-role-task"
+                onClick={() => setShowRoleTaskModal(true)}
+                className="p-1.5 rounded-lg hover:text-amber-200 hover:bg-stone-800/80 transition-colors"
+                title="Xem Vai Trò & Quy Chuẩn Báo Cáo 5 Phần"
+              >
+                <FileText className="w-4 h-4 text-amber-400" />
+              </button>
+
               {/* Toggle Context Drawer */}
               <button
                 id="chat-toggle-context"
@@ -647,6 +663,16 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
           </div>
         </div>
       )}
+
+      {/* Role & Task Standard Modal */}
+      <RoleTaskStandardModal
+        isOpen={showRoleTaskModal}
+        onClose={() => setShowRoleTaskModal(false)}
+        onSelectPromptTemplate={(template) => {
+          setInput(template);
+          textareaRef.current?.focus();
+        }}
+      />
 
       {/* API Key Settings Modal */}
       <ApiKeySettingsModal

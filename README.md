@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.4.2-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.6.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -195,6 +195,8 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.6.0** | 03/09/2026 | **Bát Tự Quy Chuẩn & Báo Cáo 5 Phần** | Xác lập chuẩn mực Vai trò & Nhiệm vụ Chuyên gia Tư vấn Hôn nhân Bát Tự; Phân cấp dữ liệu đầu vào (Bắt buộc vs Ưu tiên); Chuẩn hóa Cấu trúc Luận giải 5 Phần (Bản mệnh, Phân tích đa tầng, Tính cách lối sống, Dự đoán thời điểm, Lời khuyên hóa giải); Tích hợp Modal Quy Chuẩn & Mẫu Biểu Luận Giải. |
+| **v2.5.0** | 03/09/2026 | **Trường Sinh Đáo Xứ** | Bổ sung học thuyết Vòng Trường Sinh 10 Thiên Can (Dương Sinh Âm Tử & Tam Hợp Cục) vào Cổ Thư; Bảng ma trận 10 Can x 12 Cung; Bộ công cụ tra cứu tương tác Can phối Chi; Cập nhật tri thức cho AI Chatbox. |
 | **v2.4.2** | 31/08/2026 | **Hoàn Thiện Tàng Kinh Các** | Khắc phục hoàn toàn lỗi ẩn/mất tab và nội dung trong Cẩm Nang Cổ Thư trên di động; sửa lỗi cuộn thanh tab và tối ưu hiển thị 8 hướng Du Niên. |
 | **v2.4.1** | 31/08/2026 | **Tương Thích Toàn Diện Di Động** | Khắc phục triệt để hiện tượng mất cân đối hiển thị trên thiết bị di động; tối ưu hóa thanh điều hướng Navbar và khung đàm đạo vừa vặn 100% viewport. |
 | **v2.4.0** | 31/08/2026 | **Tinh Gọn Tâm Duyên & Tối Ưu Trải Nghiệm** | Lược bỏ chuyên mục "Lập Quẻ Duyên Nợ" để tinh gọn thanh điều hướng; chuyển giao toàn diện khả năng luận giải 6 tầng vào AI Chatbox; chuẩn hóa thuật ngữ luận giải nhân duyên nhân văn. |

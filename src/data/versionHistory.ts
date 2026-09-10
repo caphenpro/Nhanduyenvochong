@@ -17,8 +17,8 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.4.2',
-  releaseDate: '31/08/2026',
+  currentVersion: 'v2.6.0',
+  releaseDate: '03/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
   repositoryUrl: 'https://github.com/nguyenhoangdang/ai-nhan-duyen',
@@ -28,11 +28,71 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.6.0',
+    releaseDate: '03/09/2026',
+    codename: 'Bát Tự Quy Chuẩn & Cấu Trúc Báo Cáo 5 Phần',
+    tagline: 'Xác lập chuẩn mực Vai trò & Nhiệm vụ Chuyên gia Tư vấn Hôn nhân Bát Tự, phân cấp thông tin đầu vào và chuẩn hóa Cấu trúc Luận giải 5 Phần',
+    isLatest: true,
+    highlights: [
+      'Xác lập chính thức Vai Trò & Nhiệm Vụ cốt lõi của Chatbox AI Nhân Duyên: Chuyên gia Tư vấn Nhân duyên & Hôn nhân Bát Tự - Mệnh Lý theo định hướng tích cực, xây dựng.',
+      'Phân định 2 cấp độ thu thập thông tin đầu vào (Input Requirements): Bắt buộc (Giới tính & Năm sinh) và Ưu tiên (Giờ/Ngày/Tháng sinh & Nơi sinh để lập Bát Tự Tứ Trụ).',
+      'Chuẩn hóa Cấu Trúc Phân Tích & Báo Cáo 5 Phần (Output Framework): Phần 1 (Thông tin bản mệnh), Phần 2 (Phân tích các tầng tương tác), Phần 3 (Đánh giá tính cách & lối sống), Phần 4 (Dự đoán & thời điểm lưu ý), Phần 5 (Lời khuyên & phương pháp hóa giải).',
+      'Tích hợp Modal Tra Cứu Quy Chuẩn & Bộ Phím Tắt Mẫu Biểu Luận Giải tiện dụng ngay trên giao diện Chatbot và Modal Nổi.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Tích hợp Modal Tra Cứu Quy Chuẩn Vai Trò & Cấu Trúc Báo Cáo 5 Phần',
+        description: 'Xây dựng RoleTaskStandardModal.tsx cho phép người dùng tra cứu toàn văn quy chuẩn vai trò, nhiệm vụ, yêu cầu dữ liệu và gửi mẫu biểu tự động vào chat.',
+      },
+      {
+        type: 'enhance',
+        title: 'Cập nhật System Prompt & Bộ Luận Giải Cổ Thuật Ngoại Tuyến',
+        description: 'Chuẩn hóa SYSTEM_INSTRUCTION_PROMPT và ancientReasoner.ts định dạng báo cáo cặp đôi xuất ra chuẩn mực 5 phần.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Củng cố Nguyên Tắc Luận Giải Khách Quan & Xây Dựng',
+        description: 'Kiên định triết lý cân bằng học thuật mệnh lý và tâm lý thực tế, nghiêm cấm từ ngữ cực đoan đe dọa, luôn hướng tới bồi đắp đức hạnh gia đình.',
+      },
+    ],
+  },
+  {
+    version: 'v2.5.0',
+    releaseDate: '03/09/2026',
+    codename: 'Trường Sinh Đáo Xứ (10 Can Trường Sinh & Dương Thuận Âm Nghịch)',
+    tagline: 'Bổ sung trọn vẹn học thuyết Vòng Trường Sinh 10 Thiên Can, Bảng ma trận 12 cung, công cụ tra cứu tương tác và mẹo nhớ thần tốc',
+    isLatest: false,
+    highlights: [
+      'Bổ sung chuyên sâu nguyên lý Vòng Trường Sinh 10 Thiên Can dựa trên học thuyết cốt lõi Dương Sinh Âm Tử và quy luật Tam Hợp Cục vào mục 12 Cung Trường Sanh trong Cẩm Nang Cổ Thư.',
+      'Bộ Tra Cứu Tương Tác 10 Thiên Can: Chọn bất kỳ Can nào để xem chiều đếm Thuận/Nghịch, cung khởi, ý nghĩa 12 Địa Chi và công cụ tra cứu nhanh một Can phối Chi ra trạng thái cát hung kèm lời khuyên gia đạo.',
+      'Bảng Ma Trận Tổng Hợp 10 Thiên Can x 12 Cung Trường Sinh, chi tiết tiến trình vận hành của 4 cặp Can (Mộc, Hỏa & Thổ, Kim, Thủy) và 4 Mẹo nhớ nhanh của tiền nhân.',
+      'Cập nhật Chỉ Thị Trí Tuệ Tối Cao của AI Chatbox để nắm vững toàn bộ quy tắc Vòng Trường Sinh 10 Thiên Can khi đàm đạo với người dùng.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Tích hợp Vòng Trường Sinh 10 Thiên Can & Bộ Tra Cứu Tương Tác',
+        description: 'Xây dựng dữ liệu vongTruongSinhData.ts với đầy đủ 10 Thiên Can, 12 Địa Chi, phân loại Vượng/Bình/Suy và công cụ tra cứu tức thì trạng thái Trường Sinh.',
+      },
+      {
+        type: 'enhance',
+        title: 'Nâng cấp toàn diện chuyên mục 12 Cung Trường Sanh trong Cổ Thư',
+        description: 'Bổ sung Bảng Ma Trận 10 Can x 12 Cung, 4 khối Tam Hợp Cục, chuỗi tiến trình 4 cặp Can Chi và 4 mẹo ghi nhớ nhanh của cổ nhân.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Đồng bộ tri thức Vòng Trường Sinh vào AI Chatbox',
+        description: 'Cập nhật hệ thống tri thức chuẩn mực về Dương Sinh Âm Tử và Tam Hợp Cục vào prompt Chatbot AI Nhân Duyên.',
+      },
+    ],
+  },
+  {
     version: 'v2.4.2',
     releaseDate: '31/08/2026',
     codename: 'Hoàn Thiện Tàng Kinh Các (Ancient Library Scroll Fix)',
     tagline: 'Khắc phục hoàn toàn lỗi ẩn/mất tab và nội dung trong Cẩm Nang Cổ Thư trên điện thoại di động',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Khắc phục lỗi căn giữa (justify-center) trong thanh tab khiến các chuyên mục "100 Đồ Hình Cao Ly" và "Cung Mệnh Bát Trạch" bị tràn sang tọa độ âm trên smartphone.',
       'Chuẩn hóa thanh chuyển tab Cổ Thư với chế độ cuộn tự nhiên từ trái sang phải, đảm bảo hiển thị đầy đủ và dễ dàng chạm chuyển qua lại giữa 5 pho thư tịch cổ.',

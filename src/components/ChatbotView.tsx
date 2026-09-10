@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Cpu, Layers, ChevronDown, Key, Zap } from 'lucide-react';
+import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Cpu, Layers, ChevronDown, Key, Zap, FileText } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
 import { generateMetaphysicsState, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
+import { RoleTaskStandardModal } from './RoleTaskStandardModal';
 
 interface ChatbotViewProps {
   currentCoupleResult: CoupleAnalysisResult | null;
@@ -13,11 +14,13 @@ interface ChatbotViewProps {
 }
 
 const SAMPLE_PROMPTS = [
-  'Chồng tuổi Bính Tý (1996) lấy vợ tuổi Đinh Sửu (1997) luận giải theo 6 tầng Âm Dương ra sao?',
+  'Vai trò, nhiệm vụ và cấu trúc bài luận giải 5 phần của AI Nhân Duyên là gì?',
+  'Chồng sinh 1996 (Bính Tý), Vợ sinh 1997 (Đinh Sửu) — Luận giải hòa hợp theo cấu trúc 5 phần chuẩn mực!',
+  'Mẫu yêu cầu thu thập thông tin chuẩn khi tư vấn nhân duyên (Bắt buộc vs Ưu tiên)?',
   'Nguyên tắc phân biệt giữa Nạp Âm năm sinh và Ngũ Hành Thiên Can, Địa Chi?',
   'Tại sao trong mệnh lý: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
   'Quan hệ Bát Trạch (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh, Ngũ Quỷ) hiểu thế nào cho đúng?',
-  'Nếu chỉ có năm sinh thì đánh giá hòa hợp có những giới hạn gì, khi nào cần Tứ Trụ?',
+  'Khi nào chỉ cần năm sinh và khi nào bắt buộc phải có đủ Tứ Trụ (Giờ, Ngày, Tháng, Năm)?',
   'Cơ chế Sinh – Khắc – Chế – Hóa trong Âm Dương Ngũ Hành tác động đến hôn nhân thế nào?',
   'Ý nghĩa triết lý "Một người không phải chỉ là một cái tuổi" và "Đức Năng Thắng Số"?',
 ];
@@ -27,7 +30,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
     {
       id: 'welcome-msg',
       role: 'assistant',
-      content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Trợ lý AI chuyên sâu về luận giải hòa hợp nhân duyên vợ chồng, tình yêu và gia đạo theo hệ thống Âm Dương – Ngũ Hành khoa học và đa tầng.\n\n🌸 **6 Tầng Luận Giải Chuẩn Mực:**\n1. **Tầng 1 - Thiên Can:** Khảo sát tầng quan hệ Khí (Hợp – Sinh – Khắc – Bình hòa).\n2. **Tầng 2 - Địa Chi:** Khảo sát tầng quan hệ Động (Tam hợp, Lục hợp, Lục xung, Lục hại, Lục phá, Hình).\n3. **Tầng 3 - Ngũ Hành:** Phân tích Ngũ Hành nội tại của Thiên Can và Địa Chi.\n4. **Tầng 4 - Nạp Âm Lục Thập Hoa Giáp:** Phân biệt rõ Nạp Âm với Can và Chi.\n5. **Tầng 5 - Cung Mệnh Bát Trạch:** Phối Cung phi (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh, v.v.).\n6. **Tầng 6 - Cấu Trúc Quan Hệ:** Tổng hợp Điểm Thuận, Điểm Nghịch, Điểm Cần Lưu Ý theo cơ chế Sinh – Khắc – Chế – Hóa.\n\n> *"Một người không phải chỉ là một cái tuổi. Huyền học là hệ thống tham khảo nhận diện khuynh hướng; còn chất lượng hôn nhân thực tế phụ thuộc vào tính cách, giao tiếp, trách nhiệm, đạo đức và cách hai người cùng nhau xử lý khác biệt."*\n\nQuý bạn hãy gửi năm sinh của hai bạn (hoặc ngày tháng năm sinh Tứ Trụ) để ta cùng đàm đạo nhé!`,
+      content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — **Chuyên gia Tư vấn Nhân duyên & Hôn nhân Bát Tự - Mệnh Lý**.\n\n🎯 **Vai Trò & Nhiệm Vụ:**\nThu thập thông tin người dùng, phân tích mức độ hòa hợp, dự đoán vận trình nhân duyên và đưa ra lời khuyên cải thiện mối quan hệ theo định hướng tích cực, xây dựng.\n\n📋 **Quy Chuẩn Bài Luận Giải 5 Phần Chuẩn Mực:**\n1. **Phần 1: Thông Tin Bản Mệnh** (Tóm tắt Can Chi, Nạp Âm Hoa Giáp, Cung Mệnh Bát Trạch).\n2. **Phần 2: Phân Tích Các Tầng Tương Tác** (Tầng Niên Mệnh: Khí Thiên Can, Động Địa Chi, Nạp Âm, Cung Mệnh; Tầng Bát Tự Chuyên Sâu nếu đủ ngày giờ sinh).\n3. **Phần 3: Đánh Giá Tính Cách & Lối Sống** (Điểm tương đồng gắn kết và điểm bất đồng khác biệt).\n4. **Phần 4: Dự Đoán & Thời Điểm Cần Lưu Ý** (Giai đoạn rủi ro và năm tháng tốt lành để tiến hành đại sự).\n5. **Phần 5: Lời Khuyên & Phương Pháp Hóa Giải** (Tâm lý ứng xử thực tế và điều chỉnh phong thủy/hướng Bát Trạch).\n\n> *"Một người không phải chỉ là một cái tuổi. Xung không đồng nghĩa với ly hôn; Hợp không đồng nghĩa với tốt tuyệt đối. Huyền học là hệ thống nhận diện khuynh hướng, còn hạnh phúc gia đình phụ thuộc vào sự lắng nghe, tôn trọng và đồng lòng vun đắp."*\n\nQuý bạn hãy gửi năm sinh của hai bạn (hoặc đầy đủ Ngày, Tháng, Giờ sinh) hoặc nhấn nút **"Vai Trò & Quy Chuẩn"** ở thanh công cụ phía trên để xem chi tiết nhé!`,
       timestamp: Date.now(),
     },
   ]);
@@ -40,6 +43,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
   const [resolvedModelName, setResolvedModelName] = useState<string | null>(null);
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showMetaphysicsBoard, setShowMetaphysicsBoard] = useState(false);
+  const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
   const [metaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [userKey, setUserKey] = useState<string>(() => getStoredOpenRouterKey());
@@ -230,6 +234,16 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
             <span className="truncate max-w-[130px] sm:max-w-none">
               Tiết: {metaState.solarTerm.name}
             </span>
+          </button>
+
+          <button
+            id="chat-open-role-standard-btn"
+            onClick={() => setShowRoleTaskModal(true)}
+            className="flex items-center space-x-1 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border transition-colors text-[11px] sm:text-xs cursor-pointer bg-white hover:bg-amber-100/60 text-amber-900 border-amber-200 shadow-2xs"
+            title="Xem Vai Trò, Nhiệm Vụ & Cấu Trúc Báo Cáo 5 Phần của AI"
+          >
+            <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
+            <span>Vai Trò & Quy Chuẩn</span>
           </button>
 
           <button
@@ -443,6 +457,16 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           </button>
         </div>
       </div>
+
+      {/* Role & Task Standard Modal */}
+      <RoleTaskStandardModal
+        isOpen={showRoleTaskModal}
+        onClose={() => setShowRoleTaskModal(false)}
+        onSelectPromptTemplate={(template) => {
+          setInput(template);
+          inputRef.current?.focus();
+        }}
+      />
 
       {/* API Key Settings Modal */}
       <ApiKeySettingsModal

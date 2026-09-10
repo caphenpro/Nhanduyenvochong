@@ -1,7 +1,25 @@
 import React, { useState } from 'react';
-import { Search, BookOpen, Layers, Heart, Sparkles, ScrollText, Compass, Navigation, ShieldCheck, ShieldAlert, Home } from 'lucide-react';
+import {
+  Search,
+  BookOpen,
+  Layers,
+  Heart,
+  Sparkles,
+  ScrollText,
+  Compass,
+  Navigation,
+  ShieldCheck,
+  ShieldAlert,
+  Home,
+  RotateCw,
+  RotateCcw,
+  Lightbulb,
+  ArrowRight,
+  Info,
+  CheckCircle2,
+} from 'lucide-react';
 import { CAO_LY_DATA } from '../data/caolyData';
-import { TRUONG_SANH_DATA, THIEN_CAN, NGU_HANH_NAP_AM_60 } from '../data/tamtheData';
+import { TRUONG_SANH_DATA, THIEN_CAN, DIA_CHI, NGU_HANH_NAP_AM_60 } from '../data/tamtheData';
 import {
   BAT_TRACH_8_CUNG_CHI_TIET,
   Y_NGHIA_8_DU_NIEN,
@@ -9,7 +27,16 @@ import {
   calculateBatTrachByYear,
   HuongDiaLy,
 } from '../data/batTrachData';
-import { CanName, CungPhi } from '../types';
+import {
+  BANG_TRA_CUU_10_THIEN_CAN,
+  TAM_HOP_CUC_TRUONG_SINH,
+  CHI_TIET_4_CAP_THIEN_CAN,
+  MEO_NHO_NHANH,
+  DANH_SACH_TRANG_THAI,
+  getTrangThaiTruongSinhCanChi,
+  TrangThaiTruongSinh,
+} from '../data/vongTruongSinhData';
+import { CanName, ChiName, CungPhi } from '../types';
 
 export const AncientLibraryView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'caoly' | 'battrach' | 'truongsanh' | 'napam' | 'phuocduc'>('caoly');
@@ -21,8 +48,16 @@ export const AncientLibraryView: React.FC = () => {
   const [batTrachGender, setBatTrachGender] = useState<'Nam' | 'Nữ'>('Nam');
   const [selectedCungDetail, setSelectedCungDetail] = useState<CungPhi>('Khảm');
 
+  // State cho Vòng Trường Sinh 10 Thiên Can Interactive Lookup
+  const [selectedTruongSanhCan, setSelectedTruongSanhCan] = useState<CanName>('Giáp');
+  const [lookupCan, setLookupCan] = useState<CanName>('Giáp');
+  const [lookupChi, setLookupChi] = useState<ChiName>('Hợi');
+
   const batTrachCalculation = calculateBatTrachByYear(batTrachYear, batTrachGender);
   const currentCungInfo = BAT_TRACH_8_CUNG_CHI_TIET[selectedCungDetail];
+  const currentTruongSanhCanInfo = BANG_TRA_CUU_10_THIEN_CAN[selectedTruongSanhCan];
+  const lookupTrangThai = getTrangThaiTruongSinhCanChi(lookupCan, lookupChi);
+  const lookupTrangThaiDetail = DANH_SACH_TRANG_THAI.find((t) => t.ten === lookupTrangThai);
 
   const filteredCaoLy = CAO_LY_DATA.filter((item) => {
     const matchCan = selectedCan ? item.canChong === selectedCan : true;
@@ -46,7 +81,7 @@ export const AncientLibraryView: React.FC = () => {
           Cẩm Nang Tra Cứu Toàn Thư Cổ Bản
         </h1>
         <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-          Trích lục nguyên văn từ Cung Mệnh Bát Trạch, Diễn Cầm Tam Thế (1952) và Cao Ly Đầu Hình (NXB Hồng Dân).
+          Trích lục nguyên văn từ Cung Mệnh Bát Trạch, Vòng Trường Sinh 10 Thiên Can, Diễn Cầm Tam Thế (1952) và Cao Ly Đầu Hình (NXB Hồng Dân).
         </p>
       </div>
 
@@ -579,39 +614,442 @@ export const AncientLibraryView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 2: 12 Chữ Trường Sanh */}
+      {/* Tab 2: 12 Cung Trường Sanh & Vòng Trường Sinh 10 Thiên Can */}
       {activeTab === 'truongsanh' && (
-        <div className="space-y-4">
-          <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs sm:text-sm text-amber-950 leading-relaxed">
-            <strong>Phép Căn Duyên Tiền Định (Diễn Cầm Tam Thế):</strong> Dựa theo Mạng Ngũ Hành của người và Tháng Sinh Âm Lịch để tầm ra 1 trong 12 chữ Trường Sanh. Người xưa dùng 8 câu thơ lục bát này để đoán việc hôn nhân, hợp tan, con cái và sự nghiệp.
+        <div className="space-y-6">
+          {/* Banner Triết Lý Cốt Lõi */}
+          <div className="bg-amber-50/90 p-4 sm:p-5 rounded-2xl border border-amber-300/80 text-xs sm:text-sm text-amber-950 leading-relaxed shadow-xs space-y-2">
+            <div className="flex items-center space-x-2 text-amber-900 font-bold font-serif text-sm sm:text-base">
+              <Sparkles className="w-4 h-4 text-amber-700 shrink-0" />
+              <span>Cẩm Nang Vòng Trường Sinh 10 Thiên Can & 12 Cung Căn Duyên</span>
+            </div>
+            <p className="text-stone-700 text-xs sm:text-sm leading-relaxed">
+              Vòng Trường Sinh được an dựa trên nguyên lý kinh điển <strong>Dương sinh Âm tử</strong> (Thiên can Dương đi thuận, Thiên can Âm đi nghịch) và quy luật <strong>Tam hợp cục</strong> của Ngũ hành trong Mệnh lý học Đông Phương.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(TRUONG_SANH_DATA).map(([key, item]) => (
-              <div
-                key={key}
-                className="bg-white border border-amber-200 rounded-2xl p-5 shadow-xs space-y-3 flex flex-col justify-between"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-serif font-bold text-amber-950">
-                      Chữ {item.chu}
-                    </h3>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold border border-amber-200">
-                      {item.danhGia}
+          {/* Interactive Tool: Tra Cứu Vòng Trường Sinh Cho Từng Thiên Can */}
+          <div className="bg-white border border-amber-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-100 pb-3">
+              <div>
+                <h3 className="text-base sm:text-lg font-serif font-bold text-amber-950 flex items-center space-x-2">
+                  <Compass className="w-5 h-5 text-amber-700" />
+                  <span>1. Tra Cứu Vòng Trường Sinh 10 Thiên Can Tương Tác</span>
+                </h3>
+                <p className="text-xs text-stone-600">
+                  Chọn một Thiên Can để xem chiều vận hành (Thuận/Nghịch) và 12 trạng thái qua 12 Địa Chi:
+                </p>
+              </div>
+
+              {/* 10 Thiên Can Selector */}
+              <div className="flex flex-wrap gap-1.5">
+                {THIEN_CAN.map((can) => {
+                  const isSelected = selectedTruongSanhCan === can;
+                  return (
+                    <button
+                      key={can}
+                      onClick={() => setSelectedTruongSanhCan(can)}
+                      className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-amber-900 text-amber-50 shadow-xs'
+                          : 'bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-200'
+                      }`}
+                    >
+                      {can}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Chi tiết Can đã chọn */}
+            {currentTruongSanhCanInfo && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200 pb-3">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-lg sm:text-xl font-serif font-bold text-amber-950">
+                      Can {selectedTruongSanhCan} ({currentTruongSanhCanInfo.tenGoi})
+                    </span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-amber-200 text-amber-900">
+                      Hành {currentTruongSanhCanInfo.nguHanh}
                     </span>
                   </div>
 
-                  <p className="text-xs text-stone-600 italic">
-                    {item.yNghia}
-                  </p>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <span className="inline-flex items-center font-bold px-2 py-0.5 rounded-md bg-white border border-amber-300 text-amber-900">
+                      {currentTruongSanhCanInfo.chieuDem === 'Thuận' ? (
+                        <>
+                          <RotateCw className="w-3.5 h-3.5 text-emerald-600 mr-1" /> Đếm Thuận (Thuận chiều kim đồng hồ)
+                        </>
+                      ) : (
+                        <>
+                          <RotateCcw className="w-3.5 h-3.5 text-rose-600 mr-1" /> Đếm Nghịch (Ngược chiều kim đồng hồ)
+                        </>
+                      )}
+                    </span>
+                    <span className="text-stone-600">
+                      &bull; Khởi tại <strong>{currentTruongSanhCanInfo.khoiTai}</strong>
+                    </span>
+                  </div>
                 </div>
 
-                <div className="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 text-xs font-serif text-amber-950 whitespace-pre-line leading-relaxed">
-                  {item.baiTho}
+                <p className="text-xs text-stone-700 italic leading-relaxed">
+                  <strong>Nguyên lý an cung:</strong> {currentTruongSanhCanInfo.nguyenLy}
+                </p>
+
+                {/* 12 Địa Chi Cards */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 pt-1">
+                  {Object.entries(currentTruongSanhCanInfo.diaChiMap)
+                    .filter(([chi]) => chi !== 'Mẹo') // Tránh trùng Mão/Mẹo
+                    .map(([chi, trangThai]) => {
+                      const ttDetail = DANH_SACH_TRANG_THAI.find((t) => t.ten === trangThai);
+                      const isVuong = ttDetail?.phanLoai === 'Vượng Khí';
+                      const isSuy = ttDetail?.phanLoai === 'Suy Khí';
+                      return (
+                        <div
+                          key={chi}
+                          className={`p-3 rounded-xl border text-xs space-y-1 transition-all flex flex-col justify-between ${
+                            isVuong
+                              ? 'bg-emerald-50/70 border-emerald-300/80 hover:border-emerald-400'
+                              : isSuy
+                              ? 'bg-rose-50/60 border-rose-300/70 hover:border-rose-400'
+                              : 'bg-amber-50/70 border-amber-300/70 hover:border-amber-400'
+                          }`}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between font-bold">
+                              <span className="text-stone-900 font-serif text-sm">Chi {chi}</span>
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                                  isVuong
+                                    ? 'bg-emerald-200 text-emerald-950'
+                                    : isSuy
+                                    ? 'bg-rose-200 text-rose-950'
+                                    : 'bg-amber-200 text-amber-950'
+                                }`}
+                              >
+                                {trangThai}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-stone-500 pt-0.5">{ttDetail?.phanLoai}</div>
+                          </div>
+                          <p className="text-[11px] text-stone-600 pt-1 leading-snug" title={ttDetail?.yNghia}>
+                            {ttDetail?.yNghia}
+                          </p>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
-            ))}
+            )}
+
+            {/* Quick Match Tool: Tra cứu Can phối Chi */}
+            <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
+              <div className="flex items-center space-x-2 text-xs font-bold text-amber-950 uppercase tracking-wider">
+                <Lightbulb className="w-4 h-4 text-amber-700" />
+                <span>Tra Cứu Nhanh Một Can Phối Chi (Ví dụ Can Chồng/Vợ gặp Chi Năm/Tháng)</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center text-xs">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-stone-700">Thiên Can:</label>
+                  <select
+                    value={lookupCan}
+                    onChange={(e) => setLookupCan(e.target.value as CanName)}
+                    className="w-full p-2 rounded-lg border border-amber-300 bg-white font-semibold text-stone-900"
+                  >
+                    {THIEN_CAN.map((c) => (
+                      <option key={c} value={c}>
+                        Can {c} ({BANG_TRA_CUU_10_THIEN_CAN[c].tenGoi})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-stone-700">Địa Chi:</label>
+                  <select
+                    value={lookupChi}
+                    onChange={(e) => setLookupChi(e.target.value as ChiName)}
+                    className="w-full p-2 rounded-lg border border-amber-300 bg-white font-semibold text-stone-900"
+                  >
+                    {DIA_CHI.filter((c) => c !== 'Mẹo').map((c) => (
+                      <option key={c} value={c}>
+                        Chi {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {lookupTrangThaiDetail && (
+                  <div className="p-3 bg-white rounded-xl border border-amber-300 shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-amber-950">
+                        Can {lookupCan} gặp Chi {lookupChi}:
+                      </span>
+                      <span className="px-2 py-0.5 text-xs font-bold rounded-md bg-amber-200 text-amber-950">
+                        {lookupTrangThai}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-stone-600 leading-tight">
+                      <strong>Ý nghĩa:</strong> {lookupTrangThaiDetail.yNghia}
+                    </p>
+                    <p className="text-[11px] text-emerald-800 font-medium leading-tight">
+                      <strong>Lời khuyên:</strong> {lookupTrangThaiDetail.khuyenGiaDao}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Nguyên Lý Cốt Lõi Vị Trí Trường Sinh 5 Hành (Tam Hợp Cục) */}
+          <div className="bg-white border border-amber-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+            <h3 className="text-base sm:text-lg font-serif font-bold text-amber-950 flex items-center space-x-2">
+              <Layers className="w-5 h-5 text-amber-700" />
+              <span>2. Nguyên Lý Cốt Lõi: Vị Trí Trường Sinh Của 5 Hành (Tam Hợp Cục)</span>
+            </h3>
+            <p className="text-xs text-stone-600 leading-relaxed">
+              Mỗi Ngũ hành đều khởi Trường Sinh tại chi đầu tiên trong bộ Tam hợp của hành đó:
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {TAM_HOP_CUC_TRUONG_SINH.filter((t) => t.hanh !== 'Thổ').map((item) => (
+                <div
+                  key={item.hanh}
+                  className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5 text-xs"
+                >
+                  <div className="flex items-center justify-between font-bold text-amber-950">
+                    <span className="text-sm">Hành {item.hanh}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-amber-200 text-amber-900 font-mono">
+                      Khởi tại {item.khoiTai}
+                    </span>
+                  </div>
+                  <div className="text-stone-600 text-[11px]">
+                    <strong>Tam hợp:</strong> {item.tamHop}
+                  </div>
+                  <p className="text-stone-700 text-[11px] pt-1 leading-snug">{item.yNghia}</p>
+                </div>
+              ))}
+              {/* Thổ & Thủy */}
+              <div className="p-3.5 rounded-xl bg-orange-50/70 border border-orange-200 space-y-1.5 text-xs">
+                <div className="flex items-center justify-between font-bold text-amber-950">
+                  <span className="text-sm">Hành Thủy & Thổ</span>
+                  <span className="px-2 py-0.5 rounded-md bg-orange-200 text-amber-900 font-mono">
+                    Khởi tại Thân
+                  </span>
+                </div>
+                <div className="text-stone-600 text-[11px]">
+                  <strong>Tam hợp:</strong> Thân - Tý - Thìn
+                </div>
+                <p className="text-stone-700 text-[11px] pt-1 leading-snug">
+                  Thủy Thổ đồng hành/đồng cung. Thổ ký sinh cùng Thủy hoặc Hỏa trong vòng Trường Sinh.
+                </p>
+              </div>
+            </div>
+
+            {/* 2 Quy Tắc An Vòng Trường Sinh */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+              <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-2">
+                <div className="flex items-center space-x-2 font-bold text-emerald-950 text-sm">
+                  <RotateCw className="w-4 h-4 text-emerald-600" />
+                  <span>1. Quy Tắc Cho Can Dương (Giáp, Bính, Mậu, Canh, Nhâm)</span>
+                </div>
+                <p className="text-stone-700 leading-relaxed">
+                  Khởi Trường Sinh tại điểm khởi của Ngũ hành đó, đếm <strong>THUẬN</strong> theo chiều kim đồng hồ qua 12 Địa chi.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-rose-50/70 border border-rose-200 text-xs space-y-2">
+                <div className="flex items-center space-x-2 font-bold text-rose-950 text-sm">
+                  <RotateCcw className="w-4 h-4 text-rose-600" />
+                  <span>2. Quy Tắc Cho Can Âm (Ất, Đinh, Kỷ, Tân, Quý)</span>
+                </div>
+                <p className="text-stone-700 leading-relaxed">
+                  Khởi Trường Sinh tại vị trí <strong>TỬ</strong> của Can Dương cùng hành, đếm <strong>NGHỊCH</strong> ngược chiều kim đồng hồ qua 12 Địa chi.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Bảng Tra Cứu Vòng Trường Sinh 10 Thiên Can Toàn Bản */}
+          <div className="bg-white border border-amber-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+            <h3 className="text-base sm:text-lg font-serif font-bold text-amber-950 flex items-center space-x-2">
+              <ScrollText className="w-5 h-5 text-amber-700" />
+              <span>3. Bảng Ma Trận Tra Cứu Vòng Trường Sinh 10 Thiên Can</span>
+            </h3>
+            <p className="text-xs text-stone-600">
+              Đối chiếu 12 trạng thái qua 10 Thiên Can theo quy luật Dương Thuận Âm Nghịch:
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="bg-amber-100/80 text-amber-950 font-bold border-b border-amber-300">
+                    <th className="p-2.5 rounded-l-lg">Trạng Thái</th>
+                    <th className="p-2.5 text-center bg-emerald-100/60">Giáp (D.Mộc)</th>
+                    <th className="p-2.5 text-center bg-emerald-50/60">Ất (Â.Mộc)</th>
+                    <th className="p-2.5 text-center bg-rose-100/60">Bính/Mậu</th>
+                    <th className="p-2.5 text-center bg-rose-50/60">Đinh/Kỷ</th>
+                    <th className="p-2.5 text-center bg-slate-100/60">Canh (D.Kim)</th>
+                    <th className="p-2.5 text-center bg-slate-50/60">Tân (Â.Kim)</th>
+                    <th className="p-2.5 text-center bg-blue-100/60">Nhâm (D.Thủy)</th>
+                    <th className="p-2.5 text-center rounded-r-lg bg-blue-50/60">Quý (Â.Thủy)</th>
+                  </tr>
+                  <tr className="text-[11px] font-semibold text-stone-600 border-b border-amber-200 bg-amber-50/40">
+                    <td className="p-2 font-bold text-amber-900">Chiều đếm</td>
+                    <td className="p-2 text-center text-emerald-800 font-bold">Thuận</td>
+                    <td className="p-2 text-center text-rose-800 font-bold">Nghịch</td>
+                    <td className="p-2 text-center text-emerald-800 font-bold">Thuận</td>
+                    <td className="p-2 text-center text-rose-800 font-bold">Nghịch</td>
+                    <td className="p-2 text-center text-emerald-800 font-bold">Thuận</td>
+                    <td className="p-2 text-center text-rose-800 font-bold">Nghịch</td>
+                    <td className="p-2 text-center text-emerald-800 font-bold">Thuận</td>
+                    <td className="p-2 text-center text-rose-800 font-bold">Nghịch</td>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-amber-100 text-stone-700">
+                  {DANH_SACH_TRANG_THAI.map((tt, idx) => {
+                    const isVuongDinh = tt.ten === 'Đế vượng' || tt.ten === 'Lâm quan';
+                    const isKhoi = tt.ten === 'Trường sinh';
+                    const isSuyKiet = tt.ten === 'Tử' || tt.ten === 'Tuyệt';
+                    return (
+                      <tr
+                        key={tt.ten}
+                        className={`hover:bg-amber-50/70 transition-colors ${
+                          isKhoi
+                            ? 'bg-amber-50/50 font-bold'
+                            : isVuongDinh
+                            ? 'bg-emerald-50/30'
+                            : isSuyKiet
+                            ? 'bg-rose-50/20'
+                            : ''
+                        }`}
+                      >
+                        <td className="p-2.5 font-bold font-serif text-amber-950 flex items-center space-x-1.5">
+                          <span className="w-4 text-[10px] text-stone-400 font-mono">{idx + 1}.</span>
+                          <span>{tt.ten}</span>
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Giáp.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Ất.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Bính.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Đinh.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Canh.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Tân.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Nhâm.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                        <td className="p-2.5 text-center font-semibold text-stone-800">
+                          {Object.entries(BANG_TRA_CUU_10_THIEN_CAN.Quý.diaChiMap).find(([, val]) => val === tt.ten)?.[0]}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Section 4: Chi Tiết Cách Tính Cho Từng Cặp Thiên Can */}
+          <div className="bg-white border border-amber-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+            <h3 className="text-base sm:text-lg font-serif font-bold text-amber-950 flex items-center space-x-2">
+              <BookOpen className="w-5 h-5 text-amber-700" />
+              <span>4. Chi Tiết Tiến Trình Cách Tính Cho 4 Cặp Thiên Can</span>
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {CHI_TIET_4_CAP_THIEN_CAN.map((cap) => (
+                <div key={cap.nhom} className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-3">
+                  <div className="border-b border-amber-200/80 pb-2">
+                    <h4 className="font-bold text-amber-950 text-sm">{cap.nhom}</h4>
+                    <p className="text-[11px] text-stone-600">{cap.moTa}</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {cap.cacCan.map((canItem) => (
+                      <div key={canItem.can} className="space-y-1">
+                        <div className="font-bold text-xs text-amber-900">{canItem.can}:</div>
+                        <div className="text-[11px] text-stone-500 italic">{canItem.khoi}</div>
+                        <div className="p-2 rounded-lg bg-white border border-amber-200 text-[11px] font-mono text-stone-700 leading-relaxed break-words">
+                          {canItem.chuoi}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 5: Mẹo Nhớ Nhanh Thần Tốc */}
+          <div className="bg-amber-900 text-amber-50 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2">
+              <Lightbulb className="w-5 h-5 text-amber-300" />
+              <h3 className="text-base sm:text-lg font-serif font-bold text-amber-100">
+                5. Mẹo Nhớ Nhanh Thần Tốc Của Tiền Nhân
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              {MEO_NHO_NHANH.map((meo, i) => (
+                <div key={i} className="p-3.5 rounded-xl bg-amber-950/60 border border-amber-800 space-y-1">
+                  <div className="font-bold text-amber-300 flex items-center space-x-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{meo.tieuDe}</span>
+                  </div>
+                  <p className="text-amber-100/90 leading-relaxed text-[11px]">{meo.noiDung}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 6: Phép Căn Duyên Tiền Định (Diễn Cầm Tam Thế) */}
+          <div className="bg-white border border-amber-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-base sm:text-lg font-serif font-bold text-amber-950 flex items-center space-x-2">
+                <Heart className="w-5 h-5 text-amber-700" />
+                <span>6. Phép Căn Duyên Tiền Định: 12 Bài Thơ Lục Bát Cổ Bản</span>
+              </h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Trích lục nguyên văn từ sách <em>Diễn Cầm Tam Thế Diễn Nghĩa (1952)</em>. Dựa theo Mạng Ngũ Hành của người và Tháng Sinh Âm Lịch để tầm ra 1 trong 12 chữ Trường Sanh đoán việc hôn nhân, hợp tan, con cái và sự nghiệp:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(TRUONG_SANH_DATA).map(([key, item]) => (
+                <div
+                  key={key}
+                  className="bg-amber-50/40 border border-amber-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3 flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-base font-serif font-bold text-amber-950">Chữ {item.chu}</h4>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold border border-amber-300">
+                        {item.danhGia}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-stone-600 italic leading-relaxed">{item.yNghia}</p>
+                  </div>
+
+                  <div className="bg-white p-3.5 rounded-xl border border-amber-200 text-xs font-serif text-amber-950 whitespace-pre-line leading-relaxed shadow-2xs">
+                    {item.baiTho}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

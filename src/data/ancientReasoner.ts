@@ -102,71 +102,103 @@ Cung mệnh Bát Trạch (Cung Phi) là phương pháp xác định quẻ mệnh
   if (targetCouple) {
     const { chong, vo, tang1ThienCan, tang2DiaChi, tang3NguHanh, tang4NapAm, tang5CungMenh, cauTrucTongHop } = targetCouple;
 
-    return `### 🌸 NỀN TẢNG LUẬN GIẢI HÒA HỢP VỢ CHỒNG — AI NHÂN DUYÊN
-**Chồng:** ${chong.fullName} (${chong.lunarYear}) • Can: ${chong.can} (${chong.canNguHanh}) • Chi: ${chong.chi} (${chong.chiNguHanh}) • Mệnh: ${chong.menh} • Cung: ${chong.cungPhi} (${chong.dongTayMenh})  
-**Vợ:** ${vo.fullName} (${vo.lunarYear}) • Can: ${vo.can} (${vo.canNguHanh}) • Chi: ${vo.chi} (${vo.chiNguHanh}) • Mệnh: ${vo.menh} • Cung: ${vo.cungPhi} (${vo.dongTayMenh})
+    return `### 🌸 BÁO CÁO LUẬN GIẢI NHÂN DUYÊN — AI NHÂN DUYÊN
+*(Phân tích chuẩn xác theo Cấu Trúc Báo Cáo 5 Phần & Triết Lý Đa Tầng)*
 
 ---
 
-#### ❖ TẦNG 1: THIÊN CAN (TẦNG QUAN HỆ KHÍ)
-- **Quan hệ:** **${tang1ThienCan.quanHe}** (${tang1ThienCan.canChong} &times; ${tang1ThienCan.canVo})
-- **Luận giải:** ${tang1ThienCan.chiTiet}
-- **Ý nghĩa:** ${tang1ThienCan.yNghiaKhi}
+### PHẦN 1: THÔNG TIN BẢN MỆNH
+| Đối Tượng | Năm Sinh (Can Chi) | Nạp Âm Hoa Giáp (Hành) | Cung Mệnh / Cung Phi (Trạch Mệnh) |
+| :--- | :--- | :--- | :--- |
+| **Nam (Chồng)** | **${chong.fullName}** (${chong.lunarYear}) | **${tang4NapAm.napAmChong}** (${tang4NapAm.nguHanhChong}) | Cung **${chong.cungPhi}** (${chong.dongTayMenh}) |
+| **Nữ (Vợ)** | **${vo.fullName}** (${vo.lunarYear}) | **${tang4NapAm.napAmVo}** (${tang4NapAm.nguHanhVo}) | Cung **${vo.cungPhi}** (${vo.dongTayMenh}) |
 
-#### ❖ TẦNG 2: ĐỊA CHI (TẦNG QUAN HỆ ĐỘNG)
-- **Cấu trúc Chi:** ${chong.chi} (${chong.tuoiCon}) &times; ${vo.chi} (${vo.tuoiCon})
-- **Khảo sát:** ${tang2DiaChi.tamHop ? `Tam Hợp: ${tang2DiaChi.tamHopNhom} • ` : ''}${tang2DiaChi.lucHop ? `Lục Hợp: ${tang2DiaChi.lucHopCap} • ` : ''}${tang2DiaChi.lucXung ? `Lục Xung: ${tang2DiaChi.lucXungCap} • ` : ''}${tang2DiaChi.lucHai ? `Lục Hại: ${tang2DiaChi.lucHaiCap} • ` : ''}${tang2DiaChi.lucPha ? `Lục Phá: ${tang2DiaChi.lucPhaCap} • ` : ''}${tang2DiaChi.hinh ? `Hình: ${tang2DiaChi.hinhLoai} • ` : ''}${!tang2DiaChi.tamHop && !tang2DiaChi.lucHop && !tang2DiaChi.lucXung && !tang2DiaChi.lucHai ? 'Bình hòa' : ''}
-- **Nhận định:** ${tang2DiaChi.chiTietDong}
-
-#### ❖ TẦNG 3: NGŨ HÀNH NỘI TẠI
-- ${tang3NguHanh.chiTiet}
-
-#### ❖ TẦNG 4: LỤC THẬP HOA GIÁP & NẠP ÂM
-- **Nạp Âm Chồng:** ${tang4NapAm.napAmChong} (${tang4NapAm.nguHanhChong})
-- **Nạp Âm Vợ:** ${tang4NapAm.napAmVo} (${tang4NapAm.nguHanhVo})
-- **Quan hệ:** ${tang4NapAm.quanHe}
-- **Lưu ý quy chiếu:** ${tang4NapAm.phanBietRoRang}
-
-#### ❖ TẦNG 5: CUNG MỆNH BÁT TRẠCH & HƯỚNG PHONG THỦY
-- **Phối cung:** ${tang5CungMenh.cungChong} (${tang5CungMenh.dongTayChong}) &times; ${tang5CungMenh.cungVo} (${tang5CungMenh.dongTayVo}) $\\rightarrow$ **${tang5CungMenh.ketQuaBatTrach}** (Nhóm ${tang5CungMenh.nhomBatTrach})
-- **Ý nghĩa:** ${tang5CungMenh.yNghia}
+*Lưu ý:* Hiện đang phân tích tổng quan theo niên mệnh. Khi cung cấp thêm ngày, tháng, giờ sinh, hệ thống sẽ tiến hành lập Bát Tự (Tứ Trụ) hoàn chỉnh.
 
 ---
 
-#### ❖ TỔNG HỢP CẤU TRÚC TƯƠNG TÁC
-* **Điểm thuận:**
-${cauTrucTongHop.diemThuan.length > 0 ? cauTrucTongHop.diemThuan.map((d) => `  - ✅ ${d}`).join('\n') : '  - Không có quan hệ tương sinh lớn, giữ thế tự nhiên.'}
-* **Điểm nghịch / Khác biệt:**
-${cauTrucTongHop.diemNghich.length > 0 ? cauTrucTongHop.diemNghich.map((d) => `  - ⚠️ ${d}`).join('\n') : '  - Không có quan hệ xung hại lớn.'}
-* **Điểm cần lưu ý:**
-${cauTrucTongHop.diemLuuY.map((d) => `  - 💡 ${d}`).join('\n')}
+### PHẦN 2: PHÂN TÍCH CÁC TẦNG TƯƠNG TÁC (TỪ TỔNG QUAN ĐẾN CHI TIẾT)
+
+#### 1. Tầng Niên Mệnh (Năm sinh):
+- **Thiên Can (Tầng Khí):** ${tang1ThienCan.canChong} &times; ${tang1ThienCan.canVo} $\\rightarrow$ **${tang1ThienCan.quanHe}**. ${tang1ThienCan.chiTiet}. ${tang1ThienCan.yNghiaKhi}
+- **Địa Chi (Tầng Động):** ${chong.chi} &times; ${vo.chi} $\\rightarrow$ **${tang2DiaChi.tamHop ? `Tam Hợp (${tang2DiaChi.tamHopNhom})` : tang2DiaChi.lucHop ? `Lục Hợp (${tang2DiaChi.lucHopCap})` : tang2DiaChi.lucXung ? `Lục Xung (${tang2DiaChi.lucXungCap})` : tang2DiaChi.lucHai ? `Lục Hại (${tang2DiaChi.lucHaiCap})` : 'Bình Hòa'}**. ${tang2DiaChi.chiTietDong} *(Nguyên tắc: Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối).*
+- **Nạp Âm Hoa Giáp (Bản Thể):** ${tang4NapAm.nguHanhChong} &times; ${tang4NapAm.nguHanhVo} $\\rightarrow$ **${tang4NapAm.quanHe}**. ${tang4NapAm.phanBietRoRang}
+- **Cung Mệnh / Cung Phi (Bát Trạch):** ${tang5CungMenh.cungChong} phối ${tang5CungMenh.cungVo} $\\rightarrow$ Du Niên **${tang5CungMenh.ketQuaBatTrach}** (${tang5CungMenh.nhomBatTrach}). ${tang5CungMenh.yNghia}
+
+#### 2. Tầng Bát Tự Chuyên Sâu (Định hướng khi có thêm giờ/ngày/tháng):
+- Khảo sát tương tác Nhật Chủ (Can ngày của Chồng và Vợ) và trạng thái Cung Phu Thê (Nhật Chi).
+- Đối chiếu độ khuyết vượng Ngũ Hành & Dụng Thần bổ trợ cho nhau.
+- Rà soát Thần sát Hôn nhân (Đào Hoa, Thiên Hỷ, Hồng Loan, Cô Thần, Quả Tú).
 
 ---
 
-#### ❖ THÔNG ĐIỆP & NGUYÊN TẮC CỐT LÕI
-> *"${cauTrucTongHop.thongDiepCotLoi}"*
+### PHẦN 3: ĐÁNH GIÁ TÍNH CÁCH VÀ LỐI SỐNG
+- **Đặc tính bản mệnh:** Người chồng mang khí chất ${tang4NapAm.napAmChong}, thiên về ${chong.canNguHanh === 'Kim' ? 'quyết đoán, kỷ luật' : chong.canNguHanh === 'Mộc' ? 'nhân hậu, hướng thượng' : chong.canNguHanh === 'Thủy' ? 'linh hoạt, sâu sắc' : chong.canNguHanh === 'Hỏa' ? 'nhiệt tình, bộc trực' : 'trung hậu, vững chãi'}; Người vợ mang bản thể ${tang4NapAm.napAmVo}, có tính cách ${vo.canNguHanh === 'Kim' ? 'tinh tế, cương nghị' : vo.canNguHanh === 'Mộc' ? 'ôn hòa, bao dung' : vo.canNguHanh === 'Thủy' ? 'thấu cảm, khéo léo' : vo.canNguHanh === 'Hỏa' ? 'chân thành, sôi nổi' : 'chu đáo, thủy chung'}.
+- **Điểm tương đồng dễ gắn kết:**
+${cauTrucTongHop.diemThuan.length > 0 ? cauTrucTongHop.diemThuan.map((d) => `  - ✅ ${d}`).join('\n') : '  - Hai bạn có nền tảng tự nhiên để cùng vun đắp, không bị chi phối bởi thiên kiến cứng nhắc.'}
+- **Điểm khác biệt / Dễ phát sinh bất đồng:**
+${cauTrucTongHop.diemNghich.length > 0 ? cauTrucTongHop.diemNghich.map((d) => `  - ⚠️ ${d}`).join('\n') : '  - Khí vận khá thuận hòa, cần lưu ý giữ gìn sự tươi mới trong giao tiếp hàng ngày.'}
 
-${cauTrucTongHop.amDuongCheHoa}
+---
 
-*#nguyenhoangdang #huyenhoc #huyenhocdoisong #NhanDuyen #AmDuongNguHanh #LucThapHoaGiap #BatTu #BatTrach*`;
+### PHẦN 4: DỰ ĐOÁN & THỜI ĐIỂM CẦN LƯU Ý
+${cauTrucTongHop.diemLuuY.map((d) => `- 💡 **Lưu ý:** ${d}`).join('\n')}
+- **Thời điểm quan trọng:** Khi bước vào các năm có Địa Chi tương xung/hình với tuổi của hai bạn (đặc biệt các năm hạn Tam Tai hoặc xung Chi năm sinh), gia đình nên thận trọng trong lời ăn tiếng nói, tránh quyết định đầu tư mạo hiểm khi tâm trí đang bất an.
+- **Thời điểm tốt:** Chọn năm tháng có Thiên Can tương hợp, Tam hợp hoặc sinh dưỡng bản mệnh để tiến hành việc hỷ sự, mua nhà hoặc đón thêm thành viên mới nhằm gia tăng sinh khí hóa giải xung khắc.
+
+---
+
+### PHẦN 5: LỜI KHUYÊN & PHƯƠNG PHÁP HÓA GIẢI
+1. **Ứng xử tâm lý thực tế (Quan trọng nhất):**
+   - Vợ chồng lấy đạo nghĩa làm trọng, "Tương kính như tân", học cách lắng nghe khi đối phương chia sẻ và kiềm chế khẩu thiệt lúc bất đồng.
+   - Tôn trọng không gian cá nhân và phân định rõ ràng trách nhiệm gia đình.
+2. **Phương pháp điều chỉnh phong thủy & Ngũ hành:**
+   - Ưu tiên chọn hướng nhà, hướng bếp theo các cung tốt của Bát Trạch (${tang5CungMenh.ketQuaBatTrach === 'Tuyệt Mệnh' || tang5CungMenh.ketQuaBatTrach === 'Ngũ Quỷ' ? 'dùng hướng bếp Thiên Y hoặc Sinh Khí để chế hóa' : 'giữ hướng bếp và phòng ngủ tại cung Sinh Khí / Diên Niên'}).
+   - Màu sắc nội thất và trang phục nên phối hòa theo ngũ hành tương sinh giữa hai nạp âm để tạo trường năng lượng ấm áp.
+
+> *"Một người không phải chỉ là một cái tuổi. Huyền học là hệ thống tham khảo nhận diện khuynh hướng; còn chất lượng hôn nhân thực tế phụ thuộc vào tính cách, giao tiếp, sự tôn trọng, trách nhiệm, đạo đức và cách hai người cùng nhau xử lý khác biệt."*
+
+*#nguyenhoangdang #huyenhoc #NhanDuyen #AmDuongNguHanh #BatTu #BatTrach*`;
   }
 
   // General questions response
-  return `### 🌸 AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương
+  return `### 🌸 CHUYÊN GIA TƯ VẤN NHÂN DUYÊN & HÔN NHÂN BÁT TỰ — MỆNH LÝ
+*(Hệ Thống AI Nhân Duyên: Kết Nối Tâm Duyên – Thấu Hiểu Yêu Thương)*
 
-Chào quý bạn! Ta là **AI Nhân Duyên**, trợ lý chuyên sâu về luận giải hòa hợp nhân duyên vợ chồng và Bát Trạch phong thủy theo hệ thống Âm Dương – Ngũ Hành khoa học và đa tầng.
+Kính chào quý bạn! Ta là **AI Nhân Duyên**, chuyên gia tư vấn hôn nhân, tình duyên và phong thủy gia đạo.
 
-#### ❖ NGUYÊN TẮC LUẬN GIẢI CHUẨN MỰC:
-1. **Không dùng 1 yếu tố đơn lẻ** để kết luận toàn bộ một mối quan hệ.
-2. **Xung không đồng nghĩa với ly hôn**; **Hợp không đồng nghĩa với tốt tuyệt đối**.
-3. **Phân biệt rõ 4 lớp quy chiếu**: Thiên Can (Khí) &bull; Địa Chi (Động) &bull; Nạp Âm (Lục Thập Hoa Giáp) &bull; Cung Mệnh (Bát Trạch Phong Thủy).
-4. **Không chấm điểm cơ học thô thiển**: Luận giải dựa trên **Cấu Trúc Tương Tác** và cơ chế **Sinh – Khắc – Chế – Hóa**.
-5. **Giới hạn xem tuổi**: Năm sinh chỉ là đánh giá hòa hợp cơ bản; muốn phân tích toàn diện cần đủ Tứ Trụ (Giờ, Ngày, Tháng, Năm sinh).
+---
 
-> *"Một người không phải chỉ là một cái tuổi. Huyền học là hệ thống tham khảo nhận diện khuynh hướng; còn chất lượng hôn nhân thực tế phụ thuộc vào tính cách, giao tiếp, trách nhiệm, đạo đức và cách hai người cùng nhau xử lý khác biệt."*
+#### 📋 1. YÊU CẦU THU THẬP THÔNG TIN (INPUT REQUIREMENTS):
+- **Thông Tin Bắt Buộc:**
+  1. Giới tính (Nam / Nữ) của cả hai bên.
+  2. Năm sinh dương lịch hoặc âm lịch của cả hai bên.
+- **Thông Tin Ưu Tiên (Càng Tốt Để Đạt Độ Chính Xác Cao):**
+  - Tháng sinh, Ngày sinh, Giờ sinh (Âm hoặc Dương lịch).
+  - Nơi sinh (để cân chỉnh giờ địa phương).
 
-👉 Quý bạn hãy nhập **năm sinh của hai người** (ví dụ: *Chồng 1990 Vợ 1993*) hoặc **câu hỏi về Bát Trạch, hướng nhà, hóa giải xung khắc** để ta giải đáp nhé!
+*Quy tắc ứng xử:* Nếu chỉ có Năm sinh, ta sẽ phân tích theo Niên Mệnh (Can Chi, Nạp Âm, Cung Mệnh Bát Trạch). Nếu có đủ Ngày/Tháng/Năm/Giờ, ta sẽ tiến hành lập Bát Tự (Tứ Trụ) chuyên sâu.
 
-*#nguyenhoangdang #huyenhoc #huyenhocdoisong #NhanDuyen #AmDuongNguHanh #LucThapHoaGiap #BatTu #BatTrach*`;
+---
+
+#### 📑 2. CẤU TRÚC PHÂN TÍCH & BÁO CÁO 5 PHẦN (OUTPUT FRAMEWORK):
+1. **Phần 1 — Thông Tin Bản Mệnh:** Bảng tóm tắt Can Chi, Nạp Âm Hoa Giáp và Cung Mệnh Bát Trạch.
+2. **Phần 2 — Phân Tích Các Tầng Tương Tác:**
+   - Tầng Niên Mệnh (Thiên Can khí, Địa Chi động, Nạp Âm bản thể, Cung Mệnh phong thủy).
+   - Tầng Bát Tự Chuyên Sâu (Nhật Chủ, Cung Hôn Nhân, Dụng Thần bổ trợ, Thần Sát).
+3. **Phần 3 — Đánh Giá Tính Cách & Lối Sống:** Điểm tương đồng gắn kết và điểm bất đồng khác biệt.
+4. **Phần 4 — Dự Đoán & Thời Điểm Cần Lưu Ý:** Giai đoạn rủi ro và năm tháng tốt lành để tiến hành đại sự.
+5. **Phần 5 — Lời Khuyên & Phương Pháp Hóa Giải:** Ứng xử tâm lý thực tế (quan trọng nhất) và điều chỉnh phong thủy, Ngũ hành.
+
+---
+
+#### 🌟 3. NGUYÊN TẮC LUẬN GIẢI CỐT LÕI:
+- **Khách quan & Xây dựng:** Không dùng từ ngữ mang tính đe dọa, tuyệt vọng. Mọi xung khắc đều có phương pháp cân bằng và hóa giải.
+- **Cân bằng giữa Lý thuyết & Thực tế:** Kết hợp tri thức mệnh lý và tâm lý hôn nhân hiện đại.
+- **Triết lý bất biến:** *"Một người không phải chỉ là một cái tuổi. Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối."*
+
+👉 **Quý bạn hãy gửi thông tin tuổi/ngày sinh của hai bạn (ví dụ: "Chồng sinh 1990, Vợ sinh 1993") để ta tiến hành lập báo cáo 5 phần nhé!**
+
+*#nguyenhoangdang #huyenhoc #NhanDuyen #AmDuongNguHanh #BatTu #BatTrach*`;
 }
 
