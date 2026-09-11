@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.9.2',
+  currentVersion: 'v2.9.3',
   releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,40 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.9.3',
+    releaseDate: '12/09/2026',
+    codename: 'Quét Sạch Mã Dư Thừa & Refactor Toolbar Sticky',
+    tagline: 'Loại bỏ toàn bộ mã/tệp dư thừa, refactor thanh công cụ top toolbar và cố định Navbar sticky mượt mà khi cuộn trang',
+    isLatest: true,
+    highlights: [
+      'Rà soát toàn bộ kho mã nguồn, xóa các tệp và mã không sử dụng (CoupleLookupView.tsx, RoleTaskStandardModal.tsx, logo_ai_nhan_duyen_1788161586225.jpg, và các import/export thừa).',
+      'Tái cấu trúc (refactor) thanh công cụ top toolbar trong ChatbotView và AIChatbotModal, lược bỏ nút "Vai trò & Quy chuẩn".',
+      'Sửa lỗi và cố định thanh điều hướng Navbar ở chế độ sticky (sticky top-0 z-50), cuộn mượt mà trên mọi trang.',
+    ],
+    changes: [
+      {
+        type: 'ui',
+        title: 'Refactor top toolbar & Lược bỏ nút Vai trò & Quy chuẩn',
+        description: 'Gỡ bỏ nút Vai trò & Quy chuẩn khỏi top toolbar của ChatbotView và AIChatbotModal để giao diện thông thoáng.',
+      },
+      {
+        type: 'fix',
+        title: 'Cố định thanh điều hướng Sticky Navbar',
+        description: 'Sửa lỗi CSS trên container mẹ để Navbar duy trì vị trí sticky top-0 z-50 cố định khi cuộn.',
+      },
+      {
+        type: 'enhance',
+        title: 'Quét sạch mã nguồn & Tối ưu dung lượng',
+        description: 'Loại bỏ các tệp linh kiện dư thừa, bớt các import/export không dùng giúp mã nguồn sạch đẹp và build nhanh hơn.',
+      },
+    ],
+  },
+  {
     version: 'v2.9.2',
     releaseDate: '12/09/2026',
     codename: 'Rút Gọn Lời Chào Ban Đầu & Tinh Giản Phản Hồi AI',
     tagline: 'Rút ngắn tin nhắn tự giới thiệu ban đầu của assistant xuống 1 câu đơn giản và loại bỏ quy định tự giới thiệu trong System Prompt để AI không lặp lại lời chào',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Rút ngắn tin nhắn mở đầu (initial/welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: "Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?".',
       'Đồng bộ hóa lời chào tinh gọn khi người dùng xóa lịch sử cuộc trò chuyện (reset chat).',

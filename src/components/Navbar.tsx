@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const hasCustomKey = Boolean(getStoredOpenRouterKey());
 
   return (
-    <header className="border-b border-amber-200/90 bg-amber-50/95 backdrop-blur-md sticky top-0 z-40 shadow-xs w-full max-w-full overflow-hidden">
+    <header className="border-b border-amber-200/90 bg-amber-50/95 backdrop-blur-md sticky top-0 z-50 shadow-xs w-full max-w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16 lg:h-18 gap-1.5 sm:gap-3">
           {/* Logo & Title */}

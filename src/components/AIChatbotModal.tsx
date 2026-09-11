@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  MessageSquare,
   X,
   Send,
   Sparkles,
@@ -15,21 +14,14 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
-  Cpu,
-  Flame,
-  Sun,
-  Moon,
-  Info,
-  FileText,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
-import { getCurrentSolarTerm, generateMetaphysicsState, SolarTermInfo, MetaphysicsBoardState } from '../data/metaphysicsData';
+import { generateMetaphysicsState, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
 import { Key, Zap } from 'lucide-react';
-import { RoleTaskStandardModal } from './RoleTaskStandardModal';
 import { KnowledgeBaseModal } from './KnowledgeBaseModal';
 import { FolderGit2 } from 'lucide-react';
 
@@ -79,7 +71,6 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
   const [metaState, setMetaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
-  const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
   const [showKnowledgeBaseModal, setShowKnowledgeBaseModal] = useState(false);
   const [userKey, setUserKey] = useState<string>(() => getStoredOpenRouterKey());
 
@@ -304,16 +295,6 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
                 title="Xem Kho Tri Thức Ưu Tiên (/src/data/knowledge_base/)"
               >
                 <FolderGit2 className="w-4 h-4 text-amber-400" />
-              </button>
-
-              {/* Toggle Role Task Standard Modal */}
-              <button
-                id="chat-toggle-role-task"
-                onClick={() => setShowRoleTaskModal(true)}
-                className="p-1.5 rounded-lg hover:text-amber-200 hover:bg-stone-800/80 transition-colors"
-                title="Xem Vai Trò & Quy Chuẩn Báo Cáo 5 Phần"
-              >
-                <FileText className="w-4 h-4 text-amber-400" />
               </button>
 
               {/* Toggle Context Drawer */}
@@ -647,16 +628,6 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
       <KnowledgeBaseModal
         isOpen={showKnowledgeBaseModal}
         onClose={() => setShowKnowledgeBaseModal(false)}
-        onSelectPromptTemplate={(template) => {
-          setInput(template);
-          textareaRef.current?.focus();
-        }}
-      />
-
-      {/* Role & Task Standard Modal */}
-      <RoleTaskStandardModal
-        isOpen={showRoleTaskModal}
-        onClose={() => setShowRoleTaskModal(false)}
         onSelectPromptTemplate={(template) => {
           setInput(template);
           textareaRef.current?.focus();
