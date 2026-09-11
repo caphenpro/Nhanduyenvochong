@@ -258,40 +258,6 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
 
   return (
     <>
-      {/* Floating Trigger Button (Bottom Right) */}
-      {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-2">
-          <button
-            id="floating-chat-trigger"
-            onClick={() => setIsOpen(true)}
-            className="group relative flex items-center space-x-3 px-4 py-3.5 rounded-full bg-linear-to-r from-amber-800 via-amber-900 to-amber-950 text-amber-100 shadow-xl shadow-amber-950/30 hover:shadow-2xl hover:scale-105 transition-all duration-300 ring-2 ring-amber-400/50 hover:ring-amber-300"
-            title="Trò chuyện cùng Trợ lý Cổ Thuật AI"
-          >
-            {/* Pulsing Aura */}
-            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-500"></span>
-            </span>
-
-            <div className="w-8 h-8 rounded-full bg-amber-700/80 flex items-center justify-center text-amber-200 group-hover:rotate-12 transition-transform duration-300">
-              <Compass className="w-5 h-5 animate-spin-slow" />
-            </div>
-
-            <div className="text-left hidden sm:block">
-              <div className="text-xs font-bold font-serif text-amber-100 flex items-center space-x-1.5">
-                <span>Trợ Lý Cổ Thuật AI</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/30 text-amber-300 border border-amber-500/40">
-                  OpenRouter
-                </span>
-              </div>
-              <p className="text-[11px] text-amber-300/80">
-                Kỳ Môn &bull; Lục Nhâm &bull; Tiết Khí
-              </p>
-            </div>
-          </button>
-        </div>
-      )}
-
       {/* Chatbot Modal / Panel Window */}
       {isOpen && (
         <div

@@ -17,8 +17,8 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.8.0',
-  releaseDate: '10/09/2026',
+  currentVersion: 'v2.9.0',
+  releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
   repositoryUrl: 'https://github.com/nguyenhoangdang/ai-nhan-duyen',
@@ -28,11 +28,41 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.9.0',
+    releaseDate: '12/09/2026',
+    codename: 'Tối Ưu Co Giãn Giao Diện & Tinh Gọn Nút Trợ Lý',
+    tagline: 'Tối ưu giao diện co giãn linh hoạt (Responsive) cho cả Máy tính & Điện thoại; tinh gọn thanh điều hướng và lược bỏ nút chatbox nổi ở góc màn hình',
+    isLatest: true,
+    highlights: [
+      'Tối ưu hóa toàn diện giao diện đáp ứng linh hoạt (Responsive co-giãn) tương thích hoàn hảo cho cả Máy tính (Desktop) và Điện thoại di động (Mobile/Tablet).',
+      'Tinh gọn thanh điều hướng Navbar tự động co giãn theo kích thước màn hình, bảo đảm chữ và biểu tượng không bị vỡ dòng hay tràn lề.',
+      'Lược bỏ nút chatbox nổi góc dưới màn hình (floating chat button) theo yêu cầu, tạo không gian hiển thị rộng rãi, sạch đẹp trên thiết bị di động.',
+      'Cải thiện khả năng cuộn và hiển thị co giãn cho các bảng tra cứu Cung Mệnh Bát Trạch, Vòng Trường Sinh 10 Thiên Can và Ma trận 100 Đồ hình Cao Ly.',
+    ],
+    changes: [
+      {
+        type: 'ui',
+        title: 'Tối ưu hóa co giãn linh hoạt (Responsive Layout)',
+        description: 'Tự động co giãn bố cục Navbar, ChatbotView, Cẩm nang Cổ Thư và các Modal cài đặt vừa vặn với mọi độ phân giải từ di động đến máy tính.',
+      },
+      {
+        type: 'ui',
+        title: 'Lược bỏ nút chatbox nổi góc dưới phải',
+        description: 'Loại bỏ nút floating chat trigger ở góc dưới màn hình, tinh gọn trải nghiệm người dùng trên thiết bị di động.',
+      },
+      {
+        type: 'enhance',
+        title: 'Cải tiến độ co giãn và cuộn mượt cho các bảng dữ liệu',
+        description: 'Đảm bảo các bảng tra cứu Bát Trạch, Vòng Trường Sinh 10 Can và 100 Đồ hình Cao Ly cuộn ngang và hiển thị đẹp mắt.',
+      },
+    ],
+  },
+  {
     version: 'v2.8.0',
     releaseDate: '10/09/2026',
     codename: 'Tam Nguyên Tắc Tri Thức & Minh Bạch Nguồn Gốc',
     tagline: 'Quy chuẩn 3 nguyên tắc vận hành: Ưu tiên tuyệt đối Ground Truth, Mở rộng tương đồng khi cần, và Minh bạch nguồn gốc thông qua ghi chú chuẩn mực',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Xác lập Bộ 3 Nguyên Tắc Cốt Lõi điều phối tri thức cho AI Chatbox khi tương tác với Kho Tri Thức Nội Bộ (/src/data/knowledge_base/).',
       'Nguyên tắc 1 — Ưu Tiên Tuyệt Đối (Ground Truth): Tài liệu nội bộ là chân lý chuẩn mực tối cao; bắt buộc tuân theo tài liệu khi xảy ra bất kỳ xung đột nào.',
