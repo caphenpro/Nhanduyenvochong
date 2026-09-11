@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Cpu, Layers, ChevronDown, Key, Zap, FileText } from 'lucide-react';
+import { Send, Bot, User, Sparkles, RefreshCw, Volume2, VolumeX, Copy, Check, BookOpen, Compass, Layers, ChevronDown, Key, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Message, CoupleAnalysisResult } from '../types';
 import { generateMetaphysicsState, MetaphysicsBoardState } from '../data/metaphysicsData';
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
-import { RoleTaskStandardModal } from './RoleTaskStandardModal';
 import { KnowledgeBaseModal } from './KnowledgeBaseModal';
 import { FolderGit2 } from 'lucide-react';
 
@@ -47,7 +46,6 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
   const [resolvedModelName, setResolvedModelName] = useState<string | null>(null);
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showMetaphysicsBoard, setShowMetaphysicsBoard] = useState(false);
-  const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
   const [showKnowledgeBaseModal, setShowKnowledgeBaseModal] = useState(false);
   const [metaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
@@ -249,16 +247,6 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           >
             <FolderGit2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
             <span>Kho Tri Thức Ưu Tiên</span>
-          </button>
-
-          <button
-            id="chat-open-role-standard-btn"
-            onClick={() => setShowRoleTaskModal(true)}
-            className="flex items-center space-x-1 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border transition-colors text-[11px] sm:text-xs cursor-pointer bg-white hover:bg-amber-100/60 text-amber-900 border-amber-200 shadow-2xs"
-            title="Xem Vai Trò, Nhiệm Vụ & Cấu Trúc Báo Cáo 5 Phần của AI"
-          >
-            <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
-            <span>Vai Trò & Quy Chuẩn</span>
           </button>
 
           <button
@@ -477,16 +465,6 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
       <KnowledgeBaseModal
         isOpen={showKnowledgeBaseModal}
         onClose={() => setShowKnowledgeBaseModal(false)}
-        onSelectPromptTemplate={(template) => {
-          setInput(template);
-          inputRef.current?.focus();
-        }}
-      />
-
-      {/* Role & Task Standard Modal */}
-      <RoleTaskStandardModal
-        isOpen={showRoleTaskModal}
-        onClose={() => setShowRoleTaskModal(false)}
         onSelectPromptTemplate={(template) => {
           setInput(template);
           inputRef.current?.focus();
