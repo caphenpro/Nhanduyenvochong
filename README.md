@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.6.0-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.8.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -161,15 +161,21 @@ ai-nhan-duyen/
 ├── src/
 │   ├── components/             # Các thành phần giao diện React
 │   │   ├── AIChatbotModal.tsx  # Cửa sổ trợ lý AI nổi
+│   │   ├── KnowledgeBaseModal.tsx # Cửa sổ tra cứu Kho Tri Thức Ưu Tiên
+│   │   ├── RoleTaskStandardModal.tsx # Quy chuẩn Vai trò & Báo cáo 5 phần
 │   │   ├── AboutView.tsx       # Tab Giới thiệu & Lịch sử phiên bản
 │   │   ├── AncientLibraryView.tsx # Cẩm nang Cổ Thư tra cứu
 │   │   ├── ApiKeySettingsModal.tsx# Cài đặt OpenRouter Key & Model
 │   │   ├── ChatbotView.tsx     # Khung trò chuyện đàm đạo chính
 │   │   ├── CoupleLookupView.tsx# Khảo sát & phân tích hòa hợp 6 tầng
 │   │   ├── Footer.tsx          # Chân trang & liên kết phiên bản
-│   │   ├── Navbar.tsx          # Thanh điều hướng trên cùng & badge v2.1.0
+│   │   ├── Navbar.tsx          # Thanh điều hướng trên cùng & badge phiên bản
 │   │   └── VersionHistoryModal.tsx # Cửa sổ xem toàn bộ Changelog
 │   ├── data/                   # Dữ liệu tri thức và thuật toán
+│   │   ├── knowledge_base/     # KHO TRI THỨC ƯU TIÊN SỐ 1 (Ground Truth)
+│   │   │   ├── README.md       # Quy chuẩn vận hành & bổ sung tài liệu
+│   │   │   ├── index.ts        # Quản lý danh mục & hàm tổng hợp System Prompt
+│   │   │   └── 01_nam_1989_ky_ty_va_bat_trach_cung_menh.ts # Hồ sơ 1989 & Ma trận 8x8
 │   │   ├── ancientReasoner.ts  # Bộ suy luận logic offline
 │   │   ├── caolyData.ts        # Tri thức Cao Ly Đầu Hình
 │   │   ├── metaphysicsData.ts  # Tri thức Âm Dương Ngũ Hành & 24 Tiết Khí
@@ -195,6 +201,8 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.8.0** | 10/09/2026 | **Tam Nguyên Tắc Tri Thức & Minh Bạch Nguồn Gốc** | Xác lập 3 nguyên tắc nền tảng điều phối tri thức cho AI Chatbox: Nguyên tắc 1 — Ưu tiên tuyệt đối (Ground Truth), Nguyên tắc 2 — Mở rộng tương đồng khi tài liệu chưa đề cập đủ, Nguyên tắc 3 — Mẫu trình bày phân biệt minh bạch nguồn gốc (ghi chú nhẹ cho nội dung AI tự mở rộng); Nâng cấp KnowledgeBaseModal với 2 tab chuyển đổi (3 Nguyên tắc vận hành & Duyệt tệp dữ liệu chuẩn); Đồng bộ ghi chú nguồn vào cổ thư suy luận ancientReasoner.ts. |
+| **v2.7.0** | 10/09/2026 | **Kho Tri Thức Ưu Tiên & Hồ Sơ Bát Trạch 1989** | Thiết lập thư mục tri thức nội bộ `/src/data/knowledge_base/` làm nguồn Ground Truth ưu tiên số 1 cho AI Chatbox; Tích hợp Tệp Tri Thức Số 01: Hồ sơ 1989 Kỷ Tỵ Nam (Nạp âm Đại Lâm Mộc, Can Kỷ Thổ, Chi Tỵ Hỏa, Cung mệnh Khôn - Tây Tứ Mệnh); Chuẩn hóa Bảng 1 số dư chia 9, Bảng 2 Ma trận phối Cung Mệnh vợ chồng 8x8, Bảng 3 Giải nghĩa bản chất 8 Cung Cát/Hung; Tích hợp Modal Tra Cứu Kho Tri Thức Ưu Tiên (KnowledgeBaseModal) và kết nối trực tiếp vào System Prompt của AI. |
 | **v2.6.0** | 03/09/2026 | **Bát Tự Quy Chuẩn & Báo Cáo 5 Phần** | Xác lập chuẩn mực Vai trò & Nhiệm vụ Chuyên gia Tư vấn Hôn nhân Bát Tự; Phân cấp dữ liệu đầu vào (Bắt buộc vs Ưu tiên); Chuẩn hóa Cấu trúc Luận giải 5 Phần (Bản mệnh, Phân tích đa tầng, Tính cách lối sống, Dự đoán thời điểm, Lời khuyên hóa giải); Tích hợp Modal Quy Chuẩn & Mẫu Biểu Luận Giải. |
 | **v2.5.0** | 03/09/2026 | **Trường Sinh Đáo Xứ** | Bổ sung học thuyết Vòng Trường Sinh 10 Thiên Can (Dương Sinh Âm Tử & Tam Hợp Cục) vào Cổ Thư; Bảng ma trận 10 Can x 12 Cung; Bộ công cụ tra cứu tương tác Can phối Chi; Cập nhật tri thức cho AI Chatbox. |
 | **v2.4.2** | 31/08/2026 | **Hoàn Thiện Tàng Kinh Các** | Khắc phục hoàn toàn lỗi ẩn/mất tab và nội dung trong Cẩm Nang Cổ Thư trên di động; sửa lỗi cuộn thanh tab và tối ưu hiển thị 8 hướng Du Niên. |

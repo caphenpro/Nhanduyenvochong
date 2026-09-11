@@ -7,6 +7,8 @@ import { generateMetaphysicsState, MetaphysicsBoardState } from '../data/metaphy
 import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsModal';
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
 import { RoleTaskStandardModal } from './RoleTaskStandardModal';
+import { KnowledgeBaseModal } from './KnowledgeBaseModal';
+import { FolderGit2 } from 'lucide-react';
 
 interface ChatbotViewProps {
   currentCoupleResult: CoupleAnalysisResult | null;
@@ -14,14 +16,16 @@ interface ChatbotViewProps {
 }
 
 const SAMPLE_PROMPTS = [
+  '3 Nguyên tắc kết hợp tri thức nội bộ (Ground Truth) và kiến thức mở rộng của AI Chatbox là gì?',
+  'Hồ sơ tuổi 1989 Kỷ Tỵ Nam và ma trận phối cung Bát Trạch 8x8 theo Kho Tri Thức Nội Bộ?',
+  'Bảng tính Cung Mệnh theo số dư chia 9 cho Nam và Nữ trong tài liệu chuẩn?',
+  'Chồng sinh 1989 (Kỷ Tỵ), Vợ sinh 1992 (Nhâm Thân) — Phân tích hòa hợp kết hợp ghi chú minh bạch nguồn gốc!',
+  'Giải nghĩa bản chất 8 Cung (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh...) theo tài liệu nội bộ?',
   'Vai trò, nhiệm vụ và cấu trúc bài luận giải 5 phần của AI Nhân Duyên là gì?',
   'Chồng sinh 1996 (Bính Tý), Vợ sinh 1997 (Đinh Sửu) — Luận giải hòa hợp theo cấu trúc 5 phần chuẩn mực!',
   'Mẫu yêu cầu thu thập thông tin chuẩn khi tư vấn nhân duyên (Bắt buộc vs Ưu tiên)?',
   'Nguyên tắc phân biệt giữa Nạp Âm năm sinh và Ngũ Hành Thiên Can, Địa Chi?',
   'Tại sao trong mệnh lý: "Xung không đồng nghĩa với ly hôn, Hợp không đồng nghĩa với tốt tuyệt đối"?',
-  'Quan hệ Bát Trạch (Sinh Khí, Thiên Y, Diên Niên, Tuyệt Mệnh, Ngũ Quỷ) hiểu thế nào cho đúng?',
-  'Khi nào chỉ cần năm sinh và khi nào bắt buộc phải có đủ Tứ Trụ (Giờ, Ngày, Tháng, Năm)?',
-  'Cơ chế Sinh – Khắc – Chế – Hóa trong Âm Dương Ngũ Hành tác động đến hôn nhân thế nào?',
   'Ý nghĩa triết lý "Một người không phải chỉ là một cái tuổi" và "Đức Năng Thắng Số"?',
 ];
 
@@ -44,6 +48,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
   const [showModelMenu, setShowModelMenu] = useState(false);
   const [showMetaphysicsBoard, setShowMetaphysicsBoard] = useState(false);
   const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
+  const [showKnowledgeBaseModal, setShowKnowledgeBaseModal] = useState(false);
   const [metaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [userKey, setUserKey] = useState<string>(() => getStoredOpenRouterKey());
@@ -234,6 +239,16 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
             <span className="truncate max-w-[130px] sm:max-w-none">
               Tiết: {metaState.solarTerm.name}
             </span>
+          </button>
+
+          <button
+            id="chat-open-knowledge-base-btn"
+            onClick={() => setShowKnowledgeBaseModal(true)}
+            className="flex items-center space-x-1 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border transition-colors text-[11px] sm:text-xs cursor-pointer bg-amber-50 hover:bg-amber-100 text-amber-950 border-amber-300 font-semibold shadow-2xs"
+            title="Xem Kho Tri Thức Ưu Tiên Nội Bộ (/src/data/knowledge_base/)"
+          >
+            <FolderGit2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
+            <span>Kho Tri Thức Ưu Tiên</span>
           </button>
 
           <button
@@ -457,6 +472,16 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
           </button>
         </div>
       </div>
+
+      {/* Priority Knowledge Base Modal */}
+      <KnowledgeBaseModal
+        isOpen={showKnowledgeBaseModal}
+        onClose={() => setShowKnowledgeBaseModal(false)}
+        onSelectPromptTemplate={(template) => {
+          setInput(template);
+          inputRef.current?.focus();
+        }}
+      />
 
       {/* Role & Task Standard Modal */}
       <RoleTaskStandardModal

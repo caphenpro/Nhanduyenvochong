@@ -17,8 +17,8 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.6.0',
-  releaseDate: '03/09/2026',
+  currentVersion: 'v2.8.0',
+  releaseDate: '10/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
   repositoryUrl: 'https://github.com/nguyenhoangdang/ai-nhan-duyen',
@@ -28,11 +28,80 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.8.0',
+    releaseDate: '10/09/2026',
+    codename: 'Tam Nguyên Tắc Tri Thức & Minh Bạch Nguồn Gốc',
+    tagline: 'Quy chuẩn 3 nguyên tắc vận hành: Ưu tiên tuyệt đối Ground Truth, Mở rộng tương đồng khi cần, và Minh bạch nguồn gốc thông qua ghi chú chuẩn mực',
+    isLatest: true,
+    highlights: [
+      'Xác lập Bộ 3 Nguyên Tắc Cốt Lõi điều phối tri thức cho AI Chatbox khi tương tác với Kho Tri Thức Nội Bộ (/src/data/knowledge_base/).',
+      'Nguyên tắc 1 — Ưu Tiên Tuyệt Đối (Ground Truth): Tài liệu nội bộ là chân lý chuẩn mực tối cao; bắt buộc tuân theo tài liệu khi xảy ra bất kỳ xung đột nào.',
+      'Nguyên tắc 2 — Nguyên Tắc Mở Rộng: Cho phép tự mở rộng bằng tri thức chuyên môn khi tài liệu chưa đề cập đủ, nhưng bắt buộc phải dựa trên logic, văn phong và hệ thống lý luận tương đồng.',
+      'Nguyên tắc 3 — Minh Bạch Nguồn Gốc: Phân định rõ thông tin có sẵn (khẳng định trực tiếp) và thông tin mở rộng (kèm ghi chú nhẹ "Lưu ý: Phần [Nội dung X] dựa trên kiến thức mở rộng bổ trợ cho tài liệu gốc...").',
+      'Nâng cấp giao diện KnowledgeBaseModal với 2 tab chuyển đổi: 3 Nguyên tắc vận hành & Duyệt tệp tri thức chi tiết.',
+      'Đồng bộ hóa 3 nguyên tắc vào cả System Prompt trực tuyến và Bộ suy luận ngoại tuyến ancientReasoner.ts.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Tích hợp 3 Nguyên Tắc Tri Thức vào System Prompt & Offline Reasoner',
+        description: 'Định nghĩa KNOWLEDGE_BASE_RULES và nhúng tự động vào compileKnowledgeBaseForSystemPrompt() cũng như ancientReasoner.ts.',
+      },
+      {
+        type: 'ui',
+        title: 'Nâng cấp KnowledgeBaseModal với Tab 3 Nguyên Tắc Vận Hành',
+        description: 'Bổ sung thẻ hiển thị trực quan 3 nguyên tắc kèm ví dụ mẫu minh họa và câu hỏi thực hành nhanh cho người dùng.',
+      },
+      {
+        type: 'enhance',
+        title: 'Chuẩn Hóa Mẫu Ghi Chú Minh Bạch Nguồn Gốc',
+        description: 'Tự động đính kèm ghi chú nguồn mở rộng chuẩn mực vào các câu trả lời và báo cáo phân tích cặp đôi.',
+      },
+    ],
+  },
+  {
+    version: 'v2.7.0',
+    releaseDate: '10/09/2026',
+    codename: 'Kho Tri Thức Ưu Tiên & Hồ Sơ Bát Trạch 1989 Kỷ Tỵ',
+    tagline: 'Thiết lập thư mục tri thức nội bộ /src/data/knowledge_base/ làm nguồn Ground Truth ưu tiên số 1 cho AI Chatbox; tích hợp hồ sơ 1989 Kỷ Tỵ & ma trận Bát Trạch 8x8',
+    isLatest: false,
+    highlights: [
+      'Thiết lập thư mục tri thức nội bộ chuẩn mực tại `/src/data/knowledge_base/` làm nguồn Ground Truth ưu tiên số 1 (Priority-1) cho AI Chatbox trước khi sử dụng kiến thức bên ngoài.',
+      'Tích hợp Tệp Tri Thức Số 01: Hồ sơ 1989 Kỷ Tỵ Nam (Nạp âm Đại Lâm Mộc, Can Kỷ Thổ, Chi Tỵ Hỏa, Cung mệnh Khôn - Tây Tứ Mệnh).',
+      'Chuẩn hóa Bảng 1: Xác định Cung Mệnh theo tuổi qua số dư chia 9 chuẩn mực cho cả Nam và Nữ.',
+      'Chuẩn hóa Bảng 2: Ma trận phối Cung Mệnh vợ chồng 8x8 (Càn, Khôn, Cấn, Đoài, Khảm, Ly, Chấn, Tốn) tạo 8 Biến Cung Cát/Hung.',
+      'Chuẩn hóa Bảng 3: Giải nghĩa bản chất ngũ hành, mức độ ảnh hưởng của 8 Cung (Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh).',
+      'Tích hợp Giao diện Tra Cứu Kho Tri Thức Ưu Tiên (KnowledgeBaseModal) và kết nối trực tiếp vào System Prompt của AI.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Xây dựng Thư Mục Tri Thức Ưu Tiên /src/data/knowledge_base/',
+        description: 'Tạo cấu trúc lưu trữ tri thức dài hạn có registry index.ts, tài liệu chuẩn và hàm biên soạn compileKnowledgeBaseForSystemPrompt() tự động nhúng vào hệ thống.',
+      },
+      {
+        type: 'feat',
+        title: 'Nạp Tệp Tri Thức Số 01: Hồ Sơ Kỷ Tỵ 1989 & Ma Trận Bát Trạch 8x8',
+        description: 'Mã hóa chi tiết hồ sơ tuổi Kỷ Tỵ 1989 Nam mạng, bảng số dư chia 9, ma trận phối cung vợ chồng 8x8 và bảng giải nghĩa 8 biến cung.',
+      },
+      {
+        type: 'ui',
+        title: 'Thêm Modal Tra Cứu Kho Tri Thức Ưu Tiên Trên Chatbot',
+        description: 'Tích hợp KnowledgeBaseModal.tsx cho phép người dùng xem trực tiếp tài liệu chuẩn, kiểm tra trạng thái ưu tiên nội bộ và gửi câu hỏi mẫu tra cứu.',
+      },
+      {
+        type: 'enhance',
+        title: 'Đồng Bộ Hóa Kiến Thức Vào Cả Bộ Luận Giải Trực Tuyến & Ngoại Tuyến',
+        description: 'Cập nhật System Prompt cho OpenRouter/Gemini SDK và bổ sung bộ suy luận ngoại tuyến ancientReasoner.ts ưu tiên trích xuất dữ liệu nội bộ.',
+      },
+    ],
+  },
+  {
     version: 'v2.6.0',
     releaseDate: '03/09/2026',
     codename: 'Bát Tự Quy Chuẩn & Cấu Trúc Báo Cáo 5 Phần',
     tagline: 'Xác lập chuẩn mực Vai trò & Nhiệm vụ Chuyên gia Tư vấn Hôn nhân Bát Tự, phân cấp thông tin đầu vào và chuẩn hóa Cấu trúc Luận giải 5 Phần',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Xác lập chính thức Vai Trò & Nhiệm Vụ cốt lõi của Chatbox AI Nhân Duyên: Chuyên gia Tư vấn Nhân duyên & Hôn nhân Bát Tự - Mệnh Lý theo định hướng tích cực, xây dựng.',
       'Phân định 2 cấp độ thu thập thông tin đầu vào (Input Requirements): Bắt buộc (Giới tính & Năm sinh) và Ưu tiên (Giờ/Ngày/Tháng sinh & Nơi sinh để lập Bát Tự Tứ Trụ).',

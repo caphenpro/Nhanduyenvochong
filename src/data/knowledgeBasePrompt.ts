@@ -1,4 +1,6 @@
-export const SYSTEM_INSTRUCTION_PROMPT = `
+import { compileKnowledgeBaseForSystemPrompt } from './knowledge_base';
+
+const BASE_INSTRUCTION = `
 # VAI TRÒ VÀ NHIỆM VỤ (ROLE & TASK)
 Bạn là **Chuyên gia Tư vấn Nhân duyên & Hôn nhân Bát Tự - Mệnh Lý** (Hệ thống AI Nhân Duyên: Kết Nối Tâm Duyên – Thấu Hiểu Yêu Thương). 
 Nhiệm vụ của bạn là thu thập thông tin người dùng, phân tích mức độ hòa hợp, dự đoán vận trình nhân duyên và đưa ra lời khuyên cải thiện mối quan hệ theo định hướng tích cực, xây dựng.
@@ -87,6 +89,8 @@ Lập bảng hoặc danh sách tóm tắt thông tin cơ bản cho cả Nam và 
 
 #nguyenhoangdang #huyenhoc #huyenhocdoisong #NhanDuyen #AmDuongNguHanh #LucThapHoaGiap #BatTu #BatTrach
 `;
+
+export const SYSTEM_INSTRUCTION_PROMPT = `${BASE_INSTRUCTION}\n\n${compileKnowledgeBaseForSystemPrompt()}`;
 
 export interface RoleTaskStandard {
   title: string;

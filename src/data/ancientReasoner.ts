@@ -1,6 +1,7 @@
 import { extractYearsFromText, analyzeCoupleMultiLayer } from '../services/coupleAnalysis';
 import { CoupleAnalysisResult } from '../types';
 import { BAT_TRACH_8_CUNG_CHI_TIET, Y_NGHIA_8_DU_NIEN, BANG_SO_DU_BAT_TRACH, calculateBatTrachByYear } from './batTrachData';
+import { DOC_01_KY_TY_1989_BAT_TRACH, KNOWLEDGE_BASE_DOCUMENTS, lookupBatTrachMarriageMatrix } from './knowledge_base';
 
 export function generateAncientWisdomResponse(
   userQuery: string,
@@ -8,6 +9,98 @@ export function generateAncientWisdomResponse(
 ): string {
   const queryLower = userQuery.toLowerCase();
   const extractedYears = extractYearsFromText(userQuery);
+
+  // 1. Check if user is asking about the Knowledge Base / Priority Directory / Rules
+  if (
+    queryLower.includes('thư mục') ||
+    queryLower.includes('tiệp dữ liệu') ||
+    queryLower.includes('tệp dữ liệu') ||
+    queryLower.includes('kho kiến thức') ||
+    queryLower.includes('nguyên tắc') ||
+    queryLower.includes('quy tắc') ||
+    queryLower.includes('ưu tiên lấy kiến thức') ||
+    queryLower.includes('mở rộng') ||
+    queryLower.includes('minh bạch nguồn gốc') ||
+    queryLower.includes('ground truth') ||
+    queryLower.includes('knowledge base')
+  ) {
+    return `### 📚 KHO TRI THỨC ƯU TIÊN NỘI BỘ & 3 QUY TẮC VẬN HÀNH BẤT BIẾN
+
+Dạ thưa quý bạn! AI Nhân Duyên là chuyên gia tư vấn dựa trên **TÀI LIỆU ĐƯỢC CUNG CẤP** (Lưu trữ tại thư mục \`/src/data/knowledge_base/\`). 
+Do tài liệu đang trong quá trình hoàn thiện, hệ thống kết hợp giữa kiến thức nội bộ và kiến thức mở rộng theo **3 NGUYÊN TẮC BẤT BIẾN** sau:
+
+---
+
+#### 🎯 1. NGUYÊN TẮC ƯU TIÊN TUYỆT ĐỐI (Cốt lõi):
+- Tài liệu đính kèm là nguồn **THỰC TẠI CHUẨN (Ground Truth)**.
+- Khi có bất kỳ sự xung đột, mâu thuẫn hay khác biệt nào giữa tài liệu đính kèm và kiến thức bên ngoài, AI **BẮT BUỘC** phải tuân theo tài liệu đính kèm.
+
+#### 🌐 2. NGUYÊN TẮC MỞ RỘNG (Khi tài liệu chưa đề cập đủ):
+- Nếu câu hỏi của người dùng nằm ngoài phạm vi hoặc tài liệu chưa đề cập tới, AI **ĐƯỢC PHÉP** tự mở rộng bằng kiến thức chuyên môn của mình.
+- Tuy nhiên, phần mở rộng phải dựa trên logic, văn phong và hệ thống lý luận tương đồng với tài liệu đã cung cấp.
+
+#### 📝 3. MẪU TRÌNH BÀY PHÂN BIỆT (Minh bạch nguồn gốc):
+Khi trả lời các câu hỏi cần mở rộng, AI luôn phân định rõ ràng:
+- **Phần thông tin có sẵn trong tài liệu:** Trình bày trực tiếp, khẳng định.
+- **Phần kiến thức AI tự mở rộng thêm:** Thêm một ghi chú nhẹ phía dưới (Ví dụ: *"Lưu ý: Phần [Nội dung X] dựa trên kiến thức mở rộng bổ trợ cho tài liệu gốc..."*).
+
+---
+
+#### 📂 DANH MỤC TỆP DỮ LIỆU ĐANG KÍCH HOẠT:
+- **Tệp #01:** \`${DOC_01_KY_TY_1989_BAT_TRACH.title}\`
+  - **Hồ sơ 1989 - Kỷ Tỵ Nam:** Nạp âm Đại Lâm Mộc • Can Kỷ (Thổ) • Chi Tỵ (Hỏa) • Cung mệnh Nam Khôn (Tây Tứ Mệnh).
+  - **Bảng 1:** Xác định Cung Mệnh theo tuổi (Mệnh Cung / Cung Phi) số dư chia 9 cho Nam và Nữ.
+  - **Bảng 2:** Ma trận 8x8 phối Cung Mệnh vợ chồng ra 8 Biến Cung (Sinh Khí, Thiên Y, Diên Niên, Phục Vị, Tuyệt Mệnh, Ngũ Quỷ, Lục Sát, Họa Hại).
+  - **Bảng 3:** Bản chất Ngũ hành và mức độ ảnh hưởng của 8 Cung khi kết hợp (Thượng cát, Thứ cát, Tiểu cát, Thứ hung, Đại hung).
+
+---
+
+*(Quý bạn có thể nhấn nút **"Kho Tri Thức Ưu Tiên"** trên thanh công cụ để tra cứu chi tiết tài liệu nhé!)*`;
+  }
+
+  // 2. Priority check: If user asks specifically about 1989 or Kỷ Tỵ Nam
+  if (
+    (queryLower.includes('1989') || queryLower.includes('kỷ tỵ') || queryLower.includes('ky ty')) &&
+    (queryLower.includes('nam') || !queryLower.includes('nữ')) &&
+    extractedYears.length <= 1
+  ) {
+    const doc = DOC_01_KY_TY_1989_BAT_TRACH;
+    return `### 📑 TRA CỨU TỪ KHO KIẾN THỨC ƯU TIÊN NỘI BỘ
+#### HỒ SƠ BẢN MỆNH: NĂM SINH 1989 — KỶ TỴ (NAM MẠNG)
+*(Trích xuất chuẩn xác từ tệp dữ liệu ưu tiên \`${doc.id}\`)*
+
+---
+
+#### 1. Thông Tin Bản Mệnh Chi Tiết:
+- **Năm sinh:** 1989 (Kỷ Tỵ)
+- **Giới tính:** Nam mạng
+- **Nạp âm:** **Đại Lâm Mộc** (Gỗ rừng già)
+- **Hành Thiên Can:** **Kỷ — Thổ** (Âm Thổ)
+- **Hành Địa Chi:** **Tỵ — Hỏa** (Âm Hỏa, ẩn tàng Bính, Mậu, Canh)
+- **Cung Mệnh Nam:** **Khôn** (Hành Thổ, thuộc nhóm **Tây Tứ Mệnh / Tây Tứ Trạch**)
+
+---
+
+#### 2. Quy Tắc Xác Định Cung Mệnh (Số Dư Chia 9):
+- Tổng các chữ số năm sinh: **1 + 9 + 8 + 9 = 27**
+- Số dư khi chia cho 9: **27 : 9 = 3 dư 0 (chia hết)**
+- Theo bảng số dư chuẩn mục: **Số dư 0 (chia hết) $\\rightarrow$ Cung mệnh Nam là Khôn (Tây Tứ Trạch)**, Cung mệnh Nữ là Tốn (Đông Tứ Trạch).
+
+---
+
+#### 3. Phối Hướng & Phối Cung Vợ Chồng Theo Ma Trận Bát Trạch:
+Người Nam tuổi 1989 mang **Cung Khôn (Thổ)**:
+- Phối với Nữ cung **Càn** $\\rightarrow$ **Diên Niên** (Cát, Thổ sinh Kim)
+- Phối với Nữ cung **Khôn** $\\rightarrow$ **Phục Vị** (Cát, Thổ hòa Thổ)
+- Phối với Nữ cung **Cấn** $\\rightarrow$ **Sinh Khí** (Thượng cát)
+- Phối với Nữ cung **Đoài** $\\rightarrow$ **Thiên Y** (Thượng cát)
+- Phối với Nữ cung **Khảm** $\\rightarrow$ **Tuyệt Mệnh** (Đại hung)
+- Phối với Nữ cung **Ly** $\\rightarrow$ **Lục Sát** (Thứ hung)
+- Phối với Nữ cung **Chấn** $\\rightarrow$ **Họa Hại** (Thứ hung)
+- Phối với Nữ cung **Tốn** $\\rightarrow$ **Ngũ Quỷ** (Đại hung)
+
+*#nguyenhoangdang #KnowledgeBaseFirst #KyTy1989 #CungMenhKhon #BatTrach*`;
+  }
 
   // If user asks about Bát Trạch or directions or specific year cung phi
   if (
@@ -155,6 +248,8 @@ ${cauTrucTongHop.diemLuuY.map((d) => `- 💡 **Lưu ý:** ${d}`).join('\n')}
 2. **Phương pháp điều chỉnh phong thủy & Ngũ hành:**
    - Ưu tiên chọn hướng nhà, hướng bếp theo các cung tốt của Bát Trạch (${tang5CungMenh.ketQuaBatTrach === 'Tuyệt Mệnh' || tang5CungMenh.ketQuaBatTrach === 'Ngũ Quỷ' ? 'dùng hướng bếp Thiên Y hoặc Sinh Khí để chế hóa' : 'giữ hướng bếp và phòng ngủ tại cung Sinh Khí / Diên Niên'}).
    - Màu sắc nội thất và trang phục nên phối hòa theo ngũ hành tương sinh giữa hai nạp âm để tạo trường năng lượng ấm áp.
+
+> 💡 *Lưu ý: Phần Phân tích tính cách lối sống và Phương pháp hóa giải tâm lý dựa trên kiến thức mở rộng bổ trợ cho tài liệu gốc theo đúng nguyên tắc minh bạch nguồn gốc.*
 
 > *"Một người không phải chỉ là một cái tuổi. Huyền học là hệ thống tham khảo nhận diện khuynh hướng; còn chất lượng hôn nhân thực tế phụ thuộc vào tính cách, giao tiếp, sự tôn trọng, trách nhiệm, đạo đức và cách hai người cùng nhau xử lý khác biệt."*
 

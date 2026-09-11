@@ -30,6 +30,8 @@ import { ApiKeySettingsModal, getStoredOpenRouterKey } from './ApiKeySettingsMod
 import { streamAIChat, AI_MODELS_LIST, AUTO_MODEL_ID } from '../services/aiChatClient';
 import { Key, Zap } from 'lucide-react';
 import { RoleTaskStandardModal } from './RoleTaskStandardModal';
+import { KnowledgeBaseModal } from './KnowledgeBaseModal';
+import { FolderGit2 } from 'lucide-react';
 
 interface AIChatbotModalProps {
   currentCoupleResult?: CoupleAnalysisResult | null;
@@ -78,6 +80,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
   const [metaState, setMetaState] = useState<MetaphysicsBoardState>(() => generateMetaphysicsState(new Date()));
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [showRoleTaskModal, setShowRoleTaskModal] = useState(false);
+  const [showKnowledgeBaseModal, setShowKnowledgeBaseModal] = useState(false);
   const [userKey, setUserKey] = useState<string>(() => getStoredOpenRouterKey());
 
   const [input, setInput] = useState('');
@@ -327,6 +330,16 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
 
             {/* Header Action Buttons */}
             <div className="flex items-center space-x-1 sm:space-x-1.5 text-stone-400">
+              {/* Toggle Knowledge Base Modal */}
+              <button
+                id="chat-toggle-knowledge-base"
+                onClick={() => setShowKnowledgeBaseModal(true)}
+                className="p-1.5 rounded-lg hover:text-amber-200 hover:bg-stone-800/80 transition-colors"
+                title="Xem Kho Tri Thức Ưu Tiên (/src/data/knowledge_base/)"
+              >
+                <FolderGit2 className="w-4 h-4 text-amber-400" />
+              </button>
+
               {/* Toggle Role Task Standard Modal */}
               <button
                 id="chat-toggle-role-task"
@@ -663,6 +676,16 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
           </div>
         </div>
       )}
+
+      {/* Priority Knowledge Base Modal */}
+      <KnowledgeBaseModal
+        isOpen={showKnowledgeBaseModal}
+        onClose={() => setShowKnowledgeBaseModal(false)}
+        onSelectPromptTemplate={(template) => {
+          setInput(template);
+          textareaRef.current?.focus();
+        }}
+      />
 
       {/* Role & Task Standard Modal */}
       <RoleTaskStandardModal
