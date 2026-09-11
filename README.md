@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.10.0-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -71,9 +71,10 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
 
 ## ✨ Tính Năng Nổi Bật
 
-- 🤖 **Trợ Lý AI Chatbox Đa Nền Tảng & Tự Động Luân Chuyển (Smart Auto-Fallback):**
+- 🤖 **Trợ Lý AI Chatbox Tích Hợp RAG Cổ Thư & OpenRouter Web Search:**
+  - **Tích hợp Động cơ RAG (Retrieval-Augmented Generation):** Tự động truy vấn kho dữ liệu cổ thư (Kho tri thức nội bộ, 100 Đồ hình Cao Ly, Bát Trạch, Vòng Trường Sinh 10 Can, Tam Thế...) và ghép ngữ cảnh vào System Prompt.
+  - **Quy trình trả lời 3 cấp độ ưu tiên:** ƯU TIÊN 1 (Dữ liệu cổ thư RAG nội bộ làm căn cứ cốt lõi) -> ƯU TIÊN 2 (Sử dụng Web Search đối chiếu tri thức mở) -> ĐỐI CHIẾU & TỔNG HỢP (Loại bỏ mâu thuẫn, đưa ra lập luận bám sát cổ thư).
   - **Chế độ tự động chọn mô hình (Auto-Fallback):** Tự động chọn mô hình tối ưu nhất và tự động xoay vòng qua các mô hình dự phòng (Gemini 2.5 Flash, DeepSeek Chat, Llama 3.3 70B Free, Qwen 2.5 72B Free, Gemini 2.0 Flash Exp Free) khi một mô hình hết lượt miễn phí hoặc quá tải.
-  - Hỗ trợ người dùng lựa chọn thủ công mô hình yêu thích hoặc kết nối khóa API cá nhân.
   - Tích hợp công cụ **Offline Cổ Thư Reasoner** hoạt động độc lập ngay cả khi không có kết nối internet hoặc hết quota API.
 - 🔮 **Lập Quẻ & Khảo Sát Hòa Hợp Nhân Duyên:**
   - Nhập năm sinh và tháng sinh âm lịch của hai vợ chồng/cặp đôi.
@@ -85,7 +86,7 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
 - 🔑 **Quản Lý API Key An Toàn:**
   - Người dùng có thể nhập khóa cá nhân OpenRouter API Key.
   - Dữ liệu lưu an toàn trong trình duyệt (LocalStorage), không lưu trữ trái phép trên máy chủ trung gian.
-- 📜 **Lịch Sử Phiên Bản & Changelog Đầy Đủ:**
+- 📜 **Lịch Sử Phiên Bản & Changelog Đầy ĐỦ:**
   - Tích hợp cửa sổ tra cứu lịch sử phát hành (Changelog) tương tác ngay trên giao diện.
 
 ---
@@ -105,7 +106,7 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
   - [Esbuild](https://esbuild.github.io/) — Đóng gói máy chủ Node.js hiệu năng cao.
 - **AI SDK & Integration:**
   - [@google/genai](https://www.npmjs.com/package/@google/genai) — SDK chính thức của Google Gemini API.
-  - OpenRouter API REST Integration — Cổng giao tiếp đa mô hình ngôn ngữ lớn.
+  - OpenRouter API REST Integration — Cổng giao tiếp đa mô hình ngôn ngữ lớn đính kèm Web Search Plugin (`plugins: [{ id: "web" }]`).
 
 ---
 
@@ -113,7 +114,7 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
 
 ### 1. Yêu cầu môi trường
 - Node.js version 18.0 trở lên
-- Trình quản lý gói `npm` hoặc `pnpm` / `yarn`
+- Trình quản lý gói `npm` hoặc `pnpm` / `yarn` / `bun`
 
 ### 2. Tải mã nguồn về máy
 ```bash
@@ -174,13 +175,14 @@ ai-nhan-duyen/
 │   │   │   ├── README.md       # Quy chuẩn vận hành & bổ sung tài liệu
 │   │   │   ├── index.ts        # Quản lý danh mục & hàm tổng hợp System Prompt
 │   │   │   └── 01_nam_1989_ky_ty_va_bat_trach_cung_menh.ts # Hồ sơ 1989 & Ma trận 8x8
+│   │   ├── ancientRAG.ts       # Động cơ RAG tra cứu kho cổ thư nội bộ
 │   │   ├── ancientReasoner.ts  # Bộ suy luận logic offline
 │   │   ├── caolyData.ts        # Tri thức Cao Ly Đầu Hình
 │   │   ├── metaphysicsData.ts  # Tri thức Âm Dương Ngũ Hành & 24 Tiết Khí
 │   │   ├── tamtheData.ts       # Tri thức Diễn Cầm Tam Thế (1952)
 │   │   └── versionHistory.ts   # Quản lý số phiên bản & lịch sử cập nhật
 │   ├── services/
-│   │   ├── aiChatClient.ts     # Client gửi yêu cầu AI (OpenRouter/Gemini)
+│   │   ├── aiChatClient.ts     # Client gửi yêu cầu AI (OpenRouter/Gemini + RAG & Web Plugin)
 │   │   └── coupleAnalysis.ts   # Thuật toán phân tích 6 tầng Can Chi Nạp Âm
 │   ├── types.ts                # Định nghĩa kiểu dữ liệu TypeScript
 │   ├── App.tsx                 # Thành phần gốc ứng dụng
@@ -199,6 +201,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.11.0** | 12/09/2026 | **Cổ Thư RAG & OpenRouter Web Search Integration** | Tích hợp Động cơ RAG truy vấn kho cổ thư nội bộ (Knowledge Base, 100 Đồ hình Cao Ly, Bát Trạch, Vòng Trường Sinh 10 Can, Tam Thế...); Tự động phân tích từ khóa/thực thể mệnh lý để chèn context cổ thư phù hợp nhất vào System Prompt; Cập nhật quy trình trả lời 3 cấp độ (Ưu tiên 1 Cổ thư nội bộ -> Ưu tiên 2 Web Search -> Đối chiếu & Tổng hợp); Cấu hình tham số OpenRouter Web Search Plugin (`plugins: [{ id: "web" }]`) trên cả Client và Server Express. |
 | **v2.10.0** | 12/09/2026 | **Phong Thái Mệnh Lý Chuyên Gia & Chuẩn Hóa Cổ Thư** | Thiết lập phong thái Chuyên gia Mệnh lý & Phong thủy cao cấp: Lời lẽ điềm đạm, sắc sảo, tự nhiên, thấm đượm triết lý cổ truyền; Quét sạch dấu vết máy móc (không giải thích công thức chia 9 dư, không nhắc tên file nội bộ, không dùng ký hiệu LaTeX $\rightarrow$); Chuẩn hóa Khung Thông Tin Bản Mệnh Nam/Nữ cổ thư; Áp dụng cấu trúc luận giải 3 bước (Khung thông tin -> Thần khí nạp âm & cung mệnh -> Luận giải cát hung & giải pháp thực tế). |
 | **v2.9.3** | 12/09/2026 | **Quét Sạch Mã Dư Thừa & Refactor Toolbar Sticky** | Rà soát toàn bộ kho mã nguồn, xóa các tệp và mã dư thừa (`CoupleLookupView.tsx`, `RoleTaskStandardModal.tsx`, `logo_ai_nhan_duyen_1788161586225.jpg`); Refactor top toolbar trong `ChatbotView` và `AIChatbotModal`, lược bỏ nút "Vai trò & Quy chuẩn"; Cố định Navbar sticky (`sticky top-0 z-50`) cuộn mượt mà. |
 | **v2.9.2** | 12/09/2026 | **Rút Gọn Lời Chào Ban Đầu & Tinh Giản Phản Hồi AI** | Rút ngắn lời chào ban đầu (welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: *"Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?"*; Đồng bộ hóa tin nhắn reset khi làm mới cuộc trò chuyện; Loại bỏ các yêu cầu tự giới thiệu xưng danh dông dài trong System Prompt và ancientReasoner để AI không lặp lại lời chào ở mỗi phản hồi. |
