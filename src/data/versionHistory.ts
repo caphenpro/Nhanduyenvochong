@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.9.3',
+  currentVersion: 'v2.10.0',
   releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,42 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.10.0',
+    releaseDate: '12/09/2026',
+    codename: 'Phong Thái Mệnh Lý Chuyên Gia & Chuẩn Hóa Cổ Thư',
+    tagline: 'Thiết lập phong thái Chuyên gia Mệnh lý cao cấp, chuẩn hóa khung thông tin cổ thư, cấu trúc luận giải 3 bước và quét sạch dấu vết máy móc',
+    isLatest: true,
+    highlights: [
+      'Thiết lập phong thái Chuyên gia Mệnh lý & Phong thủy cao cấp: lời lẽ điềm đạm, sắc sảo, tự nhiên, thấm đượm triết lý cổ truyền.',
+      'Tuyệt đối loại bỏ mọi dấu vết máy móc: không giải thích công thức toán học (chia 9 dư), không nhắc tên tệp nội bộ, loại bỏ hoàn toàn ký hiệu LaTeX ($\\rightarrow$) và tránh liệt kê ma trận khô khan.',
+      'Chuẩn hóa Khung Thông Tin Bản Mệnh Nam/Nữ theo định dạng cổ thư (Năm sinh, Thiên Can, Địa Chi, Nạp Âm, Cung Mệnh).',
+      'Đi sâu phân tích thần khí Nạp Âm Hoa Giáp và tương tác ngũ hành bản thể, ảnh hưởng thực tế đến tính cách, vận mệnh, hôn nhân.',
+      'Áp dụng triệt để Cấu trúc luận giải 3 bước: Bước 1 (Khung thông tin bản mệnh) -> Bước 2 (Thần khí bản chất Nạp Âm & Cung Mệnh) -> Bước 3 (Luận giải trực tiếp giá trị thực Cát/Hung & Giải pháp).',
+    ],
+    changes: [
+      {
+        type: 'philosophy',
+        title: 'Phong thái & Văn phong Chuyên gia Mệnh lý cao cấp',
+        description: 'Văn phong điềm đạm, uyên bác, giải thích bản chất thực tế thay vì công thức máy móc hay ký hiệu LaTeX.',
+      },
+      {
+        type: 'feat',
+        title: 'Chuẩn hóa Khung thông tin Cổ thư & Cấu trúc luận giải 3 bước',
+        description: 'Đồng bộ hóa định dạng Thông Tin Bản Mệnh Nam/Nữ và quy trình 3 bước luận giải xuyên suốt System Prompt và Reasoning Engine.',
+      },
+      {
+        type: 'enhance',
+        title: 'Phân tích sâu Thần khí Nạp Âm Hoa Giáp',
+        description: 'Đi sâu vào hình tượng ngũ hành bản thể Nạp Âm và tác động thực tế đến đời sống gia đạo, hóa giải xung khắc.',
+      },
+    ],
+  },
+  {
     version: 'v2.9.3',
     releaseDate: '12/09/2026',
     codename: 'Quét Sạch Mã Dư Thừa & Refactor Toolbar Sticky',
     tagline: 'Loại bỏ toàn bộ mã/tệp dư thừa, refactor thanh công cụ top toolbar và cố định Navbar sticky mượt mà khi cuộn trang',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Rà soát toàn bộ kho mã nguồn, xóa các tệp và mã không sử dụng (CoupleLookupView.tsx, RoleTaskStandardModal.tsx, logo_ai_nhan_duyen_1788161586225.jpg, và các import/export thừa).',
       'Tái cấu trúc (refactor) thanh công cụ top toolbar trong ChatbotView và AIChatbotModal, lược bỏ nút "Vai trò & Quy chuẩn".',

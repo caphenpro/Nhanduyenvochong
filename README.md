@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.9.3-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.10.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -199,6 +199,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.10.0** | 12/09/2026 | **Phong Thái Mệnh Lý Chuyên Gia & Chuẩn Hóa Cổ Thư** | Thiết lập phong thái Chuyên gia Mệnh lý & Phong thủy cao cấp: Lời lẽ điềm đạm, sắc sảo, tự nhiên, thấm đượm triết lý cổ truyền; Quét sạch dấu vết máy móc (không giải thích công thức chia 9 dư, không nhắc tên file nội bộ, không dùng ký hiệu LaTeX $\rightarrow$); Chuẩn hóa Khung Thông Tin Bản Mệnh Nam/Nữ cổ thư; Áp dụng cấu trúc luận giải 3 bước (Khung thông tin -> Thần khí nạp âm & cung mệnh -> Luận giải cát hung & giải pháp thực tế). |
 | **v2.9.3** | 12/09/2026 | **Quét Sạch Mã Dư Thừa & Refactor Toolbar Sticky** | Rà soát toàn bộ kho mã nguồn, xóa các tệp và mã dư thừa (`CoupleLookupView.tsx`, `RoleTaskStandardModal.tsx`, `logo_ai_nhan_duyen_1788161586225.jpg`); Refactor top toolbar trong `ChatbotView` và `AIChatbotModal`, lược bỏ nút "Vai trò & Quy chuẩn"; Cố định Navbar sticky (`sticky top-0 z-50`) cuộn mượt mà. |
 | **v2.9.2** | 12/09/2026 | **Rút Gọn Lời Chào Ban Đầu & Tinh Giản Phản Hồi AI** | Rút ngắn lời chào ban đầu (welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: *"Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?"*; Đồng bộ hóa tin nhắn reset khi làm mới cuộc trò chuyện; Loại bỏ các yêu cầu tự giới thiệu xưng danh dông dài trong System Prompt và ancientReasoner để AI không lặp lại lời chào ở mỗi phản hồi. |
 | **v2.9.1** | 12/09/2026 | **System Prompt Chuẩn Hóa & Hạ Nhiệt Độ 0.2** | Cập nhật cấu trúc System Instruction mới: *"Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}. Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng."*; Hạ tham số nhiệt độ (temperature) xuống 0.2 cho toàn bộ các lệnh gọi Gemini API và OpenRouter trên cả Server & Client; Tối ưu hóa tính chính xác, bám sát dữ liệu và hạn chế tối đa ảo giác. |
