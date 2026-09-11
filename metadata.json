@@ -1,7 +1,6 @@
 {
   "name": "AI Nhân Duyên - Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương",
-  "description": "Nền tảng luận giải hòa hợp vợ chồng khoa học và đa tầng theo Âm Dương, Ngũ Hành, Thiên Can, Địa Chi, Lục Thập Hoa Giáp và Bát Trạch.",
+  "description": "Nền tảng trí tuệ nhân tạo chuyên sâu về luận giải hòa hợp nhân duyên vợ chồng tích hợp RAG Cổ Thư & OpenRouter Web Search theo 6 Tầng Âm Dương Ngũ Hành.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
-

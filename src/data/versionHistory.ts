@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.10.0',
+  currentVersion: 'v2.11.0',
   releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,41 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.11.0',
+    releaseDate: '12/09/2026',
+    codename: 'Cổ Thư RAG & OpenRouter Web Search Integration',
+    tagline: 'Tích hợp động cơ RAG truy vấn kho cổ thư nội bộ, quy trình trả lời 3 cấp độ ưu tiên và cấu hình OpenRouter Web Search Plugin',
+    isLatest: true,
+    highlights: [
+      'Tích hợp Động cơ RAG (Retrieval-Augmented Generation) truy vấn kho cổ thư nội bộ (Knowledge Base, 100 Đồ hình Cao Ly, Bát Trạch Phong Thủy, Vòng Trường Sinh 10 Can, Tam Thế...).',
+      'Tự động phân tích từ khóa và thực thể mệnh lý (Năm sinh, Can Chi, Cung mệnh) để trích xuất các đoạn văn bản cổ thư liên quan nhất vào System Prompt Context.',
+      'Cập nhật System Prompt bắt buộc AI tuân thủ quy trình trả lời 3 cấp độ: ƯU TIÊN 1 (Căn cứ cổ thư nội bộ RAG) -> ƯU TIÊN 2 (Sử dụng Web Search đối chiếu thông tin mở) -> ĐỐI CHIẾU & TỔNG HỢP (Loại bỏ mâu thuẫn, đưa ra lập luận chặt chẽ).',
+      'Cấu hình tham số OpenRouter Web Search Plugin (plugins: [{ id: "web" }]) trên cả Client và Máy chủ Express giúp AI chủ động kiểm chứng dữ liệu mạng.',
+    ],
+    changes: [
+      {
+        type: 'feat',
+        title: 'Động cơ RAG Tra Cứu Cổ Thư Nội Bộ',
+        description: 'Xây dựng ancientRAG.ts tự động quét và chèn trích đoạn cổ thư phù hợp nhất vào ngữ cảnh System Prompt trước khi gửi request.',
+      },
+      {
+        type: 'feat',
+        title: 'Cấu hình OpenRouter Web Search Plugin',
+        description: 'Thêm cấu hình plugins: [{ id: "web" }] vào API Chat OpenRouter trên cả Client và Server cho phép AI tìm kiếm trực tuyến.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Quy trình trả lời 3 cấp độ ưu tiên',
+        description: 'Bắt buộc AI lấy tri thức cổ thư nội bộ làm gốc, dùng web search kiểm chứng và tổng hợp đối chiếu để đảm bảo độ chính xác cao nhất.',
+      },
+    ],
+  },
+  {
     version: 'v2.10.0',
     releaseDate: '12/09/2026',
     codename: 'Phong Thái Mệnh Lý Chuyên Gia & Chuẩn Hóa Cổ Thư',
     tagline: 'Thiết lập phong thái Chuyên gia Mệnh lý cao cấp, chuẩn hóa khung thông tin cổ thư, cấu trúc luận giải 3 bước và quét sạch dấu vết máy móc',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Thiết lập phong thái Chuyên gia Mệnh lý & Phong thủy cao cấp: lời lẽ điềm đạm, sắc sảo, tự nhiên, thấm đượm triết lý cổ truyền.',
       'Tuyệt đối loại bỏ mọi dấu vết máy móc: không giải thích công thức toán học (chia 9 dư), không nhắc tên tệp nội bộ, loại bỏ hoàn toàn ký hiệu LaTeX ($\\rightarrow$) và tránh liệt kê ma trận khô khan.',
@@ -96,7 +126,7 @@ export const VERSION_HISTORY: AppVersion[] = [
     highlights: [
       'Rút ngắn tin nhắn mở đầu (initial/welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: "Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?".',
       'Đồng bộ hóa lời chào tinh gọn khi người dùng xóa lịch sử cuộc trò chuyện (reset chat).',
-      'Loại bỏ các đoạn tự giới thiệu bản thân dông dài trong System Prompt và cổ thư suy luận, yêu cầu AI không xưng danh bản thân hay lặp lại câu chào hỏi mỗi khi phản hồi.',
+      'Loại bỏ các đoạn tự giới thiệu bản thân dông dài trong System Prompt và cổ thư suy luận, yêu cầu AI không xưng danh bản thân hay tự giới thiệu lại bản thân ở mỗi phản hồi.',
       'Giữ nguyên vẹn cơ chế nạp dữ liệu nội bộ ưu tiên, triết lý 6 tầng luận giải và nhận diện thương hiệu logo.',
     ],
     changes: [

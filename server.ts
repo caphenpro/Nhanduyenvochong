@@ -7,6 +7,7 @@ import { getCanChiByYear, checkNguHanhRelation, getTruongSanhChu, TRUONG_SANH_DA
 import { getCaoLyGiaiDoan } from './src/data/caolyData';
 import { generateAncientWisdomResponse } from './src/data/ancientReasoner';
 import { generateMetaphysicsState, buildComprehensiveMetaphysicsContext } from './src/data/metaphysicsData';
+import { compileRAGContextForPrompt } from './src/data/ancientRAG';
 
 // OpenRouter Config
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -276,9 +277,10 @@ async function startServer() {
 
     const lastUserMessage = [...messages].reverse().find((m: any) => m.role === 'user')?.content || '';
 
-    // Build rich system instruction with current metaphysics state & couple context
+    // Perform RAG Search & Build rich system instruction
+    const ragContext = compileRAGContextForPrompt(lastUserMessage, coupleContext);
     const metaphysicsContext = buildComprehensiveMetaphysicsContext(coupleContext, new Date());
-    const fullSystemPrompt = buildSystemInstruction(metaphysicsContext);
+    const fullSystemPrompt = buildSystemInstruction(`${metaphysicsContext}\n\n${ragContext}`);
 
     // Format messages for OpenRouter / OpenAI compatible API
     const openRouterMessages = [
@@ -322,6 +324,7 @@ async function startServer() {
                 stream: true,
                 temperature: 0.2,
                 max_tokens: 2500,
+                plugins: [{ id: 'web' }], // Kích hoạt OpenRouter Web Search Plugin trên server
               }),
             });
 

@@ -3,6 +3,7 @@ import { generateMetaphysicsState } from '../data/metaphysicsData';
 import { SYSTEM_INSTRUCTION_PROMPT, buildSystemInstruction } from '../data/knowledgeBasePrompt';
 import { generateAncientWisdomResponse } from '../data/ancientReasoner';
 import { getStoredOpenRouterKey } from '../components/ApiKeySettingsModal';
+import { compileRAGContextForPrompt } from '../data/ancientRAG';
 
 export const AUTO_MODEL_ID = 'auto';
 
@@ -84,8 +85,10 @@ export async function streamAIChat({
   const effectiveKey = (userApiKey || getStoredOpenRouterKey() || '').trim();
   const lastUserMsg = messages.filter((m) => m.role === 'user').slice(-1)[0]?.content || '';
 
-  // Prepare system context
+  // Prepare system context & perform RAG search on user's query
   const metaState = generateMetaphysicsState(new Date());
+  const ragContext = compileRAGContextForPrompt(lastUserMsg, coupleContext);
+
   let coupleSummary = 'Chưa có thông tin cặp đôi trong phiên làm việc hiện tại.';
   if (coupleContext) {
     coupleSummary = `
@@ -111,6 +114,8 @@ export async function streamAIChat({
 - Kỳ Môn Độn Giáp: ${metaState.kyMonDonGiap.don} Cục ${metaState.kyMonDonGiap.cuc} • Trực Phù ${metaState.kyMonDonGiap.trucPhu} • Trực Sử ${metaState.kyMonDonGiap.trucSu}.
 - Đại Lục Nhâm: Nguyệt Tướng ${metaState.lucNham.nguyetTuong} • Thời Địa: ${metaState.lucNham.thoiDia} • Tam Truyền: ${metaState.lucNham.tamTruyen.map((t) => `${t.so}: ${t.canChi} (${t.than})`).join(' ➔ ')}.
 
+${ragContext}
+
 ### THÔNG TIN CẶP ĐÔI ĐANG TRA CỨU:
 ${coupleSummary}
 `);
@@ -121,7 +126,7 @@ ${coupleSummary}
       ? AUTO_FALLBACK_CHAIN
       : [model, ...AUTO_FALLBACK_CHAIN.filter((m) => m !== model)];
 
-  // Strategy 1: Direct OpenRouter call with Auto-Fallback across candidate models
+  // Strategy 1: Direct OpenRouter call with Auto-Fallback across candidate models + Web Search Plugin
   if (effectiveKey) {
     for (const currentCandidate of candidateModels) {
       try {
@@ -144,6 +149,7 @@ ${coupleSummary}
             stream: true,
             temperature: 0.2,
             max_tokens: 2500,
+            plugins: [{ id: 'web' }], // Kích hoạt OpenRouter Web Search Plugin
           }),
         });
 
@@ -201,7 +207,7 @@ ${coupleSummary}
     }
   }
 
-  // Strategy 2: Attempt Express Server-side Route (Supports internal Auto-Fallback across keys & models)
+  // Strategy 2: Attempt Express Server-side Route (Supports internal Auto-Fallback across keys & models + Web Search)
   try {
     const serverResponse = await fetch('/api/openrouter/chat', {
       method: 'POST',
