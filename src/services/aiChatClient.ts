@@ -1,6 +1,6 @@
 import { CoupleAnalysisResult, Message } from '../types';
 import { generateMetaphysicsState } from '../data/metaphysicsData';
-import { SYSTEM_INSTRUCTION_PROMPT } from '../data/knowledgeBasePrompt';
+import { SYSTEM_INSTRUCTION_PROMPT, buildSystemInstruction } from '../data/knowledgeBasePrompt';
 import { generateAncientWisdomResponse } from '../data/ancientReasoner';
 import { getStoredOpenRouterKey } from '../components/ApiKeySettingsModal';
 
@@ -104,8 +104,7 @@ export async function streamAIChat({
 `;
   }
 
-  const systemPrompt = `${SYSTEM_INSTRUCTION_PROMPT}
-
+  const systemPrompt = buildSystemInstruction(`
 ### BÀN QUẺ & THỜI LỆNH ĐANG LƯU HÀNH (THỜI ĐIỂM HIỆN TẠI):
 - 24 Tiết Khí: ${metaState.solarTerm.name} (${metaState.solarTerm.hanTu}) — Ngũ hành vượng: ${metaState.solarTerm.nguHanhVuong}, Tướng: ${metaState.solarTerm.nguHanhTuong}.
 - Bát Tự Ngày Giờ: Năm ${metaState.batTuHienTai.nam} • Tháng ${metaState.batTuHienTai.thang} • Ngày ${metaState.batTuHienTai.ngay} • Giờ ${metaState.batTuHienTai.gio}.
@@ -114,7 +113,7 @@ export async function streamAIChat({
 
 ### THÔNG TIN CẶP ĐÔI ĐANG TRA CỨU:
 ${coupleSummary}
-`;
+`);
 
   // Determine the sequence of models to try
   const candidateModels: string[] =
@@ -143,7 +142,7 @@ ${coupleSummary}
             model: currentCandidate,
             messages: openRouterMessages,
             stream: true,
-            temperature: 0.7,
+            temperature: 0.2,
             max_tokens: 2500,
           }),
         });

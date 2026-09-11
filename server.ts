@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
-import { SYSTEM_INSTRUCTION_PROMPT } from './src/data/knowledgeBasePrompt';
+import { SYSTEM_INSTRUCTION_PROMPT, buildSystemInstruction } from './src/data/knowledgeBasePrompt';
 import { getCanChiByYear, checkNguHanhRelation, getTruongSanhChu, TRUONG_SANH_DATA, CO_THAN_QUA_TU } from './src/data/tamtheData';
 import { getCaoLyGiaiDoan } from './src/data/caolyData';
 import { generateAncientWisdomResponse } from './src/data/ancientReasoner';
@@ -278,7 +278,7 @@ async function startServer() {
 
     // Build rich system instruction with current metaphysics state & couple context
     const metaphysicsContext = buildComprehensiveMetaphysicsContext(coupleContext, new Date());
-    const fullSystemPrompt = `${SYSTEM_INSTRUCTION_PROMPT}\n\n${metaphysicsContext}`;
+    const fullSystemPrompt = buildSystemInstruction(metaphysicsContext);
 
     // Format messages for OpenRouter / OpenAI compatible API
     const openRouterMessages = [
@@ -320,7 +320,7 @@ async function startServer() {
                 model: currentModel,
                 messages: openRouterMessages,
                 stream: true,
-                temperature: 0.7,
+                temperature: 0.2,
                 max_tokens: 2500,
               }),
             });
@@ -393,7 +393,7 @@ async function startServer() {
           contents: conversationContents,
           config: {
             systemInstruction: fullSystemPrompt,
-            temperature: 0.7,
+            temperature: 0.2,
           },
         });
 

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.9.0-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.9.1-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -201,6 +201,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.9.1** | 12/09/2026 | **System Prompt Chuẩn Hóa & Hạ Nhiệt Độ 0.2** | Cập nhật cấu trúc System Instruction mới: *"Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}. Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng."*; Hạ tham số nhiệt độ (temperature) xuống 0.2 cho toàn bộ các lệnh gọi Gemini API và OpenRouter trên cả Server & Client; Tối ưu hóa tính chính xác, bám sát dữ liệu và hạn chế tối đa ảo giác. |
 | **v2.9.0** | 12/09/2026 | **Tối Ưu Co Giãn Giao Diện & Tinh Gọn Nút Trợ Lý** | Tối ưu hóa toàn diện giao diện co giãn linh hoạt (Responsive Layout) cho cả Máy tính (Desktop) & Điện thoại di động (Mobile/Tablet); Tinh gọn thanh điều hướng Navbar tự động co giãn chống vỡ dòng; Lược bỏ nút chatbox nổi góc dưới màn hình (floating chat button) để tối ưu không gian hiển thị sạch sẽ, thông thoáng trên di động; Cải thiện khả năng cuộn và hiển thị cho các bảng ma trận Bát Trạch, Vòng Trường Sinh 10 Can và 100 Đồ hình Cao Ly. |
 | **v2.8.0** | 10/09/2026 | **Tam Nguyên Tắc Tri Thức & Minh Bạch Nguồn Gốc** | Xác lập 3 nguyên tắc nền tảng điều phối tri thức cho AI Chatbox: Nguyên tắc 1 — Ưu tiên tuyệt đối (Ground Truth), Nguyên tắc 2 — Mở rộng tương đồng khi tài liệu chưa đề cập đủ, Nguyên tắc 3 — Mẫu trình bày phân biệt minh bạch nguồn gốc (ghi chú nhẹ cho nội dung AI tự mở rộng); Nâng cấp KnowledgeBaseModal với 2 tab chuyển đổi (3 Nguyên tắc vận hành & Duyệt tệp dữ liệu chuẩn); Đồng bộ ghi chú nguồn vào cổ thư suy luận ancientReasoner.ts. |
 | **v2.7.0** | 10/09/2026 | **Kho Tri Thức Ưu Tiên & Hồ Sơ Bát Trạch 1989** | Thiết lập thư mục tri thức nội bộ `/src/data/knowledge_base/` làm nguồn Ground Truth ưu tiên số 1 cho AI Chatbox; Tích hợp Tệp Tri Thức Số 01: Hồ sơ 1989 Kỷ Tỵ Nam (Nạp âm Đại Lâm Mộc, Can Kỷ Thổ, Chi Tỵ Hỏa, Cung mệnh Khôn - Tây Tứ Mệnh); Chuẩn hóa Bảng 1 số dư chia 9, Bảng 2 Ma trận phối Cung Mệnh vợ chồng 8x8, Bảng 3 Giải nghĩa bản chất 8 Cung Cát/Hung; Tích hợp Modal Tra Cứu Kho Tri Thức Ưu Tiên (KnowledgeBaseModal) và kết nối trực tiếp vào System Prompt của AI. |

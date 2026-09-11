@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.9.0',
+  currentVersion: 'v2.9.1',
   releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,41 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.9.1',
+    releaseDate: '12/09/2026',
+    codename: 'System Prompt Chuẩn Hóa & Hạ Nhiệt Độ 0.2',
+    tagline: 'Cập nhật System Instruction ưu tiên dữ liệu nội bộ và hạ tham số temperature xuống 0.2 giúp câu trả lời bám sát tài liệu chuẩn xác',
+    isLatest: true,
+    highlights: [
+      'Cập nhật cấu trúc System Instruction mới: "Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}. Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng."',
+      'Hạ tham số nhiệt độ (temperature) từ 0.7 xuống 0.2 trên cả Gemini SDK và OpenRouter, giúp AI phản hồi chuẩn xác, bám sát dữ liệu và hạn chế tối đa ảo giác.',
+      'Yêu cầu AI đi thẳng vào nội dung trọng tâm trả lời, loại bỏ các lời chào hỏi hình thức dài dòng.',
+      'Đồng bộ hóa nhất quán cơ chế nạp dữ liệu nội bộ cho System Prompt trên cả Máy chủ Express và Trình duyệt.',
+    ],
+    changes: [
+      {
+        type: 'enhance',
+        title: 'Cập nhật System Instruction ưu tiên dữ liệu nội bộ',
+        description: 'Tái cấu trúc prompt hệ thống đặt dữ liệu nội bộ làm trọng tâm chuẩn mực cao nhất, chỉ mở rộng khi thiếu thông tin và không mâu thuẫn dữ liệu gốc.',
+      },
+      {
+        type: 'enhance',
+        title: 'Hạ tham số nhiệt độ temperature xuống 0.2',
+        description: 'Thiết lập temperature = 0.2 cho toàn bộ các API gọi mô hình Gemini và OpenRouter để câu trả lời bám sát dữ liệu chuyên sâu.',
+      },
+      {
+        type: 'philosophy',
+        title: 'Đi thẳng vào câu trả lời, tinh gọn phong cách',
+        description: 'Chỉ định rõ trong prompt hệ thống không chào hỏi rườm rà, tập trung phân tích luận giải trực tiếp cho người dùng.',
+      },
+    ],
+  },
+  {
     version: 'v2.9.0',
     releaseDate: '12/09/2026',
     codename: 'Tối Ưu Co Giãn Giao Diện & Tinh Gọn Nút Trợ Lý',
     tagline: 'Tối ưu giao diện co giãn linh hoạt (Responsive) cho cả Máy tính & Điện thoại; tinh gọn thanh điều hướng và lược bỏ nút chatbox nổi ở góc màn hình',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Tối ưu hóa toàn diện giao diện đáp ứng linh hoạt (Responsive co-giãn) tương thích hoàn hảo cho cả Máy tính (Desktop) và Điện thoại di động (Mobile/Tablet).',
       'Tinh gọn thanh điều hướng Navbar tự động co giãn theo kích thước màn hình, bảo đảm chữ và biểu tượng không bị vỡ dòng hay tràn lề.',

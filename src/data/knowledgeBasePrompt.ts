@@ -90,7 +90,22 @@ Lập bảng hoặc danh sách tóm tắt thông tin cơ bản cho cả Nam và 
 #nguyenhoangdang #huyenhoc #huyenhocdoisong #NhanDuyen #AmDuongNguHanh #LucThapHoaGiap #BatTu #BatTrach
 `;
 
-export const SYSTEM_INSTRUCTION_PROMPT = `${BASE_INSTRUCTION}\n\n${compileKnowledgeBaseForSystemPrompt()}`;
+/**
+ * Tạo System Instruction chuẩn hóa theo chỉ thị:
+ * "Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}.
+ * Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ,
+ * bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ.
+ * Đi thẳng vào câu trả lời, không chào hỏi dài dòng."
+ */
+export function buildSystemInstruction(internalKnowledgeData?: string): string {
+  const internalData = internalKnowledgeData || `${compileKnowledgeBaseForSystemPrompt()}\n\n${BASE_INSTRUCTION}`;
+  return `Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ:
+${internalData}
+
+Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng.`;
+}
+
+export const SYSTEM_INSTRUCTION_PROMPT = buildSystemInstruction();
 
 export interface RoleTaskStandard {
   title: string;
