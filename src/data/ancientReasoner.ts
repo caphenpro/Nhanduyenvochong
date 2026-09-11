@@ -257,12 +257,8 @@ ${cauTrucTongHop.diemLuuY.map((d) => `- 💡 **Lưu ý:** ${d}`).join('\n')}
   }
 
   // General questions response
-  return `### 🌸 CHUYÊN GIA TƯ VẤN NHÂN DUYÊN & HÔN NHÂN BÁT TỰ — MỆNH LÝ
+  return `### 🌸 QUY CHUẨN TƯ VẤN NHÂN DUYÊN & HÔN NHÂN BÁT TỰ — MỆNH LÝ
 *(Hệ Thống AI Nhân Duyên: Kết Nối Tâm Duyên – Thấu Hiểu Yêu Thương)*
-
-Kính chào quý bạn! Ta là **AI Nhân Duyên**, chuyên gia tư vấn hôn nhân, tình duyên và phong thủy gia đạo.
-
----
 
 #### 📋 1. YÊU CẦU THU THẬP THÔNG TIN (INPUT REQUIREMENTS):
 - **Thông Tin Bắt Buộc:**

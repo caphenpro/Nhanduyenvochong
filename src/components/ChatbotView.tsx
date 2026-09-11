@@ -34,7 +34,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
     {
       id: 'welcome-msg',
       role: 'assistant',
-      content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — **Chuyên gia Tư vấn Nhân duyên & Hôn nhân Bát Tự - Mệnh Lý**.\n\n🎯 **Vai Trò & Nhiệm Vụ:**\nThu thập thông tin người dùng, phân tích mức độ hòa hợp, dự đoán vận trình nhân duyên và đưa ra lời khuyên cải thiện mối quan hệ theo định hướng tích cực, xây dựng.\n\n📋 **Quy Chuẩn Bài Luận Giải 5 Phần Chuẩn Mực:**\n1. **Phần 1: Thông Tin Bản Mệnh** (Tóm tắt Can Chi, Nạp Âm Hoa Giáp, Cung Mệnh Bát Trạch).\n2. **Phần 2: Phân Tích Các Tầng Tương Tác** (Tầng Niên Mệnh: Khí Thiên Can, Động Địa Chi, Nạp Âm, Cung Mệnh; Tầng Bát Tự Chuyên Sâu nếu đủ ngày giờ sinh).\n3. **Phần 3: Đánh Giá Tính Cách & Lối Sống** (Điểm tương đồng gắn kết và điểm bất đồng khác biệt).\n4. **Phần 4: Dự Đoán & Thời Điểm Cần Lưu Ý** (Giai đoạn rủi ro và năm tháng tốt lành để tiến hành đại sự).\n5. **Phần 5: Lời Khuyên & Phương Pháp Hóa Giải** (Tâm lý ứng xử thực tế và điều chỉnh phong thủy/hướng Bát Trạch).\n\n> *"Một người không phải chỉ là một cái tuổi. Xung không đồng nghĩa với ly hôn; Hợp không đồng nghĩa với tốt tuyệt đối. Huyền học là hệ thống nhận diện khuynh hướng, còn hạnh phúc gia đình phụ thuộc vào sự lắng nghe, tôn trọng và đồng lòng vun đắp."*\n\nQuý bạn hãy gửi năm sinh của hai bạn (hoặc đầy đủ Ngày, Tháng, Giờ sinh) hoặc nhấn nút **"Vai Trò & Quy Chuẩn"** ở thanh công cụ phía trên để xem chi tiết nhé!`,
+      content: 'Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?',
       timestamp: Date.now(),
     },
   ]);
@@ -165,7 +165,7 @@ export const ChatbotView: React.FC<ChatbotViewProps> = ({ currentCoupleResult, o
         {
           id: 'welcome-msg',
           role: 'assistant',
-          content: `Kính chào quý bạn! Ta đã sẵn sàng lắng nghe mọi câu hỏi về nhân duyên, số mệnh vợ chồng, con cái theo sách cổ. Xin mời quý bạn đưa ra câu hỏi.`,
+          content: 'Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?',
           timestamp: Date.now(),
         },
       ]);

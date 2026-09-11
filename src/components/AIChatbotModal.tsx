@@ -101,7 +101,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
       {
         id: 'welcome-modal-msg',
         role: 'assistant',
-        content: `Kính chào quý bạn! Ta là **AI Nhân Duyên** — Cố Vấn Luận Giải Hòa Hợp & Nhân Duyên.\n\nTa đã kết nối hệ thống phân tích toàn diện với **Kỳ Môn Độn Giáp**, **Đại Lục Nhâm**, **24 Tiết Khí**, **Bát Trạch Phong Thủy** và kho tàng **Cổ Thư Diễn Cầm Tam Thế / Cao Ly Đầu Hình** qua động cơ AI Tự Động Luân Chuyển (*Auto-Fallback chống gián đoạn*).\n\nQuý bạn muốn tầm khảo về căn duyên vợ chồng, 6 tầng hòa hợp Âm Dương Ngũ Hành, hay phương hướng phong thủy Bát Trạch? Hãy nhập câu hỏi hoặc chọn gợi ý bên dưới!`,
+        content: 'Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?',
         timestamp: Date.now(),
       },
     ];
@@ -175,7 +175,7 @@ export const AIChatbotModal: React.FC<AIChatbotModalProps> = ({
       const resetMsg: Message = {
         id: `welcome-${Date.now()}`,
         role: 'assistant',
-        content: `Cuộc đàm đạo mới đã được khởi tạo. Mời quý bạn đặt câu hỏi về tuổi vợ chồng, Bát Tự, Kỳ Môn hay 24 Tiết Khí!`,
+        content: 'Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?',
         timestamp: Date.now(),
       };
       setMessages([resetMsg]);

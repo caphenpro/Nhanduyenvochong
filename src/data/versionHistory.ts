@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.9.1',
+  currentVersion: 'v2.9.2',
   releaseDate: '12/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,41 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.9.2',
+    releaseDate: '12/09/2026',
+    codename: 'Rút Gọn Lời Chào Ban Đầu & Tinh Giản Phản Hồi AI',
+    tagline: 'Rút ngắn tin nhắn tự giới thiệu ban đầu của assistant xuống 1 câu đơn giản và loại bỏ quy định tự giới thiệu trong System Prompt để AI không lặp lại lời chào',
+    isLatest: true,
+    highlights: [
+      'Rút ngắn tin nhắn mở đầu (initial/welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: "Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?".',
+      'Đồng bộ hóa lời chào tinh gọn khi người dùng xóa lịch sử cuộc trò chuyện (reset chat).',
+      'Loại bỏ các đoạn tự giới thiệu bản thân dông dài trong System Prompt và cổ thư suy luận, yêu cầu AI không xưng danh bản thân hay lặp lại câu chào hỏi mỗi khi phản hồi.',
+      'Giữ nguyên vẹn cơ chế nạp dữ liệu nội bộ ưu tiên, triết lý 6 tầng luận giải và nhận diện thương hiệu logo.',
+    ],
+    changes: [
+      {
+        type: 'ui',
+        title: 'Rút ngắn tin nhắn chào ban đầu trong Chat',
+        description: 'Thay thế đoạn tin nhắn chào dài nhiều phần bằng 1 câu ngắn gọn, thân thiện: "Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?".',
+      },
+      {
+        type: 'enhance',
+        title: 'Tinh giản System Prompt chống lặp lời chào',
+        description: 'Bổ sung ràng buộc nghiêm ngặt trong lời nhắc hệ thống yêu cầu AI không xưng danh tên AI hay tự giới thiệu lại bản thân ở mỗi phản hồi.',
+      },
+      {
+        type: 'fix',
+        title: 'Lược bỏ tự giới thiệu trong công cụ suy luận cổ thư',
+        description: 'Xóa câu chào xưng danh mở đầu trong ancientReasoner.ts để đi thẳng vào nội dung tư vấn.',
+      },
+    ],
+  },
+  {
     version: 'v2.9.1',
     releaseDate: '12/09/2026',
     codename: 'System Prompt Chuẩn Hóa & Hạ Nhiệt Độ 0.2',
     tagline: 'Cập nhật System Instruction ưu tiên dữ liệu nội bộ và hạ tham số temperature xuống 0.2 giúp câu trả lời bám sát tài liệu chuẩn xác',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Cập nhật cấu trúc System Instruction mới: "Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}. Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng."',
       'Hạ tham số nhiệt độ (temperature) từ 0.7 xuống 0.2 trên cả Gemini SDK và OpenRouter, giúp AI phản hồi chuẩn xác, bám sát dữ liệu và hạn chế tối đa ảo giác.',

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.9.1-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.9.2-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -201,6 +201,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.9.2** | 12/09/2026 | **Rút Gọn Lời Chào Ban Đầu & Tinh Giản Phản Hồi AI** | Rút ngắn lời chào ban đầu (welcome message) của assistant trong toàn bộ giao diện Chat xuống chỉ còn 1 câu đơn giản: *"Xin chào! Bạn cần tư vấn về nhân duyên, cung mệnh hay xem tuổi vợ chồng?"*; Đồng bộ hóa tin nhắn reset khi làm mới cuộc trò chuyện; Loại bỏ các yêu cầu tự giới thiệu xưng danh dông dài trong System Prompt và ancientReasoner để AI không lặp lại lời chào ở mỗi phản hồi. |
 | **v2.9.1** | 12/09/2026 | **System Prompt Chuẩn Hóa & Hạ Nhiệt Độ 0.2** | Cập nhật cấu trúc System Instruction mới: *"Bạn là trợ lý tư vấn Nhân Duyên Vợ Chồng. Dưới đây là DỮ LIỆU KIẾN THỨC NỘI BỘ: {dữ liệu_nội_bộ}. Hãy ưu tiên tuyệt đối dữ liệu nội bộ này để trả lời. Chỉ khi dữ liệu nội bộ không có hoặc chưa đủ, bạn mới bổ sung bằng kiến thức bên ngoài nhưng không được mâu thuẫn với dữ liệu nội bộ. Đi thẳng vào câu trả lời, không chào hỏi dài dòng."*; Hạ tham số nhiệt độ (temperature) xuống 0.2 cho toàn bộ các lệnh gọi Gemini API và OpenRouter trên cả Server & Client; Tối ưu hóa tính chính xác, bám sát dữ liệu và hạn chế tối đa ảo giác. |
 | **v2.9.0** | 12/09/2026 | **Tối Ưu Co Giãn Giao Diện & Tinh Gọn Nút Trợ Lý** | Tối ưu hóa toàn diện giao diện co giãn linh hoạt (Responsive Layout) cho cả Máy tính (Desktop) & Điện thoại di động (Mobile/Tablet); Tinh gọn thanh điều hướng Navbar tự động co giãn chống vỡ dòng; Lược bỏ nút chatbox nổi góc dưới màn hình (floating chat button) để tối ưu không gian hiển thị sạch sẽ, thông thoáng trên di động; Cải thiện khả năng cuộn và hiển thị cho các bảng ma trận Bát Trạch, Vòng Trường Sinh 10 Can và 100 Đồ hình Cao Ly. |
 | **v2.8.0** | 10/09/2026 | **Tam Nguyên Tắc Tri Thức & Minh Bạch Nguồn Gốc** | Xác lập 3 nguyên tắc nền tảng điều phối tri thức cho AI Chatbox: Nguyên tắc 1 — Ưu tiên tuyệt đối (Ground Truth), Nguyên tắc 2 — Mở rộng tương đồng khi tài liệu chưa đề cập đủ, Nguyên tắc 3 — Mẫu trình bày phân biệt minh bạch nguồn gốc (ghi chú nhẹ cho nội dung AI tự mở rộng); Nâng cấp KnowledgeBaseModal với 2 tab chuyển đổi (3 Nguyên tắc vận hành & Duyệt tệp dữ liệu chuẩn); Đồng bộ ghi chú nguồn vào cổ thư suy luận ancientReasoner.ts. |
