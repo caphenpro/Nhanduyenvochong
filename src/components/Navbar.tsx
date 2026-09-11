@@ -24,22 +24,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="border-b border-amber-200/90 bg-amber-50/95 backdrop-blur-md sticky top-0 z-40 shadow-xs w-full max-w-full overflow-hidden">
-      <div className="max-w-7xl mx-auto px-2.5 sm:px-4 lg:px-8">
-        <div className="flex items-center justify-between h-15 sm:h-18">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-18 gap-1.5 sm:gap-3">
           {/* Logo & Title */}
           <div 
             onClick={() => setActiveTab('chat')}
-            className="flex items-center space-x-2 sm:space-x-3 cursor-pointer group select-none shrink-0"
+            className="flex items-center space-x-1.5 sm:space-x-3 cursor-pointer group select-none min-w-0 shrink-1"
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-xs ring-1.5 ring-rose-300/70 group-hover:scale-105 transition-transform duration-200 bg-white shrink-0">
               <img src="/logo.png" alt="AI Nhân Duyên Logo" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center space-x-1.5 sm:space-x-2">
-                <span className="text-base sm:text-xl font-bold tracking-tight text-amber-950 font-serif whitespace-nowrap">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <span className="text-sm sm:text-lg lg:text-xl font-bold tracking-tight text-amber-950 font-serif truncate">
                   AI Nhân Duyên
                 </span>
-                <span className="hidden xs:inline-block text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.2 rounded-full font-medium bg-rose-100 text-rose-800 border border-rose-200 whitespace-nowrap">
+                <span className="hidden xs:inline-block text-[9px] sm:text-[11px] px-1.5 sm:px-2 py-0.2 rounded-full font-medium bg-rose-100 text-rose-800 border border-rose-200 whitespace-nowrap shrink-0">
                   Chatbox
                 </span>
                 {onOpenVersionModal && (
@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       e.stopPropagation();
                       onOpenVersionModal();
                     }}
-                    className="text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-200/90 hover:bg-amber-300 text-amber-900 border border-amber-400/60 transition-colors flex items-center space-x-0.5 cursor-pointer whitespace-nowrap"
+                    className="text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-200/90 hover:bg-amber-300 text-amber-900 border border-amber-400/60 transition-colors flex items-center space-x-0.5 cursor-pointer whitespace-nowrap shrink-0"
                     title="Xem Lịch Sử Phiên Bản"
                   >
                     <span>{APP_INFO.currentVersion}</span>
@@ -67,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 id="nav-tab-chat"
                 onClick={() => setActiveTab('chat')}
-                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   activeTab === 'chat'
                     ? 'bg-amber-900 text-amber-50 shadow-xs'
                     : 'text-amber-900 hover:bg-amber-100/80 hover:text-amber-950'
@@ -81,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 id="nav-tab-library"
                 onClick={() => setActiveTab('library')}
-                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   activeTab === 'library'
                     ? 'bg-amber-900 text-amber-50 shadow-xs'
                     : 'text-amber-900 hover:bg-amber-100/80 hover:text-amber-950'
@@ -95,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 id="nav-tab-about"
                 onClick={() => setActiveTab('about')}
-                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center space-x-1 px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   activeTab === 'about'
                     ? 'bg-amber-900 text-amber-50 shadow-xs'
                     : 'text-amber-900 hover:bg-amber-100/80 hover:text-amber-950'
