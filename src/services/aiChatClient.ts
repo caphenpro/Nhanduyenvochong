@@ -147,7 +147,7 @@ ${coupleSummary}
             model: currentCandidate,
             messages: openRouterMessages,
             stream: true,
-            temperature: 0.2,
+            temperature: 0.4,
             max_tokens: 2500,
             plugins: [{ id: 'web' }], // Kích hoạt OpenRouter Web Search Plugin
           }),

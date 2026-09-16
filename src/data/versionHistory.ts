@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.11.3',
+  currentVersion: 'v2.11.4',
   releaseDate: '16/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,28 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.11.4',
+    releaseDate: '16/09/2026',
+    codename: 'Chuyên Gia Linh Hoạt & Kiểm Chứng Đa Nguồn',
+    tagline: 'Tái cấu trúc chatbot để suy luận tự nhiên, kiểm chứng nhiều nguồn và điều chỉnh theo từng câu hỏi',
+    isLatest: true,
+    highlights: [
+      'Thay thế khuôn trả lời cứng bằng cơ chế chọn độ sâu, cấu trúc và phương pháp theo ý định người dùng.',
+      'Yêu cầu đối chiếu nhiều nguồn độc lập khi Web Search khả dụng, đồng thời phân biệt dữ kiện, diễn giải và khuyến nghị.',
+      'Tăng temperature OpenRouter lên 0.4 để văn phong tự nhiên và linh hoạt hơn nhưng vẫn giữ kiểm soát an toàn.',
+    ],
+    changes: [
+      { type: 'enhance', title: 'Suy luận như chuyên gia', description: 'Bổ sung quy trình xác định ý định, kiểm tra giả định, cân nhắc bất định và chọn cấu trúc trả lời phù hợp.' },
+      { type: 'enhance', title: 'Kiểm chứng đa nguồn', description: 'Hướng dẫn chatbot tra cứu và đối chiếu ít nhất hai nguồn độc lập khi câu hỏi cần xác minh.' },
+      { type: 'fix', title: 'Giảm văn phong máy móc', description: 'Loại bỏ yêu cầu phải dùng một mẫu cố định cho mọi câu hỏi và cho phép phản hồi tự nhiên hơn.' },
+    ],
+  },
+  {
     version: 'v2.11.3',
     releaseDate: '16/09/2026',
     codename: 'System Prompt Chuẩn Hóa & Phản Hồi Nhân Văn',
     tagline: 'Chuẩn hóa quy trình phân tích, xử lý phản hồi chưa đúng và kiểm soát an toàn cho chatbot',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Tích hợp quy trình ưu tiên dữ liệu nội bộ, kiểm chứng bên ngoài và đối chiếu tổng hợp.',
       'Bổ sung kiểm tra dữ liệu đầu vào, cấu trúc trả lời chuẩn, lời khuyên thực tế và nguyên tắc an toàn.',

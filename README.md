@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.3-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.4-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -202,6 +202,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.11.4** | 16/09/2026 | **Chuyên Gia Linh Hoạt & Kiểm Chứng Đa Nguồn** | Tái cấu trúc chatbot theo hướng suy luận tự nhiên, chọn độ sâu theo câu hỏi, phân biệt dữ kiện/diễn giải/khuyến nghị, đối chiếu nhiều nguồn khi Web Search khả dụng và tăng độ linh hoạt của văn phong. |
 | **v2.11.3** | 16/09/2026 | **System Prompt Chuẩn Hóa & Phản Hồi Nhân Văn** | Chuẩn hóa ưu tiên dữ liệu nội bộ/RAG, kiểm chứng bên ngoài và đối chiếu; bổ sung kiểm tra dữ liệu đầu vào, cấu trúc trả lời, xử lý phản hồi “chưa đúng”, lời khuyên thực tế và nguyên tắc an toàn cho chatbot. |
 | **v2.11.2** | 16/09/2026 | **OpenRouter API Vercel Function** | Bổ sung Serverless Function cho `/api/openrouter/test-key` và `/api/openrouter/config-status`; xử lý an toàn phản hồi HTML/non-JSON để loại bỏ lỗi `Unexpected token`. |
 | **v2.11.1** | 16/09/2026 | **Ổn Định Vận Hành & Đồng Bộ Repository** | Sửa server đọc cổng từ biến môi trường `PORT` với mặc định 3000; cập nhật liên kết GitHub chính thức sang `caphenpro/Nhanduyenvochong`; điều chỉnh rewrite Vercel để không chuyển nhầm các đường dẫn `/api/*` về `index.html`. |
