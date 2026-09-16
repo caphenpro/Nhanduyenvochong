@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.11.2',
+  currentVersion: 'v2.11.3',
   releaseDate: '16/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,28 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.11.3',
+    releaseDate: '16/09/2026',
+    codename: 'System Prompt Chuẩn Hóa & Phản Hồi Nhân Văn',
+    tagline: 'Chuẩn hóa quy trình phân tích, xử lý phản hồi chưa đúng và kiểm soát an toàn cho chatbot',
+    isLatest: true,
+    highlights: [
+      'Tích hợp quy trình ưu tiên dữ liệu nội bộ, kiểm chứng bên ngoài và đối chiếu tổng hợp.',
+      'Bổ sung kiểm tra dữ liệu đầu vào, cấu trúc trả lời chuẩn, lời khuyên thực tế và nguyên tắc an toàn.',
+      'Xử lý có hướng dẫn khi người dùng phản hồi câu trả lời chưa đúng hoặc chưa đúng trọng tâm.',
+    ],
+    changes: [
+      { type: 'enhance', title: 'Chuẩn hóa System Prompt', description: 'Tích hợp system prompt chuẩn vào cả luồng chat có context động và luồng dùng kho tri thức mặc định.' },
+      { type: 'fix', title: 'Giảm trả lời sai trọng tâm', description: 'Bổ sung kiểm tra dữ liệu, cấu trúc trả lời và bước tự kiểm tra trước khi phản hồi.' },
+      { type: 'philosophy', title: 'Luận giải nhân văn', description: 'Không kết luận tuyệt đối về hôn nhân và ưu tiên lời khuyên thực tế, an toàn.' },
+    ],
+  },
+  {
     version: 'v2.11.2',
     releaseDate: '16/09/2026',
     codename: 'OpenRouter API Vercel Function',
     tagline: 'Khắc phục kiểm tra API Key trả về HTML thay vì JSON trên Vercel',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Bổ sung Vercel Serverless Function cho kiểm tra OpenRouter API Key và trạng thái cấu hình.',
       'Frontend nhận diện và xử lý rõ ràng phản hồi HTML hoặc lỗi không phải JSON.',

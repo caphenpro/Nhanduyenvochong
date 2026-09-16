@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.2-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.3-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -202,6 +202,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.11.3** | 16/09/2026 | **System Prompt Chuẩn Hóa & Phản Hồi Nhân Văn** | Chuẩn hóa ưu tiên dữ liệu nội bộ/RAG, kiểm chứng bên ngoài và đối chiếu; bổ sung kiểm tra dữ liệu đầu vào, cấu trúc trả lời, xử lý phản hồi “chưa đúng”, lời khuyên thực tế và nguyên tắc an toàn cho chatbot. |
 | **v2.11.2** | 16/09/2026 | **OpenRouter API Vercel Function** | Bổ sung Serverless Function cho `/api/openrouter/test-key` và `/api/openrouter/config-status`; xử lý an toàn phản hồi HTML/non-JSON để loại bỏ lỗi `Unexpected token`. |
 | **v2.11.1** | 16/09/2026 | **Ổn Định Vận Hành & Đồng Bộ Repository** | Sửa server đọc cổng từ biến môi trường `PORT` với mặc định 3000; cập nhật liên kết GitHub chính thức sang `caphenpro/Nhanduyenvochong`; điều chỉnh rewrite Vercel để không chuyển nhầm các đường dẫn `/api/*` về `index.html`. |
 | **v2.11.0** | 12/09/2026 | **Cổ Thư RAG & OpenRouter Web Search Integration** | Tích hợp Động cơ RAG truy vấn kho cổ thư nội bộ (Knowledge Base, 100 Đồ hình Cao Ly, Bát Trạch, Vòng Trường Sinh 10 Can, Tam Thế...); Tự động phân tích từ khóa/thực thể mệnh lý để chèn context cổ thư phù hợp nhất vào System Prompt; Cập nhật quy trình trả lời 3 cấp độ (Ưu tiên 1 Cổ thư nội bộ -> Ưu tiên 2 Web Search -> Đối chiếu & Tổng hợp); Cấu hình tham số OpenRouter Web Search Plugin (`plugins: [{ id: "web" }]`) trên cả Client và Server Express. |
