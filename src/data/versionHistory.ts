@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.11.1',
+  currentVersion: 'v2.11.2',
   releaseDate: '16/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,26 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.11.2',
+    releaseDate: '16/09/2026',
+    codename: 'OpenRouter API Vercel Function',
+    tagline: 'Khắc phục kiểm tra API Key trả về HTML thay vì JSON trên Vercel',
+    isLatest: true,
+    highlights: [
+      'Bổ sung Vercel Serverless Function cho kiểm tra OpenRouter API Key và trạng thái cấu hình.',
+      'Frontend nhận diện và xử lý rõ ràng phản hồi HTML hoặc lỗi không phải JSON.',
+    ],
+    changes: [
+      { type: 'fix', title: 'Kết nối OpenRouter trên Vercel', description: 'Tạo endpoint /api/openrouter/test-key đúng chuẩn Vercel để không còn nhận trang HTML 404.' },
+      { type: 'fix', title: 'Xử lý phản hồi lỗi', description: 'Ngăn lỗi Unexpected token khi server trả về nội dung không phải JSON.' },
+    ],
+  },
+  {
     version: 'v2.11.1',
     releaseDate: '16/09/2026',
     codename: 'Ổn Định Vận Hành & Đồng Bộ Repository',
     tagline: 'Hỗ trợ cổng chạy qua biến môi trường và cập nhật liên kết GitHub chính thức',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Cho phép cấu hình cổng server bằng biến môi trường PORT, mặc định 3000 khi không khai báo.',
       'Đồng bộ liên kết repository chính thức caphenpro/Nhanduyenvochong trong metadata ứng dụng.',

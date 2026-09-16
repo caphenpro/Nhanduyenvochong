@@ -51,7 +51,11 @@ export const ApiKeySettingsModal: React.FC<ApiKeySettingsModalProps> = ({
 
       // Check server status
       fetch('/api/openrouter/config-status')
-        .then((res) => res.json())
+        .then(async (res) => {
+          const contentType = res.headers.get('content-type') || '';
+          if (!contentType.includes('application/json')) throw new Error(`Máy chủ trả về HTTP ${res.status} thay vì JSON.`);
+          return res.json();
+        })
         .then((data) => setServerConfig(data))
         .catch(() => setServerConfig(null));
     }
@@ -103,7 +107,20 @@ export const ApiKeySettingsModal: React.FC<ApiKeySettingsModalProps> = ({
         body: JSON.stringify({ apiKey: keyToTest }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      const rawBody = await response.text();
+      let data: { success?: boolean; message?: string; error?: string } = {};
+      if (contentType.includes('application/json')) {
+        try {
+          data = rawBody ? JSON.parse(rawBody) : {};
+        } catch {
+          data = {};
+        }
+      }
+
+      if (!contentType.includes('application/json')) {
+        throw new Error(`Máy chủ trả về HTTP ${response.status} không đúng định dạng JSON.`);
+      }
       if (response.ok && data.success) {
         setTestResult({
           success: true,
