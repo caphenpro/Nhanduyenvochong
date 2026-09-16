@@ -17,22 +17,37 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.11.0',
-  releaseDate: '12/09/2026',
+  currentVersion: 'v2.11.1',
+  releaseDate: '16/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
-  repositoryUrl: 'https://github.com/nguyenhoangdang/ai-nhan-duyen',
+  repositoryUrl: 'https://github.com/caphenpro/Nhanduyenvochong',
   description: 'Nền tảng trí tuệ nhân tạo chuyên sâu về luận giải hòa hợp nhân duyên vợ chồng, tình yêu và gia đạo theo hệ thống Âm Dương – Ngũ Hành khoa học và đa tầng.',
   motto: 'Một người không phải chỉ là một cái tuổi • Kết Nối Tâm Duyên • Thấu Hiểu Yêu Thương',
 };
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.11.1',
+    releaseDate: '16/09/2026',
+    codename: 'Ổn Định Vận Hành & Đồng Bộ Repository',
+    tagline: 'Hỗ trợ cổng chạy qua biến môi trường và cập nhật liên kết GitHub chính thức',
+    isLatest: true,
+    highlights: [
+      'Cho phép cấu hình cổng server bằng biến môi trường PORT, mặc định 3000 khi không khai báo.',
+      'Đồng bộ liên kết repository chính thức caphenpro/Nhanduyenvochong trong metadata ứng dụng.',
+    ],
+    changes: [
+      { type: 'fix', title: 'Cấu hình cổng server', description: 'Server đọc process.env.PORT thay vì luôn cố định ở cổng 3000.' },
+      { type: 'fix', title: 'Đồng bộ repository', description: 'Cập nhật URL repository chính thức của dự án.' },
+    ],
+  },
+  {
     version: 'v2.11.0',
     releaseDate: '12/09/2026',
     codename: 'Cổ Thư RAG & OpenRouter Web Search Integration',
     tagline: 'Tích hợp động cơ RAG truy vấn kho cổ thư nội bộ, quy trình trả lời 3 cấp độ ưu tiên và cấu hình OpenRouter Web Search Plugin',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Tích hợp Động cơ RAG (Retrieval-Augmented Generation) truy vấn kho cổ thư nội bộ (Knowledge Base, 100 Đồ hình Cao Ly, Bát Trạch Phong Thủy, Vòng Trường Sinh 10 Can, Tam Thế...).',
       'Tự động phân tích từ khóa và thực thể mệnh lý (Năm sinh, Can Chi, Cung mệnh) để trích xuất các đoạn văn bản cổ thư liên quan nhất vào System Prompt Context.',

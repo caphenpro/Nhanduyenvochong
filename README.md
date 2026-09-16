@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.0-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.1-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -118,8 +118,8 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
 
 ### 2. Tải mã nguồn về máy
 ```bash
-git clone https://github.com/nguyenhoangdang/ai-nhan-duyen.git
-cd ai-nhan-duyen
+git clone https://github.com/caphenpro/Nhanduyenvochong.git
+cd Nhanduyenvochong
 ```
 
 ### 3. Cài đặt các gói phụ thuộc
@@ -143,6 +143,7 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 npm run dev
 ```
 Ứng dụng sẽ chạy tại địa chỉ: `http://localhost:3000`
+Có thể chọn cổng khác bằng biến môi trường, ví dụ: `PORT=4173 npm run dev`.
 
 ### 6. Đóng gói cho môi trường Production (Build & Start)
 ```bash
@@ -201,6 +202,7 @@ ai-nhan-duyen/
 
 | Phiên Bản | Ngày Phát Hành | Mật Danh | Nội Dung Nổi Bật |
 | :--- | :---: | :--- | :--- |
+| **v2.11.1** | 16/09/2026 | **Ổn Định Vận Hành & Đồng Bộ Repository** | Sửa server đọc cổng từ biến môi trường `PORT` với mặc định 3000; cập nhật liên kết GitHub chính thức sang `caphenpro/Nhanduyenvochong`; điều chỉnh rewrite Vercel để không chuyển nhầm các đường dẫn `/api/*` về `index.html`. |
 | **v2.11.0** | 12/09/2026 | **Cổ Thư RAG & OpenRouter Web Search Integration** | Tích hợp Động cơ RAG truy vấn kho cổ thư nội bộ (Knowledge Base, 100 Đồ hình Cao Ly, Bát Trạch, Vòng Trường Sinh 10 Can, Tam Thế...); Tự động phân tích từ khóa/thực thể mệnh lý để chèn context cổ thư phù hợp nhất vào System Prompt; Cập nhật quy trình trả lời 3 cấp độ (Ưu tiên 1 Cổ thư nội bộ -> Ưu tiên 2 Web Search -> Đối chiếu & Tổng hợp); Cấu hình tham số OpenRouter Web Search Plugin (`plugins: [{ id: "web" }]`) trên cả Client và Server Express. |
 | **v2.10.0** | 12/09/2026 | **Phong Thái Mệnh Lý Chuyên Gia & Chuẩn Hóa Cổ Thư** | Thiết lập phong thái Chuyên gia Mệnh lý & Phong thủy cao cấp: Lời lẽ điềm đạm, sắc sảo, tự nhiên, thấm đượm triết lý cổ truyền; Quét sạch dấu vết máy móc (không giải thích công thức chia 9 dư, không nhắc tên file nội bộ, không dùng ký hiệu LaTeX $\rightarrow$); Chuẩn hóa Khung Thông Tin Bản Mệnh Nam/Nữ cổ thư; Áp dụng cấu trúc luận giải 3 bước (Khung thông tin -> Thần khí nạp âm & cung mệnh -> Luận giải cát hung & giải pháp thực tế). |
 | **v2.9.3** | 12/09/2026 | **Quét Sạch Mã Dư Thừa & Refactor Toolbar Sticky** | Rà soát toàn bộ kho mã nguồn, xóa các tệp và mã dư thừa (`CoupleLookupView.tsx`, `RoleTaskStandardModal.tsx`, `logo_ai_nhan_duyen_1788161586225.jpg`); Refactor top toolbar trong `ChatbotView` và `AIChatbotModal`, lược bỏ nút "Vai trò & Quy chuẩn"; Cố định Navbar sticky (`sticky top-0 z-50`) cuộn mượt mà. |
@@ -239,7 +241,7 @@ Theo quy định dự án trong file `AGENTS.md`:
 
 - **Tác giả & Nhà phát triển:** Nguyễn Hoàng Đăng
 - **Email:** [nguyenhoangdang25@gmail.com](mailto:nguyenhoangdang25@gmail.com)
-- **Dự án:** [AI Nhân Duyên (GitHub Repository)](https://github.com/nguyenhoangdang/ai-nhan-duyen)
+- **Dự án:** [AI Nhân Duyên (GitHub Repository)](https://github.com/caphenpro/Nhanduyenvochong)
 
 ---
 
