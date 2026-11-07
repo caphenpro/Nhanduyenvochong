@@ -17,7 +17,7 @@ export interface AppVersion {
 export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
-  currentVersion: 'v2.11.4',
+  currentVersion: 'v2.12.0',
   releaseDate: '16/09/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
@@ -28,11 +28,31 @@ export const APP_INFO = {
 
 export const VERSION_HISTORY: AppVersion[] = [
   {
+    version: 'v2.12.0',
+    releaseDate: '07/11/2026',
+    codename: 'OpenRouter Gateway & Free Router Optimization',
+    tagline: 'Tối ưu định tuyến AI, xử lý rate limit, giảm token RAG và giữ tương thích triển khai SPA tĩnh',
+    isLatest: true,
+    highlights: [
+      'Ưu tiên OpenRouter Free Router để tự chọn mô hình miễn phí đang khả dụng, tránh phụ thuộc vào danh sách mô hình miễn phí dễ lỗi thời.',
+      'Phân loại lỗi HTTP, dừng thử lặp khi khóa hoặc tài khoản gặp lỗi xác thực/thanh toán, tôn trọng Retry-After khi bị giới hạn tốc độ.',
+      'Chỉ bật Web Search khi câu hỏi cần nguồn hoặc thông tin cập nhật; giới hạn ngữ cảnh RAG ở mức 9.000 ký tự.',
+      'Ưu tiên máy chủ AI và giữ đường gọi OpenRouter dự phòng cho môi trường SPA tĩnh; làm rõ rủi ro lưu API Key trong LocalStorage.',
+    ],
+    changes: [
+      { type: 'enhance', title: 'Định tuyến mô hình miễn phí linh hoạt', description: 'Dùng openrouter/free làm tuyến tự động đầu tiên, sau đó dự phòng qua Gemma 4 26B Free và Llama 3.3 70B Free.' },
+      { type: 'fix', title: 'Xử lý rate limit và lỗi API theo trạng thái', description: 'Không tiếp tục thử hàng loạt mô hình khi gặp lỗi 401/402/403; áp dụng Retry-After có giới hạn khi gặp HTTP 429 và backoff ngắn cho lỗi máy chủ.' },
+      { type: 'enhance', title: 'Tối ưu chi phí và độ trễ', description: 'Web Search chỉ được bật theo ý định câu hỏi; giới hạn prompt RAG để kiểm soát lượng token.' },
+      { type: 'fix', title: 'Tương thích máy chủ và SPA tĩnh', description: 'Ưu tiên server gateway, giữ direct OpenRouter fallback cho hosting không có Express API và bảo toàn ngữ cảnh mệnh lý/RAG.' },
+      { type: 'enhance', title: 'Minh bạch bảo mật API Key', description: 'Nêu rõ LocalStorage không được mã hóa và khuyến nghị chỉ lưu khóa trên thiết bị cá nhân đáng tin cậy.' },
+    ],
+  },
+  {
     version: 'v2.11.4',
     releaseDate: '16/09/2026',
     codename: 'Chuyên Gia Linh Hoạt & Kiểm Chứng Đa Nguồn',
     tagline: 'Tái cấu trúc chatbot để suy luận tự nhiên, kiểm chứng nhiều nguồn và điều chỉnh theo từng câu hỏi',
-    isLatest: true,
+    isLatest: false,
     highlights: [
       'Thay thế khuôn trả lời cứng bằng cơ chế chọn độ sâu, cấu trúc và phương pháp theo ý định người dùng.',
       'Yêu cầu đối chiếu nhiều nguồn độc lập khi Web Search khả dụng, đồng thời phân biệt dữ kiện, diễn giải và khuyến nghị.',
