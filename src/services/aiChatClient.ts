@@ -1,5 +1,8 @@
 import { CoupleAnalysisResult, Message } from '../types';
 import { generateAncientWisdomResponse } from '../data/ancientReasoner';
+import { buildSystemInstruction } from '../data/knowledgeBasePrompt';
+import { buildComprehensiveMetaphysicsContext } from '../data/metaphysicsData';
+import { compileRAGContextForPrompt } from '../data/ancientRAG';
 import { getStoredOpenRouterKey } from '../components/ApiKeySettingsModal';
 
 export const AUTO_MODEL_ID = 'auto';
@@ -156,6 +159,9 @@ export async function streamAIChat({
   // Static SPA deployments may not expose the Express gateway. In that case,
   // retain a direct OpenRouter fallback for the user's own browser-stored key.
   if (effectiveKey) {
+    const metaphysicsContext = buildComprehensiveMetaphysicsContext(coupleContext, new Date());
+    const ragContext = compileRAGContextForPrompt(lastUserMsg, coupleContext);
+    const systemPrompt = buildSystemInstruction(`${metaphysicsContext}\\n\\n${ragContext}`);
     const candidateModels = model === AUTO_MODEL_ID || !model
       ? AUTO_FALLBACK_CHAIN
       : [model, ...AUTO_FALLBACK_CHAIN.filter((candidate) => candidate !== model)];
@@ -175,7 +181,7 @@ export async function streamAIChat({
           body: JSON.stringify({
             model: candidate,
             messages: [
-              { role: 'system', content: 'Hãy trả lời bằng tiếng Việt, lập luận rõ ràng, phân biệt dữ liệu cổ thư với nhận định hiện đại và nêu giới hạn khi thiếu căn cứ.' },
+              { role: 'system', content: systemPrompt },
               ...messages.map((message) => ({ role: message.role, content: message.content })),
             ],
             stream: true,
