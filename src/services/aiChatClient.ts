@@ -34,16 +34,16 @@ export const AI_MODELS_LIST = [
     desc: 'Mô hình mã nguồn mở mạnh mẽ, dự phòng tin cậy',
   },
   {
-    id: 'qwen/qwen-2.5-72b-instruct:free',
-    name: 'Qwen 2.5 72B (Free)',
+    id: 'openrouter/free',
+    name: 'OpenRouter Free Router',
     badge: 'Miễn phí',
-    desc: 'Khả năng tiếng Việt vượt trội, hỗ trợ thuật thư',
+    desc: 'Tự chọn mô hình miễn phí đang khả dụng trên OpenRouter',
   },
   {
-    id: 'google/gemini-2.0-flash-exp:free',
-    name: 'Gemini 2.0 Flash (Free)',
+    id: 'google/gemma-4-26b-a4b-it:free',
+    name: 'Gemma 4 26B A4B (Free)',
     badge: 'Miễn phí',
-    desc: 'Bản thử nghiệm miễn phí từ Google',
+    desc: 'Mô hình miễn phí mới, hỗ trợ ngữ cảnh dài',
   },
   {
     id: 'anthropic/claude-3.5-sonnet',
@@ -55,12 +55,9 @@ export const AI_MODELS_LIST = [
 
 // Danh sách các mô hình trong chuỗi tự động fallback khi hết quota hoặc lỗi
 export const AUTO_FALLBACK_CHAIN = [
-  'google/gemini-2.5-flash',
-  'deepseek/deepseek-chat',
+  'openrouter/free',
+  'google/gemma-4-26b-a4b-it:free',
   'meta-llama/llama-3.3-70b-instruct:free',
-  'qwen/qwen-2.5-72b-instruct:free',
-  'google/gemini-2.0-flash-exp:free',
-  'mistralai/mistral-small-24b-instruct-2501:free',
 ];
 
 export interface StreamChatOptions {
