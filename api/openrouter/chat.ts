@@ -33,11 +33,11 @@ function getGeminiClient(): GoogleGenAI | null {
 }
 
 function writeText(res: VercelResponse, text: string) {
-  if (text) res.write(`data: ${JSON.stringify({ text })}\\n\\n`);
+  if (text) res.write(`data: ${JSON.stringify({ text })}\n\n`);
 }
 
 function finish(res: VercelResponse) {
-  res.write('data: [DONE]\\n\\n');
+  res.write('data: [DONE]\n\n');
   res.end();
 }
 
@@ -58,7 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const ragContext = compileRAGContextForPrompt(lastUserMessage, coupleContext);
   const metaphysicsContext = buildComprehensiveMetaphysicsContext(coupleContext, new Date());
-  const systemPrompt = buildSystemInstruction(`${metaphysicsContext}\\n\\n${ragContext}`);
+  const systemPrompt = buildSystemInstruction(`${metaphysicsContext}\n\n${ragContext}`);
   const openRouterMessages = [
     { role: 'system', content: systemPrompt },
     ...messages.map((message: any) => ({
@@ -141,7 +141,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const { value, done: streamEnded } = await reader.read();
           if (streamEnded) break;
           buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split(/\\r?\\n/);
+          const lines = buffer.split(/\\r?\n/);
           buffer = lines.pop() || '';
           for (const line of lines) { processLine(line); if (done) break; }
         }
