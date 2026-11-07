@@ -447,6 +447,7 @@ async function startServer() {
     }
 
     // Final Fallback: Ancient Wisdom Reasoner Engine
+    res.setHeader('X-AI-Model', 'Cổ Thư Reasoner (Server Offline)');
     const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
     return await streamFallbackText(res, fallbackText);
   }
