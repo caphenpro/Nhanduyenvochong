@@ -98,7 +98,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             max_tokens: 2200,
             ...(shouldUseWebSearch ? { plugins: [{ id: 'web' }] } : {}),
           }),
-          signal: AbortSignal.timeout(45000),
+          signal: AbortSignal.timeout(15000),
         });
 
         if (!response.ok) {
