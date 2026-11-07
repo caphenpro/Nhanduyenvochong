@@ -234,7 +234,7 @@ async function startServer() {
           'X-Title': 'Can Duyen Tien Dinh Key Test',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: 'openrouter/free',
           messages: [{ role: 'user', content: 'Xin chào, trả lời ngắn 1 từ: OK' }],
           max_tokens: 10,
         }),
@@ -292,12 +292,9 @@ async function startServer() {
     ];
 
     const AUTO_SERVER_FALLBACK_MODELS = [
-      'google/gemini-2.5-flash',
-      'deepseek/deepseek-chat',
+      'openrouter/free',
+      'google/gemma-4-26b-a4b-it:free',
       'meta-llama/llama-3.3-70b-instruct:free',
-      'qwen/qwen-2.5-72b-instruct:free',
-      'google/gemini-2.0-flash-exp:free',
-      'mistralai/mistral-small-24b-instruct-2501:free',
     ];
 
     const requestedModel = (model || 'auto').toString();
@@ -305,6 +302,8 @@ async function startServer() {
       requestedModel === 'auto'
         ? AUTO_SERVER_FALLBACK_MODELS
         : [requestedModel, ...AUTO_SERVER_FALLBACK_MODELS.filter((m) => m !== requestedModel)];
+    const shouldUseWebSearch =
+      /nguồn|trích dẫn|tham khảo|đối chiếu|kiểm chứng|xác minh|mới nhất|hiện nay|hiện tại|hôm nay|gần đây|tin tức|tìm trên mạng|web search|website|đường dẫn|link|giá hiện tại|quy định mới/i.test(lastUserMessage);
 
     try {
       if (effectiveOpenRouterKey) {
@@ -323,12 +322,14 @@ async function startServer() {
                 messages: openRouterMessages,
                 stream: true,
                 temperature: 0.4,
-                max_tokens: 2500,
-                plugins: [{ id: 'web' }], // Kích hoạt OpenRouter Web Search Plugin trên server
+                max_tokens: 2200,
+                ...(shouldUseWebSearch ? { plugins: [{ id: 'web' }] } : {}),
               }),
+              signal: AbortSignal.timeout(45000),
             });
 
             if (response.ok && response.body) {
+              res.setHeader('X-AI-Model', currentModel);
               const reader = response.body.getReader();
               const decoder = new TextDecoder('utf-8');
               let buffer = '';
@@ -371,7 +372,29 @@ async function startServer() {
                 return;
               }
             } else {
-              console.warn(`[Server Auto-Fallback] Model ${currentModel} returned ${response.status}. Attempting next fallback model...`);
+              const status = response.status;
+              const retryAfter = response.headers.get('retry-after');
+              console.warn(`[Server Auto-Fallback] Model ${currentModel} returned HTTP ${status}; checking fallback policy.`);
+
+              // Credential/billing/permission failures are not model-specific.
+              // Stop wasting requests against every model with the same key.
+              if ([401, 402, 403].includes(status)) {
+                console.error(`[OpenRouter] Non-retryable credential or account error: HTTP ${status}.`);
+                break;
+              }
+
+              // Respect Retry-After on throttling, but cap the wait so another
+              // provider can be tried without making the user wait indefinitely.
+              if (status === 429 && retryAfter) {
+                const retrySeconds = Number(retryAfter);
+                const retryDateMs = Number.isFinite(retrySeconds)
+                  ? retrySeconds * 1000
+                  : Math.max(0, Date.parse(retryAfter) - Date.now());
+                const waitMs = Math.min(Math.max(0, retryDateMs), 3000);
+                if (waitMs > 0) await new Promise((resolve) => setTimeout(resolve, waitMs));
+              } else if (status >= 500) {
+                await new Promise((resolve) => setTimeout(resolve, 300));
+              }
             }
           } catch (modelErr: any) {
             console.warn(`[Server Auto-Fallback] Error querying ${currentModel}:`, modelErr.message);
@@ -391,6 +414,7 @@ async function startServer() {
           parts: [{ text: m.content }],
         }));
 
+        res.setHeader('X-AI-Model', 'Gemini 2.5 Flash (Gemini API)');
         const responseStream = await ai.models.generateContentStream({
           model: 'gemini-2.5-flash',
           contents: conversationContents,
@@ -420,6 +444,7 @@ async function startServer() {
     }
 
     // Final Fallback: Ancient Wisdom Reasoner Engine
+    res.setHeader('X-AI-Model', 'Cổ Thư Reasoner (Server Offline)');
     const fallbackText = generateAncientWisdomResponse(lastUserMessage, coupleContext);
     return await streamFallbackText(res, fallbackText);
   }

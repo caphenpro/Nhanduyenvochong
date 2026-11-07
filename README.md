@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.11.4-e11d48?style=for-the-badge" alt="Version" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Phiên_Bản-v2.12.0-e11d48?style=for-the-badge" alt="Version" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="#-kiến-trúc-kỹ-thuật"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite" alt="Vite" /></a>
@@ -74,8 +74,9 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
 - 🤖 **Trợ Lý AI Chatbox Tích Hợp RAG Cổ Thư & OpenRouter Web Search:**
   - **Tích hợp Động cơ RAG (Retrieval-Augmented Generation):** Tự động truy vấn kho dữ liệu cổ thư (Kho tri thức nội bộ, 100 Đồ hình Cao Ly, Bát Trạch, Vòng Trường Sinh 10 Can, Tam Thế...) và ghép ngữ cảnh vào System Prompt.
   - **Quy trình trả lời 3 cấp độ ưu tiên:** ƯU TIÊN 1 (Dữ liệu cổ thư RAG nội bộ làm căn cứ cốt lõi) -> ƯU TIÊN 2 (Sử dụng Web Search đối chiếu tri thức mở) -> ĐỐI CHIẾU & TỔNG HỢP (Loại bỏ mâu thuẫn, đưa ra lập luận bám sát cổ thư).
-  - **Chế độ tự động chọn mô hình (Auto-Fallback):** Tự động chọn mô hình tối ưu nhất và tự động xoay vòng qua các mô hình dự phòng (Gemini 2.5 Flash, DeepSeek Chat, Llama 3.3 70B Free, Qwen 2.5 72B Free, Gemini 2.0 Flash Exp Free) khi một mô hình hết lượt miễn phí hoặc quá tải.
+  - **Chế độ tự động chọn mô hình (Auto-Fallback):** Ưu tiên `openrouter/free` để OpenRouter tự chọn mô hình miễn phí đang khả dụng; dự phòng tiếp theo là Gemma 4 26B Free và Llama 3.3 70B Free. Các mô hình trả phí chỉ được gọi khi người dùng chủ động chọn.
   - Tích hợp công cụ **Offline Cổ Thư Reasoner** hoạt động độc lập ngay cả khi không có kết nối internet hoặc hết quota API.
+  - **Tối ưu vận hành OpenRouter:** phân loại lỗi HTTP, xử lý `Retry-After` khi gặp `429`, chỉ bật Web Search khi câu hỏi cần thông tin bên ngoài và giới hạn ngữ cảnh RAG để kiểm soát token.
 - 🔮 **Lập Quẻ & Khảo Sát Hòa Hợp Nhân Duyên:**
   - Nhập năm sinh và tháng sinh âm lịch của hai vợ chồng/cặp đôi.
   - Tự động lập bảng phân tích 6 tầng chi tiết kèm thông điệp cốt lõi và phương pháp chế hóa âm dương.
@@ -85,7 +86,7 @@ Trong văn hóa phương Đông, hôn nhân và gia đạo là nền tảng củ
   - Tra cứu Thập Can phối Thập Nhị Chi theo bí truyền Cao Ly Đầu Hình & Diễn Cầm Tam Thế.
 - 🔑 **Quản Lý API Key An Toàn:**
   - Người dùng có thể nhập khóa cá nhân OpenRouter API Key.
-  - Dữ liệu lưu an toàn trong trình duyệt (LocalStorage), không lưu trữ trái phép trên máy chủ trung gian.
+  - Khóa được lưu trong LocalStorage của trình duyệt, không ghi vào GitHub. LocalStorage không được mã hóa; chỉ lưu khóa trên thiết bị cá nhân đáng tin cậy.
 - 📜 **Lịch Sử Phiên Bản & Changelog Đầy ĐỦ:**
   - Tích hợp cửa sổ tra cứu lịch sử phát hành (Changelog) tương tác ngay trên giao diện.
 

@@ -189,12 +189,19 @@ export function compileRAGContextForPrompt(userQuery: string, coupleContext?: Co
     .map((item, idx) => `[TRÍCH ĐOẠN CỔ THƯ RAG #${idx + 1} - ${item.source} (${item.category})]:\n${item.snippet}`)
     .join('\n\n');
 
+  // Bound retrieval context to keep prompt size and latency predictable.
+  // The underlying knowledge base remains unchanged; only prompt assembly is capped.
+  const MAX_RAG_CONTEXT_CHARS = 9000;
+  const boundedText = compiledText.length > MAX_RAG_CONTEXT_CHARS
+    ? `${compiledText.slice(0, MAX_RAG_CONTEXT_CHARS)}\n[Đã giới hạn độ dài ngữ cảnh RAG để tối ưu token.]`
+    : compiledText;
+
   return `
 ======================================================================
 📖 KẾT QUẢ TRUY VẤN RAG TỪ KHO CỔ THƯ NỘI BỘ (GROUND TRUTH RETRIEVAL):
 Dưới đây là các đoạn văn bản cổ thư liên quan nhất được hệ thống tự động tìm kiếm dựa trên câu hỏi của người dùng:
 
-${compiledText}
+${boundedText}
 ======================================================================
 `;
 }

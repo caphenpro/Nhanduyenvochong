@@ -160,7 +160,7 @@ export const ApiKeySettingsModal: React.FC<ApiKeySettingsModalProps> = ({
               <h3 className="text-base font-bold text-amber-100 font-serif flex items-center space-x-2">
                 <span>Cài Đặt OpenRouter API Key</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                  Bảo Mật
+                  Lưu tại trình duyệt
                 </span>
               </h3>
               <p className="text-xs text-amber-300/80">
@@ -228,7 +228,7 @@ export const ApiKeySettingsModal: React.FC<ApiKeySettingsModalProps> = ({
               </div>
             </div>
             <p className="text-[11px] text-stone-400 leading-relaxed">
-              🔒 <strong>Bảo mật 100%:</strong> Khóa API của bạn được lưu an toàn trong trình duyệt (LocalStorage), không lưu trên mã nguồn Git, giúp bạn tự do đẩy lên GitHub mà không bao giờ bị lộ hay bị quét.
+              🔒 <strong>Lưu khóa trên thiết bị:</strong> Khóa được lưu trong LocalStorage của trình duyệt, không ghi vào mã nguồn GitHub. LocalStorage không được mã hóa; chỉ lưu khóa trên thiết bị cá nhân đáng tin cậy. Khi gửi yêu cầu AI, khóa được truyền qua kết nối HTTPS đến máy chủ ứng dụng hoặc OpenRouter tùy môi trường triển khai.
             </p>
           </div>
 

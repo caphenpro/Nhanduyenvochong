@@ -26,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'X-Title': 'Nhan Duyen Tien Dinh Key Test',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'openrouter/free',
         messages: [{ role: 'user', content: 'Xin chào, trả lời ngắn 1 từ: OK' }],
         max_tokens: 10,
       }),
