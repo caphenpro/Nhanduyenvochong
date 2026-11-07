@@ -234,7 +234,7 @@ async function startServer() {
           'X-Title': 'Can Duyen Tien Dinh Key Test',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: 'openrouter/free',
           messages: [{ role: 'user', content: 'Xin chào, trả lời ngắn 1 từ: OK' }],
           max_tokens: 10,
         }),
@@ -292,12 +292,9 @@ async function startServer() {
     ];
 
     const AUTO_SERVER_FALLBACK_MODELS = [
-      'google/gemini-2.5-flash',
-      'deepseek/deepseek-chat',
+      'openrouter/free',
+      'google/gemma-4-26b-a4b-it:free',
       'meta-llama/llama-3.3-70b-instruct:free',
-      'qwen/qwen-2.5-72b-instruct:free',
-      'google/gemini-2.0-flash-exp:free',
-      'mistralai/mistral-small-24b-instruct-2501:free',
     ];
 
     const requestedModel = (model || 'auto').toString();
