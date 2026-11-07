@@ -18,7 +18,7 @@ export const APP_INFO = {
   name: 'AI Nhân Duyên',
   fullName: 'AI Nhân Duyên — Kết Nối Tâm Duyên, Thấu Hiểu Yêu Thương',
   currentVersion: 'v2.12.0',
-  releaseDate: '16/09/2026',
+  releaseDate: '07/11/2026',
   author: 'Nguyễn Hoàng Đăng',
   contactEmail: 'nguyenhoangdang25@gmail.com',
   repositoryUrl: 'https://github.com/caphenpro/Nhanduyenvochong',
