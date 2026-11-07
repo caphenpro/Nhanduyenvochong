@@ -82,7 +82,9 @@ export async function streamAIChat({
   const effectiveKey = (userApiKey || getStoredOpenRouterKey() || '').trim();
   const lastUserMsg = messages.filter((m) => m.role === 'user').slice(-1)[0]?.content || '';
 
-  // Route every online request through the server gateway. This keeps the
+  let onlineError: any = null;
+
+  // Route every online request through the server gateway first. This keeps the
   // OpenRouter credential out of browser-to-provider requests and centralizes
   // rate-limit handling and model fallback.
   try {
@@ -148,8 +150,89 @@ export async function streamAIChat({
     throw new Error('Máy chủ AI không trả về luồng dữ liệu.');
   } catch (err: any) {
     console.warn('[AI Gateway] Không thể hoàn tất yêu cầu qua máy chủ:', err?.message || err);
-    onError?.(err);
+    onlineError = err;
   }
+
+  // Static SPA deployments may not expose the Express gateway. In that case,
+  // retain a direct OpenRouter fallback for the user's own browser-stored key.
+  if (effectiveKey) {
+    const candidateModels = model === AUTO_MODEL_ID || !model
+      ? AUTO_FALLBACK_CHAIN
+      : [model, ...AUTO_FALLBACK_CHAIN.filter((candidate) => candidate !== model)];
+    const shouldUseWebSearch =
+      /nguồn|trích dẫn|tham khảo|đối chiếu|kiểm chứng|xác minh|mới nhất|hiện nay|hiện tại|hôm nay|gần đây|tin tức|tìm trên mạng|web search|website|đường dẫn|link|giá hiện tại|quy định mới/i.test(lastUserMsg);
+
+    for (const candidate of candidateModels) {
+      try {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${effectiveKey}`,
+            'HTTP-Referer': window.location.origin || 'https://ai.studio',
+            'X-Title': 'Nhan Duyen Tien Dinh Co Thuat',
+          },
+          body: JSON.stringify({
+            model: candidate,
+            messages: [
+              { role: 'system', content: 'Hãy trả lời bằng tiếng Việt, lập luận rõ ràng, phân biệt dữ liệu cổ thư với nhận định hiện đại và nêu giới hạn khi thiếu căn cứ.' },
+              ...messages.map((message) => ({ role: message.role, content: message.content })),
+            ],
+            stream: true,
+            temperature: 0.4,
+            max_tokens: 2200,
+            ...(shouldUseWebSearch ? { plugins: [{ id: 'web' }] } : {}),
+          }),
+        });
+
+        if (!response.ok) {
+          if ([401, 402, 403].includes(response.status)) break;
+          const retryAfter = response.headers.get('retry-after');
+          if (response.status === 429 && retryAfter) {
+            const seconds = Number(retryAfter);
+            const delay = Number.isFinite(seconds) ? seconds * 1000 : Math.max(0, Date.parse(retryAfter) - Date.now());
+            if (delay > 0) await new Promise((resolve) => setTimeout(resolve, Math.min(delay, 2000)));
+          }
+          continue;
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) continue;
+        const resolved = AI_MODELS_LIST.find((item) => item.id === candidate);
+        onModelResolved?.(resolved ? resolved.name : candidate);
+        const decoder = new TextDecoder('utf-8');
+        let buffer = '';
+        let accumulated = '';
+        let finished = false;
+        const processLine = (line: string) => {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) return;
+          const dataStr = trimmed.slice(5).trim();
+          if (dataStr === '[DONE]') { finished = true; return; }
+          try {
+            const parsed = JSON.parse(dataStr);
+            const delta = parsed.choices?.[0]?.delta?.content || '';
+            if (delta) { accumulated += delta; onChunk(accumulated); }
+          } catch { /* Ignore incomplete SSE frames. */ }
+        };
+        while (!finished) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split(/\\r?\\n/);
+          buffer = lines.pop() || '';
+          for (const line of lines) { processLine(line); if (finished) break; }
+        }
+        buffer += decoder.decode();
+        if (!finished && buffer.trim()) processLine(buffer);
+        if (accumulated.trim()) return;
+      } catch (err: any) {
+        onlineError = err;
+      }
+    }
+  }
+
+  if (onlineError) onError?.(onlineError);
 
   // Final offline fallback: preserve the app's local reasoning capability.
   onModelResolved?.('Cổ Thư Reasoner (Offline Độc Lập)');
