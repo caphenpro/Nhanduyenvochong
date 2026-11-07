@@ -225,7 +225,7 @@ export async function streamAIChat({
           const { done, value } = await reader.read();
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split(/\\r?\\n/);
+          const lines = buffer.split(/\r?\n/);
           buffer = lines.pop() || '';
           for (const line of lines) { processLine(line); if (finished) break; }
         }
