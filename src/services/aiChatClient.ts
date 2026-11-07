@@ -1,9 +1,6 @@
 import { CoupleAnalysisResult, Message } from '../types';
-import { generateMetaphysicsState } from '../data/metaphysicsData';
-import { SYSTEM_INSTRUCTION_PROMPT, buildSystemInstruction } from '../data/knowledgeBasePrompt';
 import { generateAncientWisdomResponse } from '../data/ancientReasoner';
 import { getStoredOpenRouterKey } from '../components/ApiKeySettingsModal';
-import { compileRAGContextForPrompt } from '../data/ancientRAG';
 
 export const AUTO_MODEL_ID = 'auto';
 
@@ -85,191 +82,78 @@ export async function streamAIChat({
   const effectiveKey = (userApiKey || getStoredOpenRouterKey() || '').trim();
   const lastUserMsg = messages.filter((m) => m.role === 'user').slice(-1)[0]?.content || '';
 
-  // Prepare system context & perform RAG search on user's query
-  const metaState = generateMetaphysicsState(new Date());
-  const ragContext = compileRAGContextForPrompt(lastUserMsg, coupleContext);
-
-  let coupleSummary = 'Chưa có thông tin cặp đôi trong phiên làm việc hiện tại.';
-  if (coupleContext) {
-    coupleSummary = `
-- Chồng: ${coupleContext.chong.fullName} (${coupleContext.chong.lunarYear}), Can: ${coupleContext.chong.can} (${coupleContext.chong.canNguHanh}), Chi: ${coupleContext.chong.chi} (${coupleContext.chong.chiNguHanh}), Mạng Nạp Âm: ${coupleContext.chong.menh} (${coupleContext.chong.nguHanh}), Cung Phi: ${coupleContext.chong.cungPhi} (${coupleContext.chong.dongTayMenh}).
-- Vợ: ${coupleContext.vo.fullName} (${coupleContext.vo.lunarYear}), Can: ${coupleContext.vo.can} (${coupleContext.vo.canNguHanh}), Chi: ${coupleContext.vo.chi} (${coupleContext.vo.chiNguHanh}), Mạng Nạp Âm: ${coupleContext.vo.menh} (${coupleContext.vo.nguHanh}), Cung Phi: ${coupleContext.vo.cungPhi} (${coupleContext.vo.dongTayMenh}).
-- Tầng 1 Thiên Can: ${coupleContext.tang1ThienCan.quanHe} (${coupleContext.tang1ThienCan.chiTiet}).
-- Tầng 2 Địa Chi: ${coupleContext.tang2DiaChi.chiTietDong}.
-- Tầng 3 Ngũ Hành: ${coupleContext.tang3NguHanh.chiTiet}.
-- Tầng 4 Nạp Âm: ${coupleContext.tang4NapAm.quanHe} (${coupleContext.tang4NapAm.phanBietRoRang}).
-- Tầng 5 Bát Trạch: ${coupleContext.tang5CungMenh.ketQuaBatTrach} (${coupleContext.tang5CungMenh.nhomBatTrach}) - ${coupleContext.tang5CungMenh.yNghia}.
-- Cấu Trúc Tổng Hợp:
-  + Điểm thuận: ${coupleContext.cauTrucTongHop.diemThuan.join('; ')}.
-  + Điểm nghịch: ${coupleContext.cauTrucTongHop.diemNghich.join('; ')}.
-  + Điểm lưu ý: ${coupleContext.cauTrucTongHop.diemLuuY.join('; ')}.
-  + Thông điệp cốt lõi: "${coupleContext.cauTrucTongHop.thongDiepCotLoi}".
-`;
-  }
-
-  const systemPrompt = buildSystemInstruction(`
-### BÀN QUẺ & THỜI LỆNH ĐANG LƯU HÀNH (THỜI ĐIỂM HIỆN TẠI):
-- 24 Tiết Khí: ${metaState.solarTerm.name} (${metaState.solarTerm.hanTu}) — Ngũ hành vượng: ${metaState.solarTerm.nguHanhVuong}, Tướng: ${metaState.solarTerm.nguHanhTuong}.
-- Bát Tự Ngày Giờ: Năm ${metaState.batTuHienTai.nam} • Tháng ${metaState.batTuHienTai.thang} • Ngày ${metaState.batTuHienTai.ngay} • Giờ ${metaState.batTuHienTai.gio}.
-- Kỳ Môn Độn Giáp: ${metaState.kyMonDonGiap.don} Cục ${metaState.kyMonDonGiap.cuc} • Trực Phù ${metaState.kyMonDonGiap.trucPhu} • Trực Sử ${metaState.kyMonDonGiap.trucSu}.
-- Đại Lục Nhâm: Nguyệt Tướng ${metaState.lucNham.nguyetTuong} • Thời Địa: ${metaState.lucNham.thoiDia} • Tam Truyền: ${metaState.lucNham.tamTruyen.map((t) => `${t.so}: ${t.canChi} (${t.than})`).join(' ➔ ')}.
-
-${ragContext}
-
-### THÔNG TIN CẶP ĐÔI ĐANG TRA CỨU:
-${coupleSummary}
-`);
-
-  // Determine the sequence of models to try
-  const candidateModels: string[] =
-    model === AUTO_MODEL_ID || !model
-      ? AUTO_FALLBACK_CHAIN
-      : [model, ...AUTO_FALLBACK_CHAIN.filter((m) => m !== model)];
-
-  // Strategy 1: Direct OpenRouter call with Auto-Fallback across candidate models + Web Search Plugin
-  if (effectiveKey) {
-    for (const currentCandidate of candidateModels) {
-      try {
-        const openRouterMessages = [
-          { role: 'system', content: systemPrompt },
-          ...messages.map((m) => ({ role: m.role, content: m.content })),
-        ];
-
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${effectiveKey}`,
-            'HTTP-Referer': window.location.origin || 'https://ai.studio',
-            'X-Title': 'Nhan Duyen Tien Dinh Co Thuat',
-          },
-          body: JSON.stringify({
-            model: currentCandidate,
-            messages: openRouterMessages,
-            stream: true,
-            temperature: 0.4,
-            max_tokens: 2500,
-            plugins: [{ id: 'web' }], // Kích hoạt OpenRouter Web Search Plugin
-          }),
-        });
-
-        // If rate limited (429), quota exceeded (402), or model unavailable (404/503), try next model
-        if (!response.ok) {
-          const errText = await response.text().catch(() => '');
-          console.warn(`[Auto-Fallback] Model ${currentCandidate} returned ${response.status}: ${errText}. Đang tự động chuyển sang mô hình tiếp theo...`);
-          continue; // Try next model in fallback chain
-        }
-
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder('utf-8');
-        let accumulated = '';
-
-        if (reader) {
-          if (onModelResolved) {
-            const foundObj = AI_MODELS_LIST.find((m) => m.id === currentCandidate);
-            onModelResolved(foundObj ? foundObj.name : currentCandidate);
-          }
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
-
-            for (const line of lines) {
-              const trimmed = line.trim();
-              if (trimmed.startsWith('data: ')) {
-                const dataStr = trimmed.slice(6);
-                if (dataStr === '[DONE]') break;
-                try {
-                  const parsed = JSON.parse(dataStr);
-                  const delta = parsed.choices?.[0]?.delta?.content || '';
-                  if (delta) {
-                    accumulated += delta;
-                    onChunk(accumulated);
-                  }
-                } catch {
-                  // Ignore parse errors for partial chunks
-                }
-              }
-            }
-          }
-        }
-
-        if (accumulated.trim().length > 0) {
-          return; // Successfully completed streaming!
-        }
-      } catch (err: any) {
-        console.warn(`[Auto-Fallback] Error with model ${currentCandidate}:`, err?.message || err);
-        // Continue to next candidate model
-      }
-    }
-  }
-
-  // Strategy 2: Attempt Express Server-side Route (Supports internal Auto-Fallback across keys & models + Web Search)
+  // Route every online request through the server gateway. This keeps the
+  // OpenRouter credential out of browser-to-provider requests and centralizes
+  // rate-limit handling and model fallback.
   try {
     const serverResponse = await fetch('/api/openrouter/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages,
-        coupleContext,
-        model: model,
-        apiKey: effectiveKey,
-      }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...(effectiveKey ? { 'x-openrouter-key': effectiveKey } : {}),
+      },
+      body: JSON.stringify({ messages, coupleContext, model }),
     });
 
-    if (serverResponse.ok) {
-      const reader = serverResponse.body?.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let accumulated = '';
-
-      if (reader) {
-        if (onModelResolved) {
-          onModelResolved('Động cơ AI Tự Động (Máy chủ)');
-        }
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
-
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.replace('data: ', '').trim();
-              if (dataStr === '[DONE]') break;
-              try {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.text) {
-                  accumulated += parsed.text;
-                  onChunk(accumulated);
-                }
-              } catch {
-                // Ignore
-              }
-            }
-          }
-        }
-      }
-
-      if (accumulated.trim().length > 0) {
-        return; // Success!
-      }
+    if (!serverResponse.ok) {
+      const errorBody = await serverResponse.text().catch(() => '');
+      throw new Error(`Máy chủ AI trả về HTTP ${serverResponse.status}: ${errorBody.slice(0, 300)}`);
     }
-  } catch {
-    // Backend not reachable or returned 404 (e.g. static Vercel deployment)
+
+    const reader = serverResponse.body?.getReader();
+    if (reader) {
+      onModelResolved?.(serverResponse.headers.get('X-AI-Model') || 'Động cơ AI qua máy chủ');
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let accumulated = '';
+      let finished = false;
+
+      const processLine = (line: string) => {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith('data:')) return;
+        const dataStr = trimmed.slice(5).trim();
+        if (dataStr === '[DONE]') {
+          finished = true;
+          return;
+        }
+        try {
+          const parsed = JSON.parse(dataStr);
+          const textChunk = parsed.text || parsed.choices?.[0]?.delta?.content || '';
+          if (textChunk) {
+            accumulated += textChunk;
+            onChunk(accumulated);
+          }
+        } catch {
+          // Ignore malformed or incomplete SSE frames; the remaining buffer is retained.
+        }
+      };
+
+      while (!finished) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split(/\r?\n/);
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          processLine(line);
+          if (finished) break;
+        }
+      }
+
+      buffer += decoder.decode();
+      if (!finished && buffer.trim()) processLine(buffer);
+      if (accumulated.trim()) return;
+      throw new Error('Máy chủ AI kết thúc luồng nhưng không trả về nội dung.');
+    }
+    throw new Error('Máy chủ AI không trả về luồng dữ liệu.');
+  } catch (err: any) {
+    console.warn('[AI Gateway] Không thể hoàn tất yêu cầu qua máy chủ:', err?.message || err);
+    onError?.(err);
   }
 
-  // Strategy 3: Pure Client-Side Metaphysics Wisdom Engine (100% Offline, Zero-Error Guarantee)
-  if (onModelResolved) {
-    onModelResolved('Cổ Thư Reasoner (Offline Độc Lập)');
-  }
+  // Final offline fallback: preserve the app's local reasoning capability.
+  onModelResolved?.('Cổ Thư Reasoner (Offline Độc Lập)');
   const staticWisdom = generateAncientWisdomResponse(lastUserMsg, coupleContext);
-  
-  // Simulate smooth streaming typewriter effect
   let currentOutput = '';
   const chunkSize = 6;
   for (let i = 0; i < staticWisdom.length; i += chunkSize) {
